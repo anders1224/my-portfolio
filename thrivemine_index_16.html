@@ -170,9 +170,13 @@
     @media(max-width:560px){.auth-panel{padding:24px;border-radius:18px}}
     .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
     .hamburger span{width:22px;height:2px;background:#fff;transition:all .3s}
+    .mob-auth-btns{display:none;align-items:center;gap:7px}
+    .mob-auth-btns .nav-signin{font-size:.68rem;padding:7px 13px;border-radius:4px}
+    .mob-auth-btns .nav-cta{font-size:.68rem;padding:7px 13px}
     @media(max-width:900px){
       #navbar{padding:0 20px}
       .nav-links,.nav-actions{display:none}
+      .mob-auth-btns{display:flex}
       .hamburger{display:flex}
       .mob-btns{display:flex;flex-direction:column;gap:10px;margin-top:8px}
       .mob-btns a{text-align:center;padding:12px;font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
@@ -1957,6 +1961,10 @@ window.smartsupp||(function(d) {
         <div class="lang-list" id="desktopLangList"></div>
       </div>
     </div>
+    <a href="#" class="nav-signin">Login</a>
+    <a href="#" class="nav-cta">Register</a>
+  </div>
+  <div class="mob-auth-btns">
     <a href="#" class="nav-signin">Login</a>
     <a href="#" class="nav-cta">Register</a>
   </div>
