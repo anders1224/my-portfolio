@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Investment Plans — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    /* ── Starter centred ── */
+    .starter-row {
+      display:flex; justify-content:center; margin-bottom:20px;
+    }
+    .starter-row .xcard { max-width:440px; width:100%; }
+
+    /* ── 6-plan grid ── */
+    .plans-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    }
+    @media(max-width:1050px){ .plans-grid{ grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:560px) { .plans-grid{ grid-template-columns:1fr; } }
+
+    /* ── Base card ── */
+    .xcard {
+      --ac:#39ff14;
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.18);
+      border-radius:16px;
+      padding:28px 24px 24px;
+      display:flex; flex-direction:column;
+      position:relative; overflow:hidden;
+      transition:transform .3s,border-color .3s,box-shadow .3s;
+    }
+    .xcard::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,transparent,var(--ac),transparent);
+    }
+    .xcard:hover {
+      transform:translateY(-6px); border-color:var(--ac);
+      box-shadow:0 0 28px color-mix(in srgb,var(--ac) 30%,transparent),
+                 0 16px 48px rgba(0,0,0,.55);
+    }
+    .xcard.trading { --ac:#00e5b0; border-color:rgba(0,229,176,.18); }
+    .xcard.growth  { --ac:#00b4ff; border-color:rgba(0,180,255,.18); }
+    .xcard.plat    { --ac:#e5c700; border-color:rgba(229,199,0,.18); }
+    .xcard.diamond { --ac:#00c8ff; border-color:rgba(0,200,255,.18); }
+    .xcard.scomp   { --ac:#c87dff; border-color:rgba(200,125,255,.18); }
+    .xcard.pcomp   { --ac:#ff6b35; border-color:rgba(255,107,53,.18); }
+
+    .xcard-label {
+      font-size:.6rem; letter-spacing:.3em; text-transform:uppercase;
+      color:var(--ac); margin-bottom:14px;
+      display:flex; align-items:center; gap:7px;
+    }
+    .xcard-label::before {
+      content:''; width:18px; height:1px; background:var(--ac); opacity:.5; flex-shrink:0;
+    }
+    .xcard-name {
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:1.2rem; letter-spacing:.06em; color:#fff; margin-bottom:12px;
+    }
+    .xcard-roi { display:flex; align-items:flex-start; gap:2px; margin-bottom:2px; }
+    .xcard-roi-n {
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:3.6rem; line-height:1; color:var(--ac);
+      text-shadow:0 0 24px color-mix(in srgb,var(--ac) 55%,transparent);
+    }
+    .xcard-roi-s {
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:1.5rem; color:var(--ac); padding-top:6px;
+    }
+    .xcard-roi-tag {
+      font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(255,255,255,.3); margin-bottom:14px;
+    }
+    .xcard-cycle {
+      display:inline-flex; align-items:center; gap:7px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:5px 12px; margin-bottom:16px; width:fit-content;
+      font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+      color:rgba(255,255,255,.5); border-radius:4px;
+    }
+    .xcard-cycle .ci { color:var(--ac); }
+    .xcard-div { height:1px; background:rgba(255,255,255,.06); margin-bottom:14px; }
+    .xcard-range-lbl {
+      font-size:.6rem; letter-spacing:.24em; text-transform:uppercase;
+      color:rgba(255,255,255,.28); margin-bottom:8px;
+    }
+    .xcard-range { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+    .xcard-range-box {
+      flex:1; background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      padding:9px 10px; text-align:center; border-radius:4px;
+    }
+    .xcard-range-box .ra {
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:1rem; color:var(--ac); display:block;
+    }
+    .xcard-range-box .rl {
+      font-size:.58rem; letter-spacing:.15em; text-transform:uppercase;
+      color:rgba(255,255,255,.25); display:block; margin-top:1px;
+    }
+    .xcard-arrow { color:rgba(255,255,255,.2); font-size:1rem; flex-shrink:0; }
+    .xcard-feats {
+      list-style:none; display:flex; flex-direction:column;
+      gap:8px; flex:1; margin-bottom:20px;
+    }
+    .xcard-feats li {
+      display:flex; align-items:flex-start; gap:8px;
+      font-size:.81rem; color:rgba(255,255,255,.48); line-height:1.4;
+    }
+    .xcard-feats li::before {
+      content:'✓'; color:var(--ac); flex-shrink:0; font-size:.78rem; margin-top:1px;
+    }
+    .xcard-feats li.ref { color:rgba(255,255,255,.78); font-weight:600; }
+    .xcard-feats li.ref::before { content:'🎁'; font-size:.75rem; }
+    .xcard-btn {
+      display:block; text-align:center; border-radius:4px;
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:.8rem; letter-spacing:.2em; text-transform:uppercase;
+      padding:12px 16px; margin-top:auto;
+      border:1px solid var(--ac); color:var(--ac);
+      background:none; width:100%; cursor:pointer; transition:all .3s;
+    }
+    .xcard-btn:hover {
+      background:var(--ac); color:#000;
+      box-shadow:0 0 20px color-mix(in srgb,var(--ac) 45%,transparent);
+    }
+
+    /* ── Login prompt banner (shown when not logged in) ── */
+    #login-prompt {
+      display:none;
+      background:rgba(57,255,20,.06); border:1px solid rgba(57,255,20,.2);
+      border-radius:10px; padding:18px 24px; margin-bottom:28px;
+      align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    }
+    #login-prompt p { color:rgba(255,255,255,.7); font-size:.9rem; margin:0; }
+    #login-prompt p strong { color:var(--green); }
+
+    /* ── Modal plan summary ── */
+    .mplan-summary {
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+      background:#141414; border-radius:8px; padding:14px 16px; margin-bottom:18px;
+    }
+    .mplan-item { display:flex; flex-direction:column; gap:3px; }
+    .mplan-lbl { font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+    .mplan-val { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1rem; }
+
+    /* ── Return preview ── */
+    .return-box {
+      background:rgba(57,255,20,.04); border:1px solid rgba(57,255,20,.15);
+      border-radius:8px; padding:14px 16px; margin-bottom:18px; display:none;
+    }
+    .ret-row {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:.82rem; margin-bottom:6px;
+    }
+    .ret-row:last-child { margin-bottom:0; }
+    .ret-k { color:var(--muted); }
+    .ret-v { font-weight:600; font-family:'Rajdhani',sans-serif; color:var(--green); }
+    .ret-v.dim { color:rgba(255,255,255,.55); }
+
+    /* ── Pulse dot ── */
+    .live-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:var(--green); box-shadow:0 0 8px var(--green);
+      animation:livepulse 1.6s infinite; flex-shrink:0;
+    }
+    @keyframes livepulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    /* ── Guest mode: hide sidebar/topbar chrome ── */
+    body.guest .sidebar { display:none; }
+    body.guest .main-content { margin-left:0; }
+    body.guest .topbar { display:none; }
+    body.guest .page-content { padding-top:80px; }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+
+    <div class="page-content">
+
+      <!-- Login prompt (only shown when not logged in) -->
+      <div id="login-prompt">
+        <p>👋 <strong>Sign in</strong> to activate a plan and track your earnings in real time.</p>
+        <a href="../thrivemine_index_16.html" class="btn btn-green btn-sm">Sign In / Register →</a>
+      </div>
+
+      <!-- Page header -->
+      <div class="page-hdr-row" style="margin-bottom:28px;">
+        <div class="page-hdr" style="margin-bottom:0;">
+          <h1>My Investment Plans</h1>
+          <p>Select a plan below to start earning daily returns on your deposit.</p>
+        </div>
+        <div id="balBadge" style="display:none;background:rgba(57,255,20,.08);
+          border:1px solid var(--border);border-radius:8px;padding:10px 20px;
+          font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;
+          color:var(--green);white-space:nowrap;">Balance: $0.00</div>
+      </div>
+
+      <!-- Active investments (only visible when logged in) -->
+      <div class="card" id="activeSection" style="display:none;margin-bottom:36px;">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;
+            display:flex;align-items:center;gap:8px;">
+          <span class="live-dot"></span> My Active Investments
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Plan</th><th>Amount</th><th>ROI</th><th>Start</th><th>End</th><th>Status</th></tr>
+            </thead>
+            <tbody id="activeInvBody">
+              <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted);">
+                <span class="spinner"></span>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Plans heading -->
+      <div style="margin-bottom:24px;">
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.35rem;font-weight:700;margin-bottom:6px;">
+          Available Plans
+        </h2>
+        <p style="color:var(--muted);font-size:.85rem;">
+          All plans include a <strong style="color:var(--green);">15% referral bonus</strong>
+          on every successful invite. Returns paid automatically to your wallet.
+        </p>
+      </div>
+
+      <!-- Plans loaded dynamically from database -->
+      <div id="plansContainer" style="text-align:center;padding:40px;color:var(--muted);">
+        <span class="spinner"></span> Loading plans…
+      </div>
+
+      <p style="text-align:center;margin-top:28px;font-size:.72rem;
+          color:rgba(255,255,255,.18);letter-spacing:.05em;">
+        All returns generated through blockchain mining &amp; trading operations.
+        Capital at risk. Invest responsibly.
+      </p>
+
+    </div><!-- end page-content -->
+  </div>
+</div>
+
+<!-- ── INVEST MODAL ── -->
+<div class="modal-bg" id="investModal">
+  <div class="modal" style="max-width:500px;">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 class="modal-title" id="modalTitle">Invest in Plan</h3>
+    <div class="mplan-summary">
+      <div class="mplan-item">
+        <span class="mplan-lbl">ROI</span>
+        <span class="mplan-val" id="mRoi" style="color:var(--green);">—</span>
+      </div>
+      <div class="mplan-item">
+        <span class="mplan-lbl">Cycle</span>
+        <span class="mplan-val" id="mCycle">—</span>
+      </div>
+      <div class="mplan-item">
+        <span class="mplan-lbl">Min Deposit</span>
+        <span class="mplan-val" id="mMin">—</span>
+      </div>
+      <div class="mplan-item">
+        <span class="mplan-lbl">Max Deposit</span>
+        <span class="mplan-val" id="mMax">—</span>
+      </div>
+    </div>
+    <div id="modalAlert" class="alert" style="display:none;"></div>
+    <div class="field">
+      <label>Investment Amount (USD)</label>
+      <div class="input-icon-wrap">
+        <span class="field-icon">$</span>
+        <input type="number" id="investAmt" class="input"
+               placeholder="Enter amount" step="0.01" min="0"/>
+      </div>
+      <div id="amtHint" style="font-size:.75rem;color:var(--muted);margin-top:4px;"></div>
+    </div>
+    <div class="return-box" id="returnBox">
+      <div class="ret-row">
+        <span class="ret-k">Expected total return</span>
+        <span class="ret-v" id="retTotal">—</span>
+      </div>
+      <div class="ret-row">
+        <span class="ret-k">Balance after investment</span>
+        <span class="ret-v dim" id="retBalance">—</span>
+      </div>
+      <div class="ret-row">
+        <span class="ret-k">Cycle ends</span>
+        <span class="ret-v dim" id="retEnd">—</span>
+      </div>
+    </div>
+    <button class="btn btn-green btn-full" id="confirmBtn" onclick="confirmInvest()">
+      Confirm Investment
+    </button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+/* ── PLANS loaded from DB ── */
+let PLANS_DB = [];
+
+let currentUser  = null;
+let selectedPlan = null;
+
+/* ── AUTH CHECK — does NOT redirect; just unlocks extra features ── */
+(async () => {
+  // Load plans from DB first
+  try {
+    const { data: plans } = await db.from('investment_plans').select('*').eq('is_active', true).order('sort_order', { ascending: true });
+    PLANS_DB = plans || [];
+    renderPlanCards(PLANS_DB);
+  } catch(e) {
+    document.getElementById('plansContainer').innerHTML = '<p style="color:var(--muted);">Could not load plans.</p>';
+  }
+
+  let user = null;
+  try {
+    user = await getUser();         // from lib/supabase.js
+  } catch(e) { /* not logged in or Supabase error — show plans anyway */ }
+
+  if (user && user.id) {
+    currentUser = user;
+
+    /* render sidebar + topbar */
+    document.getElementById('sidebar').innerHTML = renderSidebar('investments', user);
+    document.getElementById('topbar').innerHTML  = renderTopbar('My Investment Plans');
+
+    /* show balance badge */
+    const badge = document.getElementById('balBadge');
+    badge.textContent = 'Balance: ' + fmt(user.wallet_balance || 0);
+    badge.style.display = 'block';
+
+    /* show active investments section */
+    document.getElementById('activeSection').style.display = 'block';
+
+    /* load active investments */
+    try {
+      const { data: rows } = await db
+        .from('investments')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      const tbody = document.getElementById('activeInvBody');
+      const invs  = rows || [];
+      tbody.innerHTML = invs.length === 0
+        ? `<tr><td colspan="6"><div class="empty-state">
+             <div class="empty-icon">📊</div>
+             <p>No active investments yet. Choose a plan below to get started.</p>
+           </div></td></tr>`
+        : invs.map(i => `
+            <tr>
+              <td><strong>${i.plan_name || '—'}</strong></td>
+              <td class="text-green">${fmt(i.amount)}</td>
+              <td style="color:var(--warning);">${i.roi_percent}%</td>
+              <td>${fmtDate(i.start_date || i.created_at)}</td>
+              <td>${fmtDate(i.end_date)}</td>
+              <td>${statusBadge(i.status)}</td>
+            </tr>`).join('');
+    } catch(e) {}
+
+  } else {
+    /* guest mode — show plans but no sidebar/topbar, show login prompt */
+    document.body.classList.add('guest');
+    document.getElementById('login-prompt').style.display = 'flex';
+  }
+})();
+
+/* ── RENDER PLAN CARDS FROM DB ── */
+function renderPlanCards(plans) {
+  if (!plans || plans.length === 0) {
+    document.getElementById('plansContainer').innerHTML = '<p style="color:var(--muted);">No plans available.</p>';
+    return;
+  }
+  let html = '<div class="plans-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">';
+  plans.forEach(p => {
+    html += `
+      <div class="xcard" style="--c:${p.color};border-color:rgba(${hexToRgb(p.color)},0.25);">
+        <div class="xcard-name" style="color:${p.color}">${p.name}</div>
+        <div class="xcard-roi"><span class="xcard-roi-n">${p.roi}</span><span class="xcard-roi-s">%</span></div>
+        <div class="xcard-roi-tag">${p.period} Return on Investment</div>
+        <div class="xcard-cycle"><span class="ci">⏱</span> ${p.cycle_days}-Day Cycle</div>
+        <div class="xcard-div"></div>
+        <div class="xcard-range-lbl">Investment Range</div>
+        <div class="xcard-range">
+          <div class="xcard-range-box"><span class="ra">${fmt(p.min_amount,0)}</span><span class="rl">Minimum</span></div>
+          <span class="xcard-arrow">→</span>
+          <div class="xcard-range-box"><span class="ra">${p.max_amount?fmt(p.max_amount,0):'Unlimited'}</span><span class="rl">Maximum</span></div>
+        </div>
+        <ul class="xcard-feats">
+          <li>${p.roi}% ${p.period.toLowerCase()} profit on deposit</li>
+          <li>Returns paid every ${p.cycle_days} day(s)</li>
+          <li>Instant withdrawal after cycle ends</li>
+          <li>24/7 live dashboard tracking</li>
+          <li class="ref">15% Referral Bonus on every invite</li>
+        </ul>
+        <button class="xcard-btn" style="background:${p.color};color:#000;" onclick="openInvest('${p.id}')">Invest Now →</button>
+      </div>`;
+  });
+  html += '</div>';
+  document.getElementById('plansContainer').innerHTML = html;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+/* ── OPEN INVEST MODAL ── */
+function openInvest(planId) {
+  if (!currentUser) {
+    window.location.href = '../thrivemine_index_16.html';
+    return;
+  }
+  const p = PLANS_DB.find(pl => pl.id === planId);
+  if (!p) return;
+  selectedPlan = { name:p.name, roi:p.roi, period:p.period, cycle_days:p.cycle_days, min:p.min_amount, max:p.max_amount, color:p.color };
+
+  document.getElementById('modalTitle').textContent = 'Invest in ' + p.name;
+  document.getElementById('mRoi').textContent       = p.roi + '% ' + p.period;
+  document.getElementById('mRoi').style.color       = p.color;
+  document.getElementById('mCycle').textContent     = p.cycle_days + '-Day Cycle';
+  document.getElementById('mMin').textContent       = fmt(p.min_amount, 0);
+  document.getElementById('mMax').textContent       = p.max_amount ? fmt(p.max_amount, 0) : 'Unlimited';
+  document.getElementById('amtHint').textContent    =
+    'Min: ' + fmt(p.min_amount, 0) + (p.max_amount ? '  ·  Max: ' + fmt(p.max_amount, 0) : '  ·  No maximum');
+
+  const input = document.getElementById('investAmt');
+  input.value = p.min;
+  input.min   = p.min;
+  input.max   = p.max || '';
+
+  hideAlert(document.getElementById('modalAlert'));
+  document.getElementById('returnBox').style.display = 'none';
+  document.getElementById('investModal').classList.add('open');
+  calcReturn();
+}
+
+document.getElementById('investAmt').addEventListener('input', calcReturn);
+
+function calcReturn() {
+  if (!selectedPlan) return;
+  const amt = parseFloat(document.getElementById('investAmt').value) || 0;
+  if (!amt) { document.getElementById('returnBox').style.display = 'none'; return; }
+  const total   = amt * (selectedPlan.roi / 100) * selectedPlan.cycle_days;
+  const endDate = new Date(Date.now() + selectedPlan.cycle_days * 86400000);
+  const after   = Math.max(0, (currentUser?.wallet_balance || 0) - amt);
+  document.getElementById('retTotal').textContent   = fmt(total) + ' (total)';
+  document.getElementById('retBalance').textContent = fmt(after);
+  document.getElementById('retEnd').textContent     = fmtDate(endDate.toISOString());
+  document.getElementById('returnBox').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('investModal').classList.remove('open');
+  document.getElementById('investAmt').value = '';
+  document.getElementById('returnBox').style.display = 'none';
+  hideAlert(document.getElementById('modalAlert'));
+  selectedPlan = null;
+}
+
+/* ── CONFIRM INVEST ── */
+async function confirmInvest() {
+  const amt   = parseFloat(document.getElementById('investAmt').value);
+  const alert = document.getElementById('modalAlert');
+  const btn   = document.getElementById('confirmBtn');
+  hideAlert(alert);
+
+  if (!selectedPlan) return;
+  if (isNaN(amt) || amt <= 0) { showAlert(alert, 'Please enter a valid amount.'); return; }
+  if (amt < selectedPlan.min) {
+    showAlert(alert, 'Minimum investment is ' + fmt(selectedPlan.min, 0) + '.'); return;
+  }
+  if (selectedPlan.max && amt > selectedPlan.max) {
+    showAlert(alert, 'Maximum investment is ' + fmt(selectedPlan.max, 0) + '.'); return;
+  }
+  const balance = currentUser?.wallet_balance || 0;
+  if (amt > balance) {
+    showAlert(alert, 'Insufficient balance (' + fmt(balance) + '). Please deposit first.'); return;
+  }
+
+  setLoading(btn, true, 'Processing…');
+  const endDate = new Date(Date.now() + selectedPlan.cycle_days * 86400000).toISOString();
+
+  const { error } = await db.from('investments').insert({
+    user_id:     currentUser.id,
+    plan_name:   selectedPlan.name,
+    amount:      amt,
+    roi_percent: selectedPlan.roi,
+    cycle_days:  selectedPlan.cycle_days,
+    end_date:    endDate,
+    status:      'active',
+  });
+
+  if (error) { setLoading(btn, false); showAlert(alert, error.message); return; }
+
+  await db.from('profiles').update({
+    wallet_balance: balance - amt,
+    total_invested: (currentUser.total_invested || 0) + amt,
+  }).eq('id', currentUser.id);
+
+  await db.from('notifications').insert({
+    user_id: currentUser.id,
+    title:   'Investment Activated',
+    message: `Your ${fmt(amt)} investment in ${selectedPlan.name} is now active. Returns in ${selectedPlan.cycle_days} day(s).`,
+    type:    'success',
+  }).then(()=>{}).catch(()=>{});
+
+  setLoading(btn, false);
+  closeModal();
+  window.alert('✅ Investment successful!\nPlan: ' + selectedPlan.name + '\nAmount: ' + fmt(amt));
+  window.location.reload();
+}
+
+document.getElementById('investModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>

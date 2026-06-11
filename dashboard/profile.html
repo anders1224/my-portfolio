@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>My Profile — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .avatar-circle {
+      width:80px; height:80px; border-radius:50%;
+      background:rgba(57,255,20,.1); border:2px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Rajdhani',sans-serif; font-weight:700;
+      font-size:2rem; color:var(--green); margin:0 auto 16px;
+    }
+    .alert{display:none;}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr"><h1>My Profile</h1><p>Manage your account details and security.</p></div>
+      <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:24px;">
+
+        <!-- Profile card -->
+        <div>
+          <div class="card" style="text-align:center;margin-bottom:16px;">
+            <div class="avatar-circle" id="avatarCircle">U</div>
+            <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.3rem;" id="profileName">Loading…</h2>
+            <p style="color:var(--muted);font-size:.83rem;" id="profileEmail"></p>
+            <div id="profileCountry" style="font-size:.78rem;color:var(--muted);margin-top:4px;"></div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border2);">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;">
+                <div><div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.3rem;color:var(--green);" id="totalInv">$0</div>
+                  <div style="font-size:.68rem;letter-spacing:.15em;color:var(--muted);">INVESTED</div></div>
+                <div><div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.3rem;color:var(--green);" id="totalEarn">$0</div>
+                  <div style="font-size:.68rem;letter-spacing:.15em;color:var(--muted);">EARNED</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card card-green">
+            <div style="font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Your Referral Code</div>
+            <div id="refCode" style="font-family:monospace;font-size:1.1rem;color:var(--green);letter-spacing:.15em;margin-bottom:10px;"></div>
+            <button onclick="copyRef()" class="btn btn-outline btn-sm btn-full">📋 Copy Referral Link</button>
+          </div>
+        </div>
+
+        <!-- Edit form -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">Edit Profile</h3>
+            <div id="profileAlert" class="alert"></div>
+            <form id="profileForm">
+              <div class="grid-2">
+                <div class="field"><label>Full Name</label>
+                  <input type="text" id="editName" class="input" placeholder="Full Name"/></div>
+                <div class="field"><label>Phone</label>
+                  <input type="tel" id="editPhone" class="input" placeholder="Phone number"/></div>
+              </div>
+              <div class="field"><label>Country</label>
+                <select id="editCountry" class="input select">
+                  <option value="">Select country…</option>
+                  <option>Nigeria</option><option>United States</option><option>United Kingdom</option>
+                  <option>Ghana</option><option>Kenya</option><option>South Africa</option>
+                  <option>Canada</option><option>Australia</option><option>Germany</option>
+                  <option>France</option><option>Brazil</option><option>India</option>
+                  <option>UAE</option><option>Singapore</option><option>Philippines</option>
+                  <option>Indonesia</option><option>Mexico</option><option>Other</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-green" id="saveProfileBtn">Save Changes</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">Change Password</h3>
+            <div id="pwAlert" class="alert"></div>
+            <form id="pwForm">
+              <div class="field"><label>New Password</label>
+                <input type="password" id="newPw" class="input" placeholder="Min 8 characters" minlength="8" required/></div>
+              <div class="field"><label>Confirm Password</label>
+                <input type="password" id="confirmPw" class="input" placeholder="Repeat password" required/></div>
+              <button type="submit" class="btn btn-outline" id="savePwBtn">Update Password</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let currentUser = null;
+(async () => {
+  currentUser = await requireUser();
+  if (!currentUser) return;
+  document.getElementById('sidebar').innerHTML = renderSidebar('profile', currentUser);
+  document.getElementById('topbar').innerHTML  = renderTopbar('My Profile');
+
+  document.getElementById('avatarCircle').textContent = (currentUser.full_name||'U').charAt(0).toUpperCase();
+  document.getElementById('profileName').textContent  = currentUser.full_name || 'User';
+  document.getElementById('profileEmail').textContent = currentUser.email || '';
+  document.getElementById('profileCountry').textContent = currentUser.country || '';
+  document.getElementById('totalInv').textContent  = fmt(currentUser.total_invested, 0);
+  document.getElementById('totalEarn').textContent = fmt(currentUser.total_earnings, 0);
+  document.getElementById('refCode').textContent   = currentUser.referral_code || '—';
+  document.getElementById('editName').value    = currentUser.full_name || '';
+  document.getElementById('editPhone').value   = currentUser.phone || '';
+  document.getElementById('editCountry').value = currentUser.country || '';
+})();
+
+function copyRef() {
+  const link = window.location.origin + '/auth/signup.html?ref=' + (currentUser?.referral_code || '');
+  navigator.clipboard.writeText(link);
+  showAlert(document.getElementById('profileAlert'), 'Referral link copied!', 'success');
+  setTimeout(() => hideAlert(document.getElementById('profileAlert')), 2000);
+}
+
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('saveProfileBtn');
+  setLoading(btn, true, 'Saving…');
+  const { error } = await db.from('profiles').update({
+    full_name: document.getElementById('editName').value,
+    phone:     document.getElementById('editPhone').value,
+    country:   document.getElementById('editCountry').value,
+  }).eq('id', currentUser.id);
+  setLoading(btn, false);
+  if (error) showAlert(document.getElementById('profileAlert'), error.message);
+  else showAlert(document.getElementById('profileAlert'), 'Profile updated!', 'success');
+});
+
+document.getElementById('pwForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const pw = document.getElementById('newPw').value;
+  const cf = document.getElementById('confirmPw').value;
+  if (pw !== cf) { showAlert(document.getElementById('pwAlert'), 'Passwords do not match.'); return; }
+  const btn = document.getElementById('savePwBtn');
+  setLoading(btn, true, 'Updating…');
+  const { error } = await db.auth.updateUser({ password: pw });
+  setLoading(btn, false);
+  if (error) showAlert(document.getElementById('pwAlert'), error.message);
+  else { showAlert(document.getElementById('pwAlert'), 'Password updated!', 'success'); e.target.reset(); }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Dashboard — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .welcome-bar {
+      background:linear-gradient(135deg,rgba(57,255,20,.08),rgba(0,229,176,.04));
+      border:1px solid var(--border); border-radius:12px;
+      padding:20px 24px; margin-bottom:24px;
+      display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+    }
+    .welcome-bar h2 { font-family:'Rajdhani',sans-serif; font-size:1.3rem; font-weight:700; }
+    .welcome-bar p  { color:var(--muted); font-size:.85rem; margin-top:2px; }
+    .plan-quick { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:24px; }
+    @media(max-width:700px) { .plan-quick { grid-template-columns:1fr; } }
+    .plan-mini {
+      background:var(--bg2); border:1px solid var(--border2); border-radius:10px;
+      padding:16px; position:relative; overflow:hidden;
+      transition:border-color .25s;
+    }
+    .plan-mini:hover { border-color:var(--border); }
+    .plan-mini::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,transparent,var(--c,var(--green)),transparent);
+    }
+    .plan-mini .roi { font-family:'Rajdhani',sans-serif; font-size:1.8rem; font-weight:700; color:var(--c,var(--green)); }
+    .plan-mini .pname { font-size:.8rem; color:var(--muted); margin-top:2px; }
+    .quick-actions { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+    .tx-row td:first-child { font-family:monospace; font-size:.78rem; color:var(--muted); }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content" id="pageContent">
+      <div style="text-align:center;padding:60px;color:var(--muted);">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+(async () => {
+  const user = await requireUser();
+  if (!user) return;
+
+  // Unread count for topbar
+  const { count: unread } = await db.from('notifications')
+    .select('*', { count:'exact', head:true })
+    .eq('user_id', user.id).eq('is_read', false);
+
+  document.getElementById('sidebar').innerHTML = renderSidebar('overview', user);
+  document.getElementById('topbar').innerHTML  = renderTopbar('Overview', unread || 0);
+
+  // Fetch data in parallel
+  const [txRes, invRes, notifRes] = await Promise.all([
+    db.from('transactions').select('*').eq('user_id', user.id).order('created_at', { ascending:false }).limit(5),
+    db.from('investments').select('*, investment_plans(name,color)').eq('user_id', user.id).eq('status','active'),
+    db.from('notifications').select('*').eq('user_id', user.id).eq('is_read', false).order('created_at',{ascending:false}).limit(3),
+  ]);
+
+  const txns   = txRes.data || [];
+  const invs   = invRes.data || [];
+  const notifs = notifRes.data || [];
+
+  const pendingDeposit = txns.filter(t => t.type==='deposit' && t.status==='pending').reduce((s,t) => s + t.amount, 0);
+
+  document.getElementById('pageContent').innerHTML = `
+    <!-- Welcome -->
+    <div class="welcome-bar">
+      <div>
+        <h2>Welcome back, ${user.full_name?.split(' ')[0] || 'Investor'}! 👋</h2>
+        <p>Here's a summary of your account activity.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="deposit.html"  class="btn btn-green btn-sm">+ Deposit</a>
+        <a href="withdraw.html" class="btn btn-outline btn-sm">Withdraw</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="label">Wallet Balance</div>
+          <div class="icon">💰</div>
+        </div>
+        <div class="value green">${fmt(user.wallet_balance)}</div>
+        <div class="change text-muted">Available to withdraw</div>
+      </div>
+      <div class="stat-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="label">Total Invested</div>
+          <div class="icon">📈</div>
+        </div>
+        <div class="value">${fmt(user.total_invested)}</div>
+        <div class="change"><span style="color:var(--green);">▲</span> Active plans: ${invs.length}</div>
+      </div>
+      <div class="stat-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="label">Total Earnings</div>
+          <div class="icon">🏆</div>
+        </div>
+        <div class="value">${fmt(user.total_earnings)}</div>
+        <div class="change text-muted">All-time returns</div>
+      </div>
+      <div class="stat-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="label">Pending</div>
+          <div class="icon">⏳</div>
+        </div>
+        <div class="value" style="color:var(--warning);">${fmt(pendingDeposit)}</div>
+        <div class="change text-muted">Awaiting confirmation</div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    ${notifs.length > 0 ? `
+    <div style="margin-bottom:24px;">
+      ${notifs.map(n => `
+        <div class="alert alert-${n.type === 'success' ? 'success' : n.type === 'error' ? 'error' : 'info'}" style="display:flex;margin-bottom:8px;">
+          <div><strong>${n.title}</strong> — ${n.message}</div>
+          <div style="margin-left:auto;font-size:.75rem;color:var(--muted);white-space:nowrap;">${timeAgo(n.created_at)}</div>
+        </div>
+      `).join('')}
+    </div>` : ''}
+
+    <!-- Active Investments -->
+    ${invs.length > 0 ? `
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;">Active Investments</h3>
+        <a href="investments.html" style="font-size:.78rem;color:var(--green);">View all →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Plan</th><th>Amount</th><th>ROI</th><th>End Date</th><th>Status</th></tr></thead>
+          <tbody>
+            ${invs.map(i => `
+              <tr>
+                <td>${i.plan_name || i.investment_plans?.name || '—'}</td>
+                <td class="text-green">${fmt(i.amount)}</td>
+                <td>${i.roi_percent}%</td>
+                <td>${fmtDate(i.end_date)}</td>
+                <td>${statusBadge(i.status)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : ''}
+
+    <!-- Recent Transactions -->
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;">Recent Transactions</h3>
+        <a href="transactions.html" style="font-size:.78rem;color:var(--green);">View all →</a>
+      </div>
+      ${txns.length === 0 ? `
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <p>No transactions yet. Make your first deposit to get started!</p>
+          <a href="deposit.html" class="btn btn-green btn-sm" style="margin-top:12px;">Make Deposit</a>
+        </div>` : `
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ref</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            ${txns.map(t => `
+              <tr>
+                <td>${t.reference || '—'}</td>
+                <td style="text-transform:capitalize;">${t.type}</td>
+                <td class="${t.type==='deposit'||t.type==='earning'||t.type==='referral'?'text-green':'text-danger'}">${fmt(t.amount)}</td>
+                <td>${statusBadge(t.status)}</td>
+                <td>${fmtDate(t.created_at)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`}
+    </div>
+
+    <!-- Investment Plans Quick View -->
+    <div style="margin-top:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;">Available Plans</h3>
+        <a href="investments.html" style="font-size:.78rem;color:var(--green);">Invest now →</a>
+      </div>
+      <div id="plansQuick"></div>
+    </div>
+  `;
+
+  // Load plans
+  const { data: plans } = await db.from('investment_plans').select('*').eq('is_active', true).order('min_amount');
+  if (plans) {
+    document.getElementById('plansQuick').innerHTML = `
+      <div class="plan-quick">
+        ${plans.slice(0,3).map(p => `
+          <div class="plan-mini" style="--c:${p.color}">
+            <div class="roi">${p.roi_percent}%</div>
+            <div class="pname">${p.name}</div>
+            <div style="font-size:.75rem;color:var(--muted);margin-top:6px;">
+              ${fmt(p.min_amount, 0)} – ${p.max_amount ? fmt(p.max_amount, 0) : 'Unlimited'} · ${p.cycle_days}d
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>

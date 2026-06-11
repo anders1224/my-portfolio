@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Deposit — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .method-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+    @media(max-width:600px) { .method-grid { grid-template-columns:repeat(2,1fr); } }
+    .method-card {
+      background:var(--bg2); border:2px solid var(--border2);
+      border-radius:10px; padding:16px 12px; text-align:center;
+      cursor:pointer; transition:all .22s;
+    }
+    .method-card:hover  { border-color:var(--border); }
+    .method-card.active { border-color:var(--green); background:rgba(57,255,20,.05); }
+    .method-icon { font-size:1.8rem; margin-bottom:6px; }
+    .method-name { font-size:.8rem; font-weight:600; }
+    .wallet-box {
+      background:rgba(57,255,20,.05); border:1px solid var(--border);
+      border-radius:8px; padding:16px; margin-bottom:20px;
+    }
+    .wallet-addr {
+      font-family:monospace; font-size:.82rem; color:var(--green);
+      word-break:break-all; margin:8px 0;
+    }
+    .copy-btn {
+      font-size:.72rem; padding:5px 12px;
+      background:rgba(57,255,20,.1); border:1px solid var(--border);
+      color:var(--green); cursor:pointer; border-radius:4px;
+      font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:.1em;
+    }
+    .copy-btn:hover { background:rgba(57,255,20,.2); }
+    .alert { display:none; }
+    .steps { counter-reset:step; display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
+    .step-item { display:flex; gap:14px; align-items:flex-start; }
+    .step-n {
+      width:26px; height:26px; border-radius:50%; background:rgba(57,255,20,.1);
+      border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+      font-family:'Rajdhani',sans-serif; font-weight:700; color:var(--green);
+      font-size:.82rem; flex-shrink:0;
+    }
+    .step-text { font-size:.85rem; color:var(--muted); padding-top:3px; line-height:1.5; }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr">
+        <h1>Make a Deposit</h1>
+        <p>Choose your payment method and send funds to get started.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+        <!-- Left: form -->
+        <div>
+          <div class="card">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">Select Payment Method</h3>
+            <div class="method-grid">
+              <div class="method-card active" onclick="selectMethod('Bitcoin','BTC')" id="m-BTC">
+                <div class="method-icon">₿</div>
+                <div class="method-name">Bitcoin</div>
+              </div>
+              <div class="method-card" onclick="selectMethod('Ethereum','ETH')" id="m-ETH">
+                <div class="method-icon">◈</div>
+                <div class="method-name">Ethereum</div>
+              </div>
+              <div class="method-card" onclick="selectMethod('USDT TRC-20','TRC20')" id="m-TRC20">
+                <div class="method-icon">₮</div>
+                <div class="method-name">USDT TRC-20</div>
+              </div>
+              <div class="method-card" onclick="selectMethod('USDT ERC-20','ERC20')" id="m-ERC20">
+                <div class="method-icon">₮</div>
+                <div class="method-name">USDT ERC-20</div>
+              </div>
+              <div class="method-card" onclick="selectMethod('Litecoin','LTC')" id="m-LTC">
+                <div class="method-icon">Ł</div>
+                <div class="method-name">Litecoin</div>
+              </div>
+              <div class="method-card" onclick="selectMethod('Dogecoin','DOGE')" id="m-DOGE">
+                <div class="method-icon">Ð</div>
+                <div class="method-name">Dogecoin</div>
+              </div>
+            </div>
+
+            <div class="wallet-box">
+              <div style="font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">
+                Send <span id="methodName">Bitcoin</span> to this address
+              </div>
+              <div class="wallet-addr" id="walletAddr">Loading…</div>
+              <button class="copy-btn" onclick="copyAddr()">📋 Copy Address</button>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="depositForm">
+              <div class="field">
+                <label>Amount (USD equivalent)</label>
+                <input type="number" id="amount" class="input" placeholder="e.g. 500" min="10" step="0.01" required/>
+              </div>
+              <div class="field">
+                <label>Transaction Hash / TxID</label>
+                <input type="text" id="txHash" class="input" placeholder="Paste your transaction hash here" required/>
+              </div>
+              <div class="field">
+                <label>Upload Screenshot (optional)</label>
+                <input type="text" id="note" class="input" placeholder="Any notes for admin…"/>
+              </div>
+              <button type="submit" class="btn btn-green btn-full" id="submitBtn">Submit Deposit</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: instructions -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">How to Deposit</h3>
+            <div class="steps">
+              <div class="step-item"><div class="step-n">1</div><div class="step-text">Choose your preferred cryptocurrency above.</div></div>
+              <div class="step-item"><div class="step-n">2</div><div class="step-text">Copy the wallet address shown and send your funds from your crypto wallet or exchange.</div></div>
+              <div class="step-item"><div class="step-n">3</div><div class="step-text">Enter the exact USD amount and paste your transaction hash (TxID) in the form.</div></div>
+              <div class="step-item"><div class="step-n">4</div><div class="step-text">Click Submit. Deposits are confirmed within 1–3 hours after blockchain confirmation.</div></div>
+            </div>
+          </div>
+          <div class="card card-green">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:.9rem;margin-bottom:10px;">⚠️ Important</h3>
+            <ul style="color:var(--muted);font-size:.82rem;line-height:1.8;padding-left:16px;">
+              <li>Send only the selected cryptocurrency to this address.</li>
+              <li>Minimum deposit is $10. No maximum.</li>
+              <li>Our company does not charge deposit fees.</li>
+              <li>Double-check the wallet address before sending.</li>
+              <li>Deposits go to Admin for review before crediting.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let currentUser = null;
+let currentMethod = 'Bitcoin';
+let walletAddresses = {};
+
+(async () => {
+  currentUser = await requireUser();
+  if (!currentUser) return;
+  document.getElementById('sidebar').innerHTML = renderSidebar('deposit', currentUser);
+  document.getElementById('topbar').innerHTML  = renderTopbar('Deposit Funds');
+
+  // Load wallet addresses from settings
+  const { data: settings } = await db.from('site_settings').select('*');
+  if (settings) {
+    settings.forEach(s => {
+      if (s.key === 'btc_wallet')  walletAddresses.Bitcoin      = s.value;
+      if (s.key === 'eth_wallet')  walletAddresses.Ethereum     = s.value;
+      if (s.key === 'usdt_wallet') {
+        walletAddresses['USDT TRC-20'] = s.value;
+        walletAddresses['USDT ERC-20'] = s.value;
+      }
+      if (s.key === 'ltc_wallet')  walletAddresses.Litecoin  = s.value;
+      if (s.key === 'doge_wallet') walletAddresses.Dogecoin  = s.value;
+    });
+  }
+  document.getElementById('walletAddr').textContent = walletAddresses['Bitcoin'] || 'Contact support for address';
+})();
+
+function selectMethod(name, key) {
+  currentMethod = name;
+  document.querySelectorAll('.method-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('m-' + key).classList.add('active');
+  document.getElementById('methodName').textContent = name;
+  document.getElementById('walletAddr').textContent = walletAddresses[name] || 'Contact support for address';
+}
+
+function copyAddr() {
+  const addr = document.getElementById('walletAddr').textContent;
+  navigator.clipboard.writeText(addr).then(() => {
+    showAlert(document.getElementById('alertBox'), 'Address copied to clipboard!', 'success');
+    setTimeout(() => hideAlert(document.getElementById('alertBox')), 2000);
+  });
+}
+
+document.getElementById('depositForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn   = document.getElementById('submitBtn');
+  const alert = document.getElementById('alertBox');
+  setLoading(btn, true, 'Submitting…');
+
+  const { error } = await db.from('transactions').insert({
+    user_id:        currentUser.id,
+    type:           'deposit',
+    amount:         parseFloat(document.getElementById('amount').value),
+    method:         currentMethod,
+    txn_hash:       document.getElementById('txHash').value.trim(),
+    note:           document.getElementById('note').value.trim(),
+    status:         'pending',
+  });
+
+  setLoading(btn, false);
+  if (error) { showAlert(alert, error.message); return; }
+
+  // Add notification
+  await db.from('notifications').insert({
+    user_id: currentUser.id,
+    title:   'Deposit Submitted',
+    message: `Your deposit of $${document.getElementById('amount').value} via ${currentMethod} is under review.`,
+    type:    'info'
+  });
+
+  showAlert(alert, '✅ Deposit submitted successfully! Admin will confirm within 1–3 hours.', 'success');
+  e.target.reset();
+});
+</script>
+</body>
+</html>

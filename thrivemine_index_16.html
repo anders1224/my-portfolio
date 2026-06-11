@@ -1,0 +1,3957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ThriveMine — Empowering Industries Through Blockchain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ═══════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════ */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:#0a0a0a;
+      color:#fff;
+      font-family:'Exo 2',sans-serif;
+      overflow-x:hidden;
+    }
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
+    ::-webkit-scrollbar-thumb{background:#39ff14;border-radius:2px}
+    a{text-decoration:none;color:inherit}
+    img{display:block;width:100%}
+
+    /* ═══════════════════════════════════════
+       CSS VARIABLES
+    ═══════════════════════════════════════ */
+    :root{
+      --green:#39ff14;
+      --green2:#00e676;
+      --glow-sm:0 0 14px rgba(57,255,20,.4);
+      --glow-md:0 0 24px rgba(57,255,20,.45),0 0 50px rgba(57,255,20,.15);
+      --glow-lg:0 0 32px rgba(57,255,20,.6),0 0 80px rgba(57,255,20,.2);
+      --card-bg:#141414;
+      --border:rgba(57,255,20,.3);
+      --muted:#666;
+    }
+
+    /* ═══════════════════════════════════════
+       REUSABLE
+    ═══════════════════════════════════════ */
+    .container{max-width:1280px;margin:0 auto;padding:0 48px}
+    @media(max-width:768px){.container{padding:0 20px}}
+
+    .sec-tag{
+      font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;
+      color:var(--green);margin-bottom:12px;font-family:'Exo 2',sans-serif;
+    }
+    .sec-title{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;
+    }
+    .btn-green{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--green);color:#000;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:14px 36px;cursor:pointer;border:none;
+      box-shadow:var(--glow-sm);
+      transition:box-shadow .3s,transform .2s;
+    }
+    .btn-green:hover{box-shadow:var(--glow-lg);transform:translateY(-2px)}
+    .btn-outline{
+      display:inline-flex;align-items:center;gap:8px;
+      background:transparent;color:#ccc;
+      border:1px solid rgba(255,255,255,.2);
+      font-family:'Rajdhani',sans-serif;font-weight:600;
+      font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:14px 36px;cursor:pointer;
+      transition:border-color .3s,color .3s;
+    }
+    .btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+    /* ═══════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════ */
+    #navbar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 48px;height:64px;
+      background:rgba(10,10,10,.92);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(57,255,20,.08);
+      transition:background .3s;
+    }
+    .nav-logo{
+      display:flex;align-items:center;gap:10px;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.5rem;letter-spacing:.12em;color:#fff;
+    }
+    .nav-logo .icon{
+      width:32px;height:32px;background:var(--green);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;color:#000;font-weight:900;
+    }
+    .nav-logo span{color:var(--green)}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{
+      font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(255,255,255,.5);
+      transition:color .2s;
+    }
+    .nav-links a:hover{color:var(--green)}
+    .nav-actions{display:flex;gap:10px;align-items:center}
+    .nav-signin{
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.75rem;
+      letter-spacing:.18em;text-transform:uppercase;
+      border:1px solid rgba(57,255,20,.5);color:var(--green);
+      padding:8px 20px;border-radius:4px;transition:all .2s;
+    }
+    .nav-signin:hover{background:rgba(57,255,20,.1);border-color:var(--green)}
+    .nav-cta{
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.75rem;
+      letter-spacing:.18em;text-transform:uppercase;
+      background:var(--green);color:#000;
+      padding:8px 20px;
+      box-shadow:var(--glow-sm);transition:box-shadow .2s;
+    }
+    .nav-cta:hover{box-shadow:var(--glow-md)}
+    .nav-dashboard{
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.75rem;
+      letter-spacing:.18em;text-transform:uppercase;
+      background:var(--green);color:#000;
+      padding:8px 20px;
+      box-shadow:var(--glow-sm);transition:box-shadow .2s;
+      display:none;
+    }
+    .nav-dashboard:hover{box-shadow:var(--glow-md)}
+    .mob-dashboard{
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;
+      letter-spacing:.18em;text-transform:uppercase;
+      color:#000;
+      background:var(--green);
+      padding:12px 16px;
+      text-align:center;
+      border-radius:10px;
+      margin:12px 0;
+      display:block;
+    }
+    .mob-dashboard:hover{opacity:.95}
+    .auth-modal{
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.86);backdrop-filter:blur(12px);
+      z-index:300;opacity:0;pointer-events:none;transition:opacity .2s ease;
+    }
+    .auth-modal.open{opacity:1;pointer-events:auto}
+    .auth-panel{
+      width:min(540px,calc(100% - 40px));background:#080808;
+      border:1px solid rgba(57,255,20,.2);padding:32px 28px;
+      border-radius:22px;box-shadow:0 0 70px rgba(0,0,0,.6);position:relative;
+    }
+    .auth-close{position:absolute;top:18px;right:18px;border:none;
+      background:transparent;color:#fff;font-size:26px;cursor:pointer}
+    .auth-panel h2{font-size:1.85rem;margin-bottom:16px}
+    .auth-switch{display:flex;gap:10px;margin-bottom:24px}
+    .auth-switch button{flex:1;padding:12px 16px;border:1px solid rgba(255,255,255,.16);
+      background:transparent;color:#ccc;cursor:pointer;font-weight:700;transition:all .2s}
+    .auth-switch button.active{background:var(--green);color:#000;border-color:var(--green)}
+    .auth-form .field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+    .auth-form label{font-size:.85rem;color:#aaa}
+    .auth-form input{width:100%;padding:14px 16px;background:#111;
+      border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff}
+    .auth-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+    .auth-messages{margin-top:16px;color:#fff;font-size:.95rem;min-height:22px}
+    .auth-note{color:#8af77d;font-size:.85rem;line-height:1.5;margin-top:10px}
+    @media(max-width:560px){.auth-panel{padding:24px;border-radius:18px}}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .hamburger span{width:22px;height:2px;background:#fff;transition:all .3s}
+    @media(max-width:900px){
+      #navbar{padding:0 20px}
+      .nav-links,.nav-actions{display:none}
+      .hamburger{display:flex}
+      .mob-btns{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+      .mob-btns a{text-align:center;padding:12px;font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+      .mob-btn1{border:1px solid rgba(255,255,255,.2);color:#aaa}
+      .mob-btn2{background:var(--green);color:#000}
+    }
+
+    /* ═══════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════ */
+    #hero{
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      text-align:center;padding:100px 24px 60px;
+      position:relative;overflow:hidden;
+    }
+    #hero-canvas{position:absolute;inset:0;opacity:.35;pointer-events:none}
+    .grid-overlay{
+      position:absolute;inset:0;pointer-events:none;
+      background-image:
+        linear-gradient(rgba(57,255,20,.04) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(57,255,20,.04) 1px,transparent 1px);
+      background-size:60px 60px;
+    }
+    .hero-glow{
+      position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse 70% 55% at 50% 42%,rgba(57,255,20,.06),transparent 70%);
+    }
+    .hero-inner{position:relative;z-index:2;max-width:900px}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:10px;
+      border:1px solid rgba(57,255,20,.3);
+      padding:7px 22px;margin-bottom:36px;
+      color:var(--green);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+      animation:fadeUp .8s ease both;
+    }
+    .hero-badge .dot{
+      width:7px;height:7px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 8px var(--green);
+      animation:blink 1.5s infinite;
+    }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    h1{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:clamp(2.8rem,7vw,6rem);
+      line-height:1.04;letter-spacing:.02em;
+      animation:fadeUp .9s .1s ease both;
+    }
+    h1 em{font-style:normal;color:var(--green);text-shadow:0 0 40px rgba(57,255,20,.3)}
+    .hero-sub{
+      margin:24px auto 0;color:rgba(255,255,255,.45);
+      font-size:clamp(1rem,1.8vw,1.15rem);line-height:1.75;font-weight:300;
+      max-width:640px;
+      animation:fadeUp 1s .2s ease both;
+    }
+    .hero-btns{
+      display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+      margin-top:40px;
+      animation:fadeUp 1s .3s ease both;
+    }
+    /* Stats bar */
+    .hero-stats{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      border:1px solid rgba(57,255,20,.12);
+      max-width:720px;margin:60px auto 0;
+      animation:fadeUp 1s .45s ease both;
+    }
+    .hstat{
+      padding:20px 12px;text-align:center;
+      border-right:1px solid rgba(57,255,20,.1);
+    }
+    .hstat:last-child{border-right:none}
+    .hstat-n{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.9rem;color:var(--green);
+      text-shadow:0 0 16px rgba(57,255,20,.4);
+    }
+    .hstat-l{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+    @media(max-width:500px){
+      .hero-stats{grid-template-columns:repeat(2,1fr)}
+      .hstat:nth-child(2){border-right:none}
+      .hstat:nth-child(1),.hstat:nth-child(2){border-bottom:1px solid rgba(57,255,20,.1)}
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* scroll caret */
+    .scroll-caret{
+      position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      animation:bounce 2s infinite;
+    }
+    .scroll-caret span{width:1px;height:40px;background:linear-gradient(transparent,rgba(57,255,20,.4))}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+    /* ═══════════════════════════════════════
+       BITCOIN TRADING CHART SECTION
+    ═══════════════════════════════════════ */
+    #chart-section{
+      background:#080808;
+      padding:80px 0 90px;
+      border-bottom:1px solid rgba(57,255,20,.07);
+    }
+    .chart-hdr{
+      display:flex;flex-wrap:wrap;align-items:flex-end;
+      justify-content:space-between;gap:20px;
+      margin-bottom:28px;
+    }
+    .chart-hdr-left{}
+    .chart-hdr-left .sec-tag{margin-bottom:6px}
+    .chart-hdr-title{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:clamp(1.6rem,3vw,2.4rem);color:#fff;
+      display:flex;align-items:center;gap:14px;
+    }
+    .chart-live-dot{
+      width:9px;height:9px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 8px var(--green);
+      animation:blink 1.4s infinite;
+      display:inline-block;
+    }
+    .chart-live-label{
+      font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;
+      color:var(--green);font-family:'Exo 2',sans-serif;
+    }
+
+    /* Coin price pills row */
+    .coin-pills{
+      display:flex;flex-wrap:wrap;gap:10px;
+      margin-bottom:20px;
+    }
+    .coin-pill{
+      display:flex;align-items:center;gap:8px;
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.15);
+      padding:8px 16px;
+      cursor:pointer;
+      transition:border-color .2s,background .2s;
+      border-radius:4px;
+    }
+    .coin-pill:hover,.coin-pill.active{
+      border-color:var(--green);
+      background:rgba(57,255,20,.06);
+    }
+    .coin-pill-sym{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.82rem;letter-spacing:.1em;color:#fff;
+    }
+    .coin-pill-price{
+      font-family:'Rajdhani',sans-serif;font-size:.82rem;
+      color:var(--green);font-weight:600;
+    }
+    .coin-pill-chg{
+      font-size:.72rem;font-weight:600;
+    }
+    .coin-pill-chg.up{color:#00e676}
+    .coin-pill-chg.dn{color:#ff5252}
+
+    /* Chart frame */
+    .chart-frame{
+      width:100%;
+      border:1px solid rgba(57,255,20,.18);
+      border-radius:8px;
+      overflow:hidden;
+      background:#0b0b0b;
+      box-shadow:0 0 40px rgba(0,0,0,.6),0 0 1px rgba(57,255,20,.2);
+      min-height:500px;
+      position:relative;
+    }
+    .chart-frame iframe{
+      display:block;
+      width:100%;
+      height:500px;
+      border:none;
+      background:#0b0b0b;
+    }
+    @media(max-width:768px){
+      .chart-frame { min-height:340px; }
+      .chart-frame iframe{height:340px}
+      .chart-hdr{flex-direction:column;align-items:flex-start}
+    }
+
+    /* Bottom stats bar */
+    .chart-stats{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      margin-top:16px;
+      border:1px solid rgba(57,255,20,.1);
+    }
+    @media(max-width:600px){.chart-stats{grid-template-columns:repeat(2,1fr)}}
+    .cstat{
+      padding:14px 16px;text-align:center;
+      border-right:1px solid rgba(57,255,20,.08);
+    }
+    .cstat:last-child{border-right:none}
+    @media(max-width:600px){
+      .cstat:nth-child(2){border-right:none}
+      .cstat:nth-child(1),.cstat:nth-child(2){border-bottom:1px solid rgba(57,255,20,.08)}
+    }
+    .cstat-v{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.1rem;color:#fff;
+      display:block;margin-bottom:3px;
+    }
+    .cstat-v.green{color:var(--green)}
+    .cstat-l{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+    /* ═══════════════════════════════════════
+       TRANSLATOR (Google Translate)
+    ═══════════════════════════════════════ */
+
+    /* Hide Google's default ugly banner & top bar */
+    body { top: 0 !important; }
+    .goog-te-banner-frame, .skiptranslate { display:none !important; }
+    .goog-te-gadget { font-size:0 !important; }
+    .goog-te-gadget .goog-te-combo { font-size:.78rem !important; }
+
+    /* Custom translate button in navbar */
+    .translate-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .translate-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(57,255,20,.07);
+      border: 1px solid rgba(57,255,20,.25);
+      color: rgba(255,255,255,.7);
+      padding: 7px 14px;
+      font-family: 'Exo 2', sans-serif;
+      font-size: .75rem;
+      letter-spacing: .08em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all .25s;
+      white-space: nowrap;
+    }
+    .translate-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(57,255,20,.12);
+    }
+    .translate-btn .globe-icon { font-size: .95rem; }
+    .translate-btn .chevron {
+      font-size: .55rem;
+      opacity: .5;
+      transition: transform .25s;
+    }
+    .translate-btn.open .chevron { transform: rotate(180deg); }
+
+    /* Dropdown panel */
+    .translate-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: #0f0f0f;
+      border: 1px solid rgba(57,255,20,.2);
+      border-radius: 8px;
+      width: 220px;
+      z-index: 500;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,.8);
+    }
+    .translate-panel.open { display: block; animation: fadeUp .2s ease; }
+
+    .translate-panel-hdr {
+      padding: 12px 16px 8px;
+      font-size: .65rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--green);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    /* Language list */
+    .lang-list {
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+    .lang-list::-webkit-scrollbar { width: 3px; }
+    .lang-list::-webkit-scrollbar-thumb { background: rgba(57,255,20,.3); border-radius: 2px; }
+
+    .lang-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-size: .83rem;
+      color: rgba(255,255,255,.55);
+      transition: background .18s, color .18s;
+    }
+    .lang-item:hover { background: rgba(57,255,20,.06); color: #fff; }
+    .lang-item.active { color: var(--green); background: rgba(57,255,20,.05); }
+    .lang-item .flag { font-size: 1.1rem; flex-shrink: 0; }
+    .lang-item .lname { flex: 1; }
+    .lang-item .lcode {
+      font-size: .65rem;
+      color: rgba(255,255,255,.2);
+      letter-spacing: .08em;
+    }
+
+    /* Floating translate button (mobile / bottom corner) */
+    #float-translate {
+      position: fixed;
+      bottom: 88px;
+      right: 20px;
+      z-index: 300;
+      display: none;
+    }
+    @media(max-width:900px) { #float-translate { display: block; } }
+
+    .float-translate-btn {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #000;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--glow-md);
+      transition: transform .2s;
+    }
+    .float-translate-btn:hover { transform: scale(1.1); }
+
+    /* Mobile translate panel */
+    #mobile-translate-panel {
+      display: none;
+      position: fixed;
+      bottom: 140px;
+      right: 16px;
+      width: 240px;
+      background: #0f0f0f;
+      border: 1px solid rgba(57,255,20,.25);
+      border-radius: 10px;
+      z-index: 400;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,.9);
+    }
+    #mobile-translate-panel.open { display: block; animation: fadeUp .2s ease; }
+
+    /* Hidden Google Translate element */
+    #google_translate_element { display: none; }
+
+    /* ═══════════════════════════════════════
+       TICKER
+    ═══════════════════════════════════════ */
+    .ticker-wrap{
+      overflow:hidden;
+      border-top:1px solid rgba(57,255,20,.08);
+      border-bottom:1px solid rgba(57,255,20,.08);
+      background:#0d0d0d;padding:11px 0;
+    }
+    .ticker-track{display:flex;animation:tickRun 35s linear infinite;white-space:nowrap}
+    .tick{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:0 44px;font-size:.68rem;letter-spacing:.25em;
+      text-transform:uppercase;color:#4a4a4a;
+    }
+    .tick .gem{color:var(--green);font-size:.9rem}
+    @keyframes tickRun{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* ═══════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════ */
+    #about{background:#0e0e0e;padding:110px 0}
+    .about-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+    }
+    @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:48px}}
+
+    .about-img-wrap{position:relative}
+    .about-img-wrap img{
+      border:2px solid rgba(57,255,20,.25);
+      object-fit:cover;height:420px;
+      box-shadow:0 0 40px rgba(57,255,20,.12);
+    }
+    .about-img-wrap::before{
+      content:'';position:absolute;top:-8px;left:-8px;right:8px;bottom:8px;
+      border:1px solid rgba(57,255,20,.1);z-index:-1;
+    }
+    .about-badge{
+      position:absolute;bottom:20px;right:20px;
+      background:rgba(10,10,10,.92);
+      border:1px solid rgba(57,255,20,.3);
+      padding:12px 18px;text-align:center;
+    }
+    .about-badge-n{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.8rem;color:var(--green)}
+    .about-badge-l{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+    .about-text .sec-title{margin-bottom:20px}
+    .about-text p{color:rgba(255,255,255,.4);font-size:.98rem;line-height:1.8;font-weight:300;margin-bottom:16px}
+    .feat-list{display:flex;flex-direction:column;gap:14px;margin-top:28px}
+    .feat-item{display:flex;align-items:flex-start;gap:12px}
+    .feat-icon{
+      width:34px;height:34px;border:1px solid rgba(57,255,20,.3);
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;font-size:.95rem;
+      transition:border-color .3s;
+    }
+    .feat-item:hover .feat-icon{border-color:var(--green)}
+    .feat-text strong{display:block;font-size:.88rem;font-weight:600;margin-bottom:2px}
+    .feat-text span{font-size:.8rem;color:rgba(255,255,255,.38);line-height:1.5}
+
+    /* ═══════════════════════════════════════
+       DIVERSITY & INCLUSION
+    ═══════════════════════════════════════ */
+    .div-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:72px;
+      align-items:center;
+    }
+    @media(max-width:900px){
+      .div-grid{grid-template-columns:1fr;gap:48px}
+    }
+
+    .div-title{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:clamp(2rem,3.5vw,2.8rem);
+      color:#fff;line-height:1.1;margin-bottom:32px;
+    }
+
+    /* Icon + heading block */
+    .div-block{
+      display:flex;align-items:flex-start;gap:18px;
+      margin-bottom:32px;
+    }
+    .div-icon{
+      font-size:2.4rem;line-height:1;flex-shrink:0;margin-top:4px;
+    }
+    .div-block-heading{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.4rem;color:#fff;margin-bottom:10px;line-height:1.2;
+    }
+    .div-block-desc{
+      color:rgba(255,255,255,.5);font-size:.96rem;
+      line-height:1.75;font-weight:300;
+    }
+
+    /* Value list */
+    .div-values{
+      display:flex;flex-direction:column;gap:18px;
+    }
+    .div-val-item{
+      display:flex;align-items:flex-start;gap:14px;
+      padding:16px 18px;
+      background:rgba(57,255,20,.03);
+      border:1px solid rgba(57,255,20,.1);
+      border-radius:8px;
+      transition:border-color .3s,background .3s;
+    }
+    .div-val-item:hover{
+      border-color:rgba(57,255,20,.3);
+      background:rgba(57,255,20,.06);
+    }
+    .div-val-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+    .div-val-item strong{
+      display:block;font-size:.9rem;font-weight:600;
+      color:#fff;margin-bottom:3px;
+    }
+    .div-val-item span{
+      font-size:.82rem;color:rgba(255,255,255,.4);line-height:1.55;
+    }
+
+    /* Photo side */
+    .div-img-wrap{position:relative}
+    .div-img{
+      width:100%;
+      border-radius:12px;
+      object-fit:cover;
+      height:460px;
+      display:block;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 24px 64px rgba(0,0,0,.6);
+    }
+    @media(max-width:900px){.div-img{height:280px}}
+
+    /* Floating badge bottom-right */
+    .div-img-badge{
+      position:absolute;
+      bottom:20px;right:20px;
+      background:rgba(10,10,10,.92);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(57,255,20,.3);
+      border-radius:8px;
+      padding:12px 20px;
+      text-align:center;
+      box-shadow:0 0 20px rgba(57,255,20,.15);
+    }
+    .dib-n{
+      display:block;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.9rem;color:var(--green);
+      text-shadow:0 0 12px rgba(57,255,20,.4);
+    }
+    .dib-l{
+      display:block;
+      font-size:.62rem;letter-spacing:.22em;
+      text-transform:uppercase;color:rgba(255,255,255,.4);
+      margin-top:2px;
+    }
+
+    /* ═══════════════════════════════════════
+       SERVICES  ← Main section matching screenshots
+    ═══════════════════════════════════════ */
+    #services{background:#0a0a0a;padding:110px 0}
+    .services-hdr{text-align:center;max-width:700px;margin:0 auto 64px}
+    .services-hdr .sec-title{margin-bottom:16px}
+    .services-hdr p{color:rgba(255,255,255,.4);font-size:1.05rem;line-height:1.75;font-weight:300}
+
+    /* THE CARD GRID — matches screenshots exactly */
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    @media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px) {.cards{grid-template-columns:1fr}}
+
+    /* THE SERVICE CARD — pixel-matching the screenshots:
+       • Rounded corners (16px)
+       • BRIGHT green border with glow
+       • Image fills top portion (4:3 ratio)
+       • Dark grey (#2a2a2a) footer bar
+       • Bold white centered label text */
+    .svc-card{
+      border-radius:16px;
+      border:2px solid var(--green);
+      box-shadow:var(--glow-md);
+      overflow:hidden;
+      background:#111;
+      cursor:pointer;
+      transition:transform .35s ease, box-shadow .35s ease;
+    }
+    .svc-card:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--glow-lg);
+    }
+    .svc-img{
+      position:relative;width:100%;
+      aspect-ratio:4/3;overflow:hidden;
+    }
+    .svc-img img{
+      width:100%;height:100%;object-fit:cover;
+      transition:transform .5s ease;
+    }
+    .svc-card:hover .svc-img img{transform:scale(1.06)}
+    .svc-label{
+      background:#2a2a2a;
+      padding:18px 16px;text-align:center;
+    }
+    .svc-label span{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.1rem;letter-spacing:.04em;color:#fff;
+    }
+
+    /* ═══════════════════════════════════════
+       HOW IT WORKS
+    ═══════════════════════════════════════ */
+    #how{background:#0e0e0e;padding:110px 0}
+    .how-hdr{text-align:center;max-width:580px;margin:0 auto 72px}
+    .how-hdr .sec-title{margin-bottom:0}
+    .steps{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:40px;
+      position:relative;
+    }
+    .steps::before{
+      content:'';position:absolute;
+      top:34px;left:8%;right:8%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(57,255,20,.2),rgba(57,255,20,.2),transparent);
+    }
+    @media(max-width:900px){
+      .steps{grid-template-columns:repeat(2,1fr)}
+      .steps::before{display:none}
+    }
+    @media(max-width:500px){.steps{grid-template-columns:1fr}}
+    .step{text-align:center;position:relative;z-index:1}
+    .step-num{
+      width:68px;height:68px;border-radius:50%;
+      border:2px solid rgba(57,255,20,.4);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.5rem;color:var(--green);
+      margin:0 auto 20px;background:#0e0e0e;
+      transition:border-color .3s,box-shadow .3s;
+    }
+    .step:hover .step-num{border-color:var(--green);box-shadow:var(--glow-sm)}
+    .step-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.05em;margin-bottom:10px}
+    .step-desc{font-size:.83rem;color:rgba(255,255,255,.38);line-height:1.65}
+
+    /* ═══════════════════════════════════════
+       STATS BANNER
+    ═══════════════════════════════════════ */
+    #stats{
+      padding:64px 0;
+      border-top:1px solid rgba(57,255,20,.08);
+      border-bottom:1px solid rgba(57,255,20,.08);
+      background:linear-gradient(135deg,rgba(57,255,20,.04),rgba(0,230,118,.02));
+    }
+    .stats-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);
+      max-width:1000px;margin:0 auto;
+    }
+    @media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+    .bstat{
+      text-align:center;padding:24px;
+      border-right:1px solid rgba(57,255,20,.1);
+    }
+    .bstat:last-child{border-right:none}
+    @media(max-width:700px){
+      .bstat:nth-child(2){border-right:none}
+      .bstat:nth-child(1),.bstat:nth-child(2){border-bottom:1px solid rgba(57,255,20,.1)}
+    }
+    .bstat-n{
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2.8rem;
+      color:var(--green);text-shadow:0 0 20px rgba(57,255,20,.4);
+    }
+    .bstat-l{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
+    /* ═══════════════════════════════════════
+       TESTIMONIALS
+    ═══════════════════════════════════════ */
+    #testi{background:#0a0a0a;padding:110px 0}
+    .testi-hdr{text-align:center;max-width:580px;margin:0 auto 60px}
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    @media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
+    .tcard{
+      background:#111;border:1px solid rgba(57,255,20,.12);
+      padding:32px 28px;
+      transition:border-color .3s,transform .3s;
+    }
+    .tcard:hover{border-color:rgba(57,255,20,.35);transform:translateY(-3px)}
+    .tcard-q{font-size:2.5rem;color:var(--green);line-height:1;margin-bottom:14px}
+    .tcard-text{font-size:.88rem;color:rgba(255,255,255,.45);line-height:1.75;font-weight:300;margin-bottom:24px}
+    .tcard-author{display:flex;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,.05);padding-top:18px}
+    .tcard-ava{
+      width:40px;height:40px;border-radius:50%;
+      background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.2);
+      display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+    }
+    .tcard-name{font-weight:600;font-size:.88rem}
+    .tcard-role{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+    /* ═══════════════════════════════════════
+       ROADMAP
+    ═══════════════════════════════════════ */
+    #roadmap{background:#0e0e0e;padding:110px 0}
+    .road-hdr{text-align:center;max-width:600px;margin:0 auto 72px}
+    .road-track{
+      max-width:1000px;margin:0 auto;
+      display:flex;flex-direction:column;gap:0;
+      position:relative;
+    }
+    .road-track::before{
+      content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;
+      background:linear-gradient(180deg,transparent,rgba(57,255,20,.25),rgba(57,255,20,.25),transparent);
+      transform:translateX(-50%);
+    }
+    @media(max-width:700px){
+      .road-track::before{left:18px;transform:none}
+    }
+    .rm{
+      display:grid;grid-template-columns:1fr 56px 1fr;
+      gap:0;margin-bottom:44px;align-items:start;
+    }
+    @media(max-width:700px){
+      .rm{grid-template-columns:36px 1fr;gap:0}
+    }
+    .rm.right .rm-card{grid-column:3}
+    .rm.right .rm-empty{grid-column:1}
+    .rm.right .rm-dot{grid-column:2;grid-row:1}
+    .rm.left .rm-card{grid-column:1;text-align:right}
+    .rm.left .rm-dot{grid-column:2}
+    .rm.left .rm-empty{grid-column:3}
+    @media(max-width:700px){
+      .rm.left .rm-card,.rm.right .rm-card{grid-column:2;text-align:left}
+      .rm.left .rm-dot,.rm.right .rm-dot{grid-column:1;grid-row:1}
+      .rm.left .rm-empty,.rm.right .rm-empty{display:none}
+    }
+    .rm-dot{display:flex;justify-content:center;padding-top:14px}
+    .rm-dot-inner{
+      width:12px;height:12px;border-radius:50%;
+      border:2px solid rgba(57,255,20,.5);background:#0e0e0e;
+      position:relative;z-index:1;
+    }
+    .rm-dot-inner.done{background:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.6)}
+    .rm-dot-inner.active{
+      border-color:#f0b429;
+      animation:rmPulse 2s infinite;
+    }
+    @keyframes rmPulse{0%,100%{box-shadow:0 0 0 0 rgba(240,180,41,.4)}50%{box-shadow:0 0 0 7px rgba(240,180,41,0)}}
+    .rm-card{
+      background:#111;border:1px solid rgba(57,255,20,.1);
+      padding:24px 28px;transition:border-color .3s;
+    }
+    .rm-card:hover{border-color:rgba(57,255,20,.28)}
+    .rm-phase{
+      font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
+      color:var(--green);margin-bottom:6px;font-family:'Exo 2',sans-serif;
+    }
+    .rm-phase.gold{color:#f0b429}
+    .rm-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:10px}
+    .rm-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+    .rm-list li{font-size:.8rem;color:rgba(255,255,255,.38);display:flex;align-items:center;gap:7px}
+    .rm-list li::before{content:'—';color:var(--green);opacity:.5;flex-shrink:0}
+    .rm.left .rm-list li{justify-content:flex-end}
+    .rm.left .rm-list li::before{order:1}
+    @media(max-width:700px){
+      .rm.left .rm-list li{justify-content:flex-start}
+      .rm.left .rm-list li::before{order:0}
+    }
+
+    /* ═══════════════════════════════════════
+       PRICING
+    ═══════════════════════════════════════ */
+    #pricing{background:#0a0a0a;padding:110px 0}
+    .price-hdr{text-align:center;max-width:560px;margin:0 auto 60px}
+    .price-hdr .sec-title{margin-bottom:14px}
+    .price-hdr p{color:rgba(255,255,255,.4);font-size:.98rem}
+
+    /* Single centered card wrapper */
+    .price-grid{
+      display:flex;justify-content:center;
+    }
+
+    /* The card itself */
+    .pcard{
+      background:#111;
+      border:2px solid var(--green);
+      border-radius:20px;
+      padding:44px 40px 40px;
+      width:100%;max-width:480px;
+      display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+      box-shadow:var(--glow-md);
+      transition:box-shadow .35s,transform .3s;
+    }
+    .pcard:hover{box-shadow:var(--glow-lg);transform:translateY(-4px)}
+
+    /* Top badge */
+    .popular-badge{
+      position:absolute;top:0;left:50%;transform:translateX(-50%);
+      background:var(--green);color:#000;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;
+      padding:6px 24px;white-space:nowrap;
+      display:flex;align-items:center;gap:6px;
+      border-radius:0 0 10px 10px;
+    }
+
+    /* Plan label */
+    .plan-name{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.6rem;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--green);margin-top:28px;margin-bottom:6px;
+      text-shadow:0 0 20px rgba(57,255,20,.35);
+    }
+
+    /* ROI rate — big hero number */
+    .plan-roi{
+      display:flex;align-items:flex-start;gap:4px;
+      margin-bottom:4px;
+    }
+    .plan-roi-pct{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:5rem;line-height:1;color:#fff;
+    }
+    .plan-roi-sym{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:2rem;color:var(--green);padding-top:8px;
+    }
+    .plan-roi-label{
+      font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(255,255,255,.35);margin-bottom:20px;
+    }
+
+    /* Duration pill */
+    .plan-duration{
+      display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(57,255,20,.3);
+      padding:6px 16px;margin-bottom:28px;width:fit-content;
+      font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);
+    }
+    .plan-duration .clk{color:var(--green);font-size:.9rem}
+
+    /* Divider */
+    .plan-divider{height:1px;background:rgba(57,255,20,.12);margin-bottom:24px}
+
+    /* Investment range row */
+    .plan-range-label{
+      font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
+      color:rgba(255,255,255,.35);margin-bottom:10px;
+    }
+    .plan-range{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin-bottom:28px;
+    }
+    .plan-range-box{
+      flex:1;background:rgba(57,255,20,.06);
+      border:1px solid rgba(57,255,20,.2);
+      padding:14px 18px;text-align:center;
+    }
+    .plan-range-box .amt{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.55rem;color:#fff;display:block;
+    }
+    .plan-range-box .lbl{
+      font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-top:3px;display:block;
+    }
+    .range-arrow{color:var(--green);font-size:1.2rem;flex-shrink:0}
+
+    /* Features list */
+    .plan-features{
+      list-style:none;display:flex;flex-direction:column;gap:11px;
+      flex:1;margin-bottom:32px;
+    }
+    .plan-features li{
+      display:flex;align-items:flex-start;gap:10px;
+      font-size:.86rem;color:rgba(255,255,255,.58);
+    }
+    .plan-features li::before{
+      content:'✓';color:var(--green);flex-shrink:0;margin-top:1px;font-size:.85rem;font-weight:700;
+    }
+
+    /* CTA button */
+    .plan-btn{
+      display:block;text-align:center;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.9rem;letter-spacing:.22em;text-transform:uppercase;
+      padding:15px;transition:all .3s;
+    }
+    .plan-btn.g{
+      background:var(--green);color:#000;
+      box-shadow:var(--glow-sm);
+    }
+    .plan-btn.g:hover{box-shadow:var(--glow-lg);transform:translateY(-1px)}
+
+    .price-note{
+      text-align:center;margin-top:24px;
+      font-size:.72rem;color:rgba(255,255,255,.18);letter-spacing:.05em;
+    }
+
+    /* ═══════════════════════════════════════
+       INVESTMENT PLAN CARDS
+    ═══════════════════════════════════════ */
+    .iplan-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+    @media(max-width:1050px){.iplan-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px) {.iplan-grid{grid-template-columns:1fr}}
+
+    /* Base card */
+    .iplan-card{
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.18);
+      border-radius:16px;
+      padding:0 24px 24px;
+      display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+      transition:transform .32s,border-color .32s,box-shadow .32s;
+    }
+    .iplan-card:hover{
+      transform:translateY(-6px);
+      border-color:var(--card-ac,var(--green));
+      box-shadow:0 0 28px color-mix(in srgb,var(--card-ac,var(--green)) 28%,transparent),
+                 0 16px 48px rgba(0,0,0,.55);
+    }
+
+    /* Coloured top accent bar */
+    .iplan-top-bar{
+      height:3px;width:100%;
+      margin:0 -24px 20px;
+      width:calc(100% + 48px);
+      background:linear-gradient(90deg,transparent,var(--card-ac,var(--green)),transparent);
+      flex-shrink:0;
+    }
+
+    /* Per-plan accent colours */
+    .starter-plan  {--card-ac:#39ff14}
+    .trading-plan  {--card-ac:#00e5b0;border-color:rgba(0,229,176,.2)}
+    .growth-plan   {--card-ac:#00b4ff;border-color:rgba(0,180,255,.2)}
+    .platinum-plan {--card-ac:#e5c700;border-color:rgba(229,199,0,.2)}
+    .diamond-plan  {--card-ac:#00c8ff;border-color:rgba(0,200,255,.2)}
+    .scomp-plan    {--card-ac:#c87dff;border-color:rgba(200,125,255,.2)}
+    .pcomp-plan    {--card-ac:#ff6b35;border-color:rgba(255,107,53,.2)}
+
+    .iplan-badge{
+      font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;
+      color:var(--card-ac,var(--green));
+      border:1px solid var(--card-ac,var(--green));
+      padding:3px 10px;width:fit-content;
+      margin-bottom:14px;opacity:.9;
+    }
+    .iplan-name{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.2rem;letter-spacing:.06em;
+      color:#fff;margin-bottom:10px;
+    }
+    .iplan-roi-row{
+      display:flex;align-items:flex-start;gap:2px;
+      margin-bottom:3px;
+    }
+    .iplan-roi-n{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:3.6rem;line-height:1;
+      color:var(--card-ac,var(--green));
+      text-shadow:0 0 22px color-mix(in srgb,var(--card-ac,var(--green)) 55%,transparent);
+    }
+    .iplan-roi-s{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.5rem;color:var(--card-ac,var(--green));
+      padding-top:6px;
+    }
+    .iplan-roi-label{
+      font-size:.67rem;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-bottom:12px;
+    }
+    .iplan-cycle{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:4px;
+      padding:5px 12px;margin-bottom:16px;width:fit-content;
+      font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
+      color:rgba(255,255,255,.5);
+    }
+    .iplan-ci{color:var(--card-ac,var(--green))}
+    .iplan-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:14px}
+    .iplan-range-label{
+      font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-bottom:8px;
+    }
+    .iplan-range{
+      display:flex;align-items:center;gap:8px;margin-bottom:16px;
+    }
+    .iplan-range-box{
+      flex:1;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:4px;padding:9px 10px;text-align:center;
+    }
+    .iplan-ra{
+      display:block;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1rem;color:var(--card-ac,var(--green));
+    }
+    .iplan-rl{
+      display:block;
+      font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;
+      color:rgba(255,255,255,.25);margin-top:2px;
+    }
+    .iplan-arrow{color:rgba(255,255,255,.22);font-size:.95rem;flex-shrink:0}
+
+    .iplan-feats{
+      list-style:none;display:flex;flex-direction:column;
+      gap:8px;flex:1;margin-bottom:20px;
+    }
+    .iplan-feats li{
+      display:flex;align-items:flex-start;gap:8px;
+      font-size:.81rem;color:rgba(255,255,255,.48);line-height:1.4;
+    }
+    .iplan-feats li::before{
+      content:'✓';color:var(--card-ac,var(--green));
+      flex-shrink:0;font-size:.78rem;margin-top:1px;
+    }
+    .iplan-feats li.iplan-ref{
+      color:rgba(255,255,255,.78);font-weight:600;
+    }
+    .iplan-feats li.iplan-ref::before{content:''}
+
+    .iplan-btn{
+      display:block;text-align:center;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:12px 16px;border-radius:4px;
+      border:1px solid var(--card-ac,var(--green));
+      color:var(--card-ac,var(--green));
+      transition:all .28s;margin-top:auto;
+    }
+    .iplan-btn:hover{
+      background:var(--card-ac,var(--green));
+      color:#000;
+      box-shadow:0 0 20px color-mix(in srgb,var(--card-ac,var(--green)) 42%,transparent);
+    }
+
+    /* ═══════════════════════════════════════
+       PAYMENT SYSTEMS SECTION
+    ═══════════════════════════════════════ */
+    #payments{
+      background:#070d0d;
+      padding:100px 0;
+      border-top:1px solid rgba(57,255,20,.07);
+      border-bottom:1px solid rgba(57,255,20,.07);
+    }
+    .pay-hdr{text-align:center;max-width:680px;margin:0 auto 50px}
+    .pay-hdr .sec-tag{margin-bottom:10px}
+    .pay-hdr .sec-title{margin-bottom:18px}
+    .pay-hdr p{
+      color:rgba(255,255,255,.45);font-size:1rem;line-height:1.7;font-weight:300;
+    }
+
+    /* Big "Deposit" button — exactly like screenshot */
+    .deposit-btn-wrap{
+      max-width:680px;margin:0 auto 56px;
+    }
+    .deposit-btn{
+      display:block;width:100%;
+      text-align:center;
+      border:2px solid rgba(57,255,20,.45);
+      border-radius:14px;
+      padding:22px 24px;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.8rem;letter-spacing:.06em;color:#fff;
+      background:rgba(57,255,20,.04);
+      transition:all .3s;
+      box-shadow:0 0 0 0 rgba(57,255,20,0);
+    }
+    .deposit-btn:hover{
+      background:rgba(57,255,20,.09);
+      border-color:var(--green);
+      box-shadow:var(--glow-md);
+      color:var(--green);
+    }
+
+    /* Payment logos grid — staggered layout like screenshot */
+    .pay-grid{
+      max-width:700px;margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      row-gap:36px;
+      column-gap:20px;
+      align-items:center;
+    }
+
+    /* Center items that span both columns */
+    .pay-center{
+      grid-column:1/-1;
+      display:flex;justify-content:center;
+    }
+
+    .pay-item{
+      display:flex;align-items:center;gap:12px;
+      opacity:.75;
+      transition:opacity .25s,transform .25s;
+      cursor:default;
+    }
+    .pay-item:hover{opacity:1;transform:scale(1.04)}
+
+    /* Icon circle */
+    .pay-icon{
+      width:48px;height:48px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;font-size:1.35rem;font-weight:900;
+      background:rgba(0,210,160,.15);
+      border:2px solid rgba(0,210,160,.35);
+      color:#00d2a0;
+    }
+    .pay-icon.pm{
+      background:rgba(0,180,230,.15);
+      border-color:rgba(0,180,230,.35);
+      color:#00b4e6;
+      font-size:.65rem;font-weight:700;letter-spacing:.05em;
+      flex-direction:column;gap:0;line-height:1.1;
+    }
+
+    .pay-name{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.2rem;letter-spacing:.05em;color:#00d2a0;
+    }
+    .pay-name.italic{font-style:italic;font-weight:400;font-size:1.15rem}
+    .pay-name.blue{color:#00b4e6}
+
+    /* ethereum is slightly muted/smaller in screenshot */
+    .pay-item.eth .pay-icon{
+      background:rgba(100,150,255,.12);
+      border-color:rgba(100,150,255,.3);
+      color:#7899ff;font-size:1.1rem;
+    }
+    .pay-item.eth .pay-name{color:#7899ff;font-style:italic;font-weight:400}
+
+    /* bitcoin */
+    .pay-item.btc .pay-icon{background:rgba(0,210,160,.15);border-color:rgba(0,210,160,.35);color:#00d2a0}
+
+    @media(max-width:500px){
+      .pay-grid{grid-template-columns:1fr;row-gap:28px}
+      .pay-center{grid-column:1}
+    }
+
+    /* ═══════════════════════════════════════
+       CONTACT SECTION
+    ═══════════════════════════════════════ */
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1fr 1.2fr;
+      gap:64px;
+      align-items:start;
+      margin-bottom:56px;
+    }
+    @media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:48px}}
+
+    /* Info cards */
+    .contact-cards{display:flex;flex-direction:column;gap:14px}
+    .contact-card{
+      display:flex;align-items:flex-start;gap:16px;
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.12);
+      border-radius:10px;
+      padding:18px 20px;
+      transition:border-color .3s,background .3s;
+    }
+    .contact-card:hover{
+      border-color:rgba(57,255,20,.35);
+      background:rgba(57,255,20,.04);
+    }
+    .contact-card-icon{
+      font-size:1.5rem;flex-shrink:0;margin-top:2px;
+    }
+    .contact-card-title{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;
+      color:#fff;margin-bottom:6px;
+    }
+    .contact-card-val{
+      display:block;font-size:.83rem;
+      color:rgba(255,255,255,.45);line-height:1.6;
+      transition:color .2s;
+    }
+    a.contact-card-val:hover{color:var(--green)}
+
+    /* Form box */
+    .contact-form-box{
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.15);
+      border-radius:16px;
+      padding:36px 32px;
+    }
+    .contact-form-title{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.4rem;letter-spacing:.06em;color:#fff;
+      margin-bottom:6px;
+    }
+    .contact-form{display:flex;flex-direction:column;gap:16px}
+    .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:600px){.cf-row{grid-template-columns:1fr}}
+    .cf-field{display:flex;flex-direction:column;gap:6px}
+    .cf-label{
+      font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;
+      color:rgba(255,255,255,.35);
+    }
+    .cf-input{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.1);
+      color:#fff;
+      padding:11px 14px;
+      font-family:'Exo 2',sans-serif;
+      font-size:.88rem;
+      outline:none;
+      border-radius:4px;
+      transition:border-color .25s;
+      width:100%;
+    }
+    .cf-input::placeholder{color:rgba(255,255,255,.2)}
+    .cf-input:focus{border-color:rgba(57,255,20,.5)}
+    .cf-select{cursor:pointer;appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2339ff14' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 14px center;
+    }
+    .cf-select option{background:#0f0f0f;color:#fff}
+    .cf-textarea{resize:vertical;min-height:110px;line-height:1.6}
+    .cf-submit{
+      background:var(--green);color:#000;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:14px;border:none;border-radius:4px;cursor:pointer;
+      box-shadow:var(--glow-sm);
+      transition:box-shadow .3s,transform .2s;
+    }
+    .cf-submit:hover{box-shadow:var(--glow-lg);transform:translateY(-2px)}
+    .cf-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+    .cf-success{
+      display:flex;align-items:center;gap:16px;
+      background:rgba(57,255,20,.06);
+      border:1px solid rgba(57,255,20,.25);
+      border-radius:8px;
+      padding:20px 24px;
+      margin-top:8px;
+    }
+
+    /* Map */
+    .contact-map{
+      border:1px solid rgba(57,255,20,.15);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .contact-map-label{
+      background:#0f0f0f;
+      padding:12px 20px;
+      font-size:.78rem;letter-spacing:.1em;
+      color:rgba(255,255,255,.45);
+      display:flex;align-items:center;gap:8px;
+      border-bottom:1px solid rgba(57,255,20,.1);
+    }
+
+    /* ═══════════════════════════════════════
+       CTA BAND
+    ═══════════════════════════════════════ */
+    #cta{
+      padding:120px 24px;text-align:center;
+      background:#0e0e0e;
+      border-top:1px solid rgba(57,255,20,.06);
+      border-bottom:1px solid rgba(57,255,20,.06);
+      position:relative;overflow:hidden;
+    }
+    #cta::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(57,255,20,.055),transparent);
+      pointer-events:none;
+    }
+    #cta h2{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:clamp(2.2rem,4.5vw,4rem);line-height:1.08;margin-bottom:18px;
+    }
+    #cta h2 em{font-style:normal;color:var(--green)}
+    #cta p{color:rgba(255,255,255,.4);max-width:520px;margin:0 auto 44px;font-size:1rem;line-height:1.75}
+    .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+    /* ═══════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════ */
+    footer{background:#070707;padding:64px 0 32px;border-top:1px solid rgba(255,255,255,.04)}
+    .footer-grid{
+      display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+      gap:56px;margin-bottom:48px;
+    }
+    @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:36px}}
+    @media(max-width:500px){.footer-grid{grid-template-columns:1fr}}
+    .footer-brand-logo{
+      display:flex;align-items:center;gap:10px;margin-bottom:14px;
+      font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:.1em;
+    }
+    .footer-brand-logo .icon{width:28px;height:28px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#000;font-weight:900}
+    .footer-brand-logo span{color:var(--green)}
+    .footer-about{font-size:.83rem;color:rgba(255,255,255,.3);line-height:1.7;max-width:260px}
+    .footer-col-title{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--green);margin-bottom:18px}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .footer-links a{font-size:.83rem;color:rgba(255,255,255,.3);transition:color .2s}
+    .footer-links a:hover{color:#fff}
+    .footer-bottom{
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
+      padding-top:28px;border-top:1px solid rgba(255,255,255,.04);
+      font-size:.72rem;color:rgba(255,255,255,.22);
+    }
+    .socials{display:flex;gap:10px}
+    .soc{
+      width:34px;height:34px;border:1px solid rgba(57,255,20,.15);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;color:rgba(255,255,255,.3);
+      transition:all .2s;
+    }
+    .soc:hover{border-color:var(--green);color:var(--green)}
+
+    /* ═══════════════════════════════════════
+       LIVE INVESTMENT TOAST NOTIFICATION
+    ═══════════════════════════════════════ */
+    #live-toast{
+      position:fixed;
+      top:64px;
+      left:0; right:0;
+      z-index:150;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background:#0b2020;
+      border-bottom:2px solid rgba(0,210,160,.25);
+      padding:13px 20px 13px 16px;
+      transform:translateY(-110%);
+      transition:transform .5s cubic-bezier(.22,.68,0,1.2);
+    }
+    #live-toast.show{
+      transform:translateY(0);
+    }
+    .lt-text{
+      flex:1;
+      transition:opacity .35s ease;
+    }
+    .lt-icon{
+      width:46px; height:46px;
+      border-radius:6px;
+      background:rgba(0,190,150,.15);
+      border:1px solid rgba(0,190,150,.3);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem; font-weight:900;
+      color:#00e5b0;
+      flex-shrink:0;
+    }
+    .lt-line1{
+      font-size:.95rem;
+      color:#fff;
+      font-weight:400;
+      line-height:1.3;
+    }
+    .lt-line1 strong{
+      color:#00e5b0;
+      font-weight:700;
+    }
+    .lt-amount{
+      font-family:'Rajdhani',sans-serif;
+      font-size:1.45rem;
+      font-weight:700;
+      color:#fff;
+      line-height:1.15;
+    }
+    .lt-close{
+      color:rgba(255,255,255,.7);
+      font-size:1.1rem;
+      cursor:pointer;
+      padding:6px 10px;
+      flex-shrink:0;
+      transition:all .2s;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:6px;
+    }
+    .lt-close:hover{color:#fff;background:rgba(255,255,255,.15)}
+
+    /* nudge hero down when toast is showing */
+    body.toast-open #hero{
+      padding-top:140px;
+    }
+
+    /* ═══════════════════════════════════════
+       DESKTOP NAV DROPDOWN  (Investment Plans)
+    ═══════════════════════════════════════ */
+    .nav-dropdown{position:relative}
+    .nav-dropdown-btn{
+      display:flex;align-items:center;gap:5px;
+      font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(255,255,255,.5);cursor:pointer;background:none;border:none;
+      font-family:'Exo 2',sans-serif;padding:0;
+      transition:color .2s;
+    }
+    .nav-dropdown-btn:hover,.nav-dropdown-btn.active{color:var(--green)}
+    .nav-dropdown-btn svg{transition:transform .25s}
+    .nav-dropdown-btn.active svg{transform:rotate(180deg)}
+    .nav-drop-panel{
+      display:none;position:absolute;top:calc(100% + 18px);left:50%;
+      transform:translateX(-50%);
+      background:#0d0d0d;border:1px solid rgba(57,255,20,.18);
+      min-width:220px;z-index:300;
+      box-shadow:0 16px 48px rgba(0,0,0,.7);
+    }
+    .nav-drop-panel.open{display:block;animation:fadeUp .2s ease}
+    .nav-drop-item{
+      display:block;padding:12px 20px;
+      font-size:.78rem;letter-spacing:.1em;color:rgba(255,255,255,.55);
+      border-bottom:1px solid rgba(255,255,255,.04);
+      transition:color .2s,background .2s;
+    }
+    .nav-drop-item:last-child{border-bottom:none}
+    .nav-drop-item:hover{color:var(--green);background:rgba(57,255,20,.05)}
+    .nav-drop-item .droi{color:var(--green);font-weight:700;font-size:.82rem}
+
+    /* ═══════════════════════════════════════
+       MOBILE MENU — updated style
+    ═══════════════════════════════════════ */
+    #mobile-menu{
+      display:none;position:fixed;top:64px;left:0;right:0;z-index:99;
+      background:#0d1a1a;
+      border-bottom:1px solid rgba(0,230,118,.12);
+      overflow-y:auto;max-height:calc(100vh - 64px);
+    }
+    #mobile-menu.open{display:block}
+
+    /* Top toast row in mobile menu */
+    /* Login row */
+    .mob-login{
+      display:flex;align-items:center;gap:12px;
+      padding:18px 20px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      color:#00e5b0;font-size:1rem;font-weight:500;
+    }
+    .mob-login .mob-login-icon{
+      width:32px;height:32px;border:1px solid rgba(0,229,176,.3);
+      display:flex;align-items:center;justify-content:center;font-size:.9rem;
+    }
+
+    /* Nav links in mobile menu */
+    .mob-nav-link{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:20px 20px;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      font-size:1.1rem;font-weight:400;color:#fff;
+      transition:color .2s;
+    }
+    .mob-nav-link:hover,.mob-nav-link.active-link{color:var(--green)}
+
+    /* Investment Plans dropdown in mobile */
+    .mob-inv-toggle{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:20px 20px;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      font-size:1.1rem;font-weight:400;color:var(--green);
+      cursor:pointer;
+    }
+    .mob-inv-toggle svg{transition:transform .3s;flex-shrink:0}
+    .mob-inv-toggle.open svg{transform:rotate(180deg)}
+
+    .mob-inv-dropdown{
+      display:none;background:#0a1515;
+      border-bottom:1px solid rgba(57,255,20,.08);
+    }
+    .mob-inv-dropdown.open{display:block}
+    .mob-inv-plan{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;
+      border-bottom:1px solid rgba(255,255,255,.03);
+      font-size:.9rem;color:rgba(255,255,255,.65);
+      transition:color .2s,background .2s;
+    }
+    .mob-inv-plan:hover{color:#fff;background:rgba(57,255,20,.04)}
+    .mob-inv-plan .plan-roi-tag{
+      color:var(--green);font-weight:700;font-size:.9rem;
+      font-family:'Rajdhani',sans-serif;
+    }
+
+    /* Language & buttons bottom */
+    .mob-bottom{padding:20px}
+    .mob-lang{
+      width:100%;background:#111;border:1px solid rgba(255,255,255,.1);
+      color:rgba(255,255,255,.5);padding:12px 16px;font-size:.88rem;
+      margin-bottom:14px;appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 14px center;
+      cursor:pointer;
+    }
+    .mob-btns{display:flex;flex-direction:column;gap:10px}
+    .mob-btn1{
+      display:block;text-align:center;padding:13px;
+      border:1px solid rgba(255,255,255,.2);color:#aaa;
+      font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+    }
+    .mob-btn2{
+      display:block;text-align:center;padding:13px;
+      background:var(--green);color:#000;
+      font-family:'Rajdhani',sans-serif;font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+      box-shadow:var(--glow-sm);
+    }
+
+    /* ═══════════════════════════════════════
+       INVESTMENT PLANS  SECTION
+    ═══════════════════════════════════════ */
+    #investment-plans{background:#080808;padding:110px 0}
+
+    /* ── section header ── */
+    .plans-hdr{text-align:center;max-width:720px;margin:0 auto 64px}
+    .plans-hdr .sec-title{margin-bottom:14px}
+    .plans-hdr p{color:rgba(255,255,255,.4);font-size:1rem;line-height:1.75}
+
+    /* ── 3-col responsive grid for all plans ── */
+    .plans-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+      align-items:stretch;
+    }
+    @media(max-width:1100px){.plans-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px) {.plans-grid{grid-template-columns:1fr}}
+
+    /* ── base plan card ── */
+    .xcard{
+      --ac:var(--green);
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.2);
+      border-radius:16px;
+      padding:28px 24px 24px;
+      display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+      transition:transform .3s,border-color .3s,box-shadow .3s;
+    }
+    .xcard::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,transparent,var(--ac),transparent);
+    }
+    .xcard:hover{
+      transform:translateY(-6px);
+      border-color:var(--ac);
+      box-shadow:0 0 28px color-mix(in srgb,var(--ac) 30%,transparent),0 16px 48px rgba(0,0,0,.5);
+    }
+
+    /* accent overrides */
+    .xcard.starter {--ac:#39ff14}
+    .xcard.trading {--ac:#00e5b0;border-color:rgba(0,229,176,.18)}
+    .xcard.growth  {--ac:#00b4ff;border-color:rgba(0,180,255,.18)}
+    .xcard.plat    {--ac:#e5c700;border-color:rgba(229,199,0,.18)}
+    .xcard.diamond {--ac:#00c8ff;border-color:rgba(0,200,255,.18)}
+    .xcard.scomp   {--ac:#c87dff;border-color:rgba(200,125,255,.18)}
+    .xcard.pcomp   {--ac:#ff6b35;border-color:rgba(255,107,53,.18)}
+
+    /* top label */
+    .xcard-label{
+      font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
+      color:var(--ac);margin-bottom:14px;
+      display:flex;align-items:center;gap:7px;
+    }
+    .xcard-label::before{
+      content:'';width:20px;height:1px;background:var(--ac);opacity:.5;
+    }
+
+    /* plan name */
+    .xcard-name{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.25rem;letter-spacing:.06em;color:#fff;
+      margin-bottom:14px;
+    }
+
+    /* big ROI */
+    .xcard-roi{
+      display:flex;align-items:flex-start;gap:2px;margin-bottom:2px;
+    }
+    .xcard-roi-n{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:3.6rem;line-height:1;color:var(--ac);
+      text-shadow:0 0 24px color-mix(in srgb,var(--ac) 55%,transparent);
+    }
+    .xcard-roi-s{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.5rem;color:var(--ac);padding-top:6px;
+    }
+    .xcard-roi-tag{
+      font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-bottom:16px;
+    }
+
+    /* cycle pill */
+    .xcard-cycle{
+      display:inline-flex;align-items:center;gap:7px;
+      border:1px solid rgba(255,255,255,.1);
+      padding:5px 13px;margin-bottom:18px;width:fit-content;
+      font-size:.73rem;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(255,255,255,.5);border-radius:4px;
+    }
+    .xcard-cycle .ci{color:var(--ac)}
+
+    /* divider */
+    .xcard-div{height:1px;background:rgba(255,255,255,.06);margin-bottom:16px}
+
+    /* range row */
+    .xcard-range{
+      display:flex;align-items:center;gap:8px;margin-bottom:16px;
+    }
+    .xcard-range-box{
+      flex:1;background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      padding:10px 12px;text-align:center;border-radius:4px;
+    }
+    .xcard-range-box .ra{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.1rem;color:var(--ac);display:block;
+    }
+    .xcard-range-box .rl{
+      font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(255,255,255,.28);display:block;margin-top:1px;
+    }
+    .xcard-arrow{color:rgba(255,255,255,.25);font-size:1rem;flex-shrink:0}
+
+    /* features */
+    .xcard-feats{
+      list-style:none;display:flex;flex-direction:column;gap:8px;
+      flex:1;margin-bottom:20px;
+    }
+    .xcard-feats li{
+      display:flex;align-items:flex-start;gap:9px;
+      font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.4;
+    }
+    .xcard-feats li::before{
+      content:'✓';color:var(--ac);flex-shrink:0;font-size:.8rem;margin-top:1px;
+    }
+    /* referral row — always highlighted */
+    .xcard-feats li.ref{color:rgba(255,255,255,.75);font-weight:500}
+    .xcard-feats li.ref::before{content:'🎁';font-size:.78rem}
+
+    /* CTA */
+    .xcard-btn{
+      display:block;text-align:center;border-radius:4px;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:12px 16px;margin-top:auto;
+      border:1px solid var(--ac);color:var(--ac);
+      transition:all .3s;
+    }
+    .xcard-btn:hover{
+      background:var(--ac);color:#000;
+      box-shadow:0 0 20px color-mix(in srgb,var(--ac) 45%,transparent);
+    }
+
+    /* Starter card — stays as its own centred card above the grid */
+    .starter-wrap{
+      display:flex;justify-content:center;margin-bottom:20px;
+    }
+    .starter-wrap .xcard{max-width:420px;width:100%}
+    .inv-hdr{text-align:center;max-width:700px;margin:0 auto 64px}
+    .inv-hdr .sec-title{margin-bottom:14px}
+    .inv-hdr p{color:rgba(255,255,255,.4);font-size:1rem;line-height:1.75}
+
+    .inv-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+    @media(max-width:1100px){.inv-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:580px) {.inv-grid{grid-template-columns:1fr}}
+
+    /* Each plan card */
+    .inv-card{
+      background:#0f0f0f;
+      border:1px solid rgba(57,255,20,.18);
+      border-radius:14px;
+      padding:28px 24px 24px;
+      display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+      transition:transform .3s,border-color .3s,box-shadow .3s;
+    }
+    .inv-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,transparent,var(--c,var(--green)),transparent);
+      opacity:.7;
+    }
+    .inv-card:hover{
+      transform:translateY(-5px);
+      border-color:rgba(57,255,20,.45);
+      box-shadow:0 0 28px rgba(57,255,20,.18),0 12px 40px rgba(0,0,0,.5);
+    }
+
+    /* Featured cards get accent colours */
+    .inv-card.platinum{--c:#e5c700}
+    .inv-card.platinum{border-color:rgba(229,199,0,.25)}
+    .inv-card.platinum:hover{border-color:rgba(229,199,0,.55);box-shadow:0 0 28px rgba(229,199,0,.2),0 12px 40px rgba(0,0,0,.5)}
+    .inv-card.platinum::before{background:linear-gradient(90deg,transparent,#e5c700,transparent)}
+
+    .inv-card.diamond{--c:#00c8ff}
+    .inv-card.diamond{border-color:rgba(0,200,255,.25)}
+    .inv-card.diamond:hover{border-color:rgba(0,200,255,.55);box-shadow:0 0 28px rgba(0,200,255,.2),0 12px 40px rgba(0,0,0,.5)}
+    .inv-card.diamond::before{background:linear-gradient(90deg,transparent,#00c8ff,transparent)}
+
+    .inv-card.comp1{--c:#c87dff}
+    .inv-card.comp1{border-color:rgba(200,125,255,.25)}
+    .inv-card.comp1:hover{border-color:rgba(200,125,255,.55);box-shadow:0 0 28px rgba(200,125,255,.2),0 12px 40px rgba(0,0,0,.5)}
+    .inv-card.comp1::before{background:linear-gradient(90deg,transparent,#c87dff,transparent)}
+
+    .inv-card.comp2{--c:#ff6b35}
+    .inv-card.comp2{border-color:rgba(255,107,53,.25)}
+    .inv-card.comp2:hover{border-color:rgba(255,107,53,.55);box-shadow:0 0 28px rgba(255,107,53,.2),0 12px 40px rgba(0,0,0,.5)}
+    .inv-card.comp2::before{background:linear-gradient(90deg,transparent,#ff6b35,transparent)}
+
+    /* Card top badge */
+    .inv-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+      border:1px solid;padding:4px 10px;margin-bottom:18px;width:fit-content;
+      border-color:var(--c,var(--green));color:var(--c,var(--green));
+    }
+
+    /* Plan name */
+    .inv-name{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.15rem;letter-spacing:.08em;text-transform:uppercase;
+      color:#fff;margin-bottom:4px;
+    }
+
+    /* Big ROI */
+    .inv-roi{
+      display:flex;align-items:flex-start;gap:2px;
+      margin:10px 0 4px;
+    }
+    .inv-roi-n{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:3.4rem;line-height:1;color:var(--c,var(--green));
+      text-shadow:0 0 20px color-mix(in srgb,var(--c,var(--green)) 60%,transparent);
+    }
+    .inv-roi-sym{
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:1.4rem;color:var(--c,var(--green));padding-top:6px;
+    }
+    .inv-roi-label{
+      font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+      color:rgba(255,255,255,.3);margin-bottom:18px;
+    }
+
+    /* Divider */
+    .inv-div{height:1px;background:rgba(255,255,255,.06);margin-bottom:18px}
+
+    /* Meta rows */
+    .inv-meta{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;flex:1}
+    .inv-row{
+      display:flex;align-items:center;justify-content:space-between;
+      font-size:.8rem;
+    }
+    .inv-row .k{color:rgba(255,255,255,.35);letter-spacing:.05em}
+    .inv-row .v{
+      color:#fff;font-weight:600;font-family:'Rajdhani',sans-serif;
+      font-size:.88rem;letter-spacing:.04em;
+    }
+    .inv-row .v.accent{color:var(--c,var(--green))}
+
+    /* CTA */
+    .inv-btn{
+      display:block;text-align:center;
+      font-family:'Rajdhani',sans-serif;font-weight:700;
+      font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;
+      padding:11px 16px;margin-top:auto;
+      background:transparent;
+      border:1px solid var(--c,var(--green));
+      color:var(--c,var(--green));
+      transition:all .3s;
+    }
+    .inv-btn:hover{
+      background:var(--c,var(--green));
+      color:#000;
+      box-shadow:0 0 20px color-mix(in srgb,var(--c,var(--green)) 50%,transparent);
+    }
+
+  </style>
+
+<!-- Smartsupp Live Chat — placed in <head> as recommended -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '308e0ef38d9bbd56978969064da2eb01349607da';
+_smartsupp.offsetX = 20;
+_smartsupp.offsetY = 20;
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+</head>
+<body>
+
+<!-- ══════════ LIVE INVESTMENT TOAST ══════════ -->
+<div id="live-toast">
+  <div class="lt-icon">₿</div>
+  <div class="lt-text">
+    <div class="lt-line1" id="lt-line1">Someone from <strong id="lt-country">Nigeria</strong> just invested</div>
+    <div class="lt-amount" id="lt-amount">$3,200</div>
+  </div>
+  <button class="lt-close" onclick="closeLiveToast()" aria-label="Close">✕</button>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <div class="icon">T</div>
+    THRIVE<span>MINE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#about">About Us</a></li>
+    <li><a href="#investment-plans">Investment Plans</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">Knowledge Hub</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <!-- Translator -->
+    <div class="translate-wrap" id="desktopTranslateWrap">
+      <button class="translate-btn" id="desktopTranslateBtn" onclick="toggleTranslatePanel('desktop')">
+        <span class="globe-icon">🌐</span>
+        <span id="current-lang-label">English</span>
+        <span class="chevron">▼</span>
+      </button>
+      <div class="translate-panel" id="desktopTranslatePanel">
+        <div class="translate-panel-hdr">Select Language</div>
+        <div class="lang-list" id="desktopLangList"></div>
+      </div>
+    </div>
+    <a href="#" class="nav-signin">Login</a>
+    <a href="#" class="nav-cta">Register</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()" id="ham">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ── LOGIN MODAL ── -->
+<div id="login-modal" class="auth-modal" aria-hidden="true">
+  <div class="auth-panel" role="dialog" aria-modal="true">
+    <button class="auth-close" onclick="closeLoginModal()">×</button>
+    <div style="text-align:center;margin-bottom:22px;">
+      <div style="font-size:2rem;margin-bottom:8px;">🔐</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.01em;">Welcome Back</h2>
+      <p style="color:rgba(255,255,255,.4);font-size:.82rem;margin-top:4px;">Sign in to your ThriveMine account</p>
+    </div>
+    <form class="auth-form" id="login-form">
+      <div class="field">
+        <label>Email or Username</label>
+        <input id="login-identifier" type="text" required placeholder="Email or username" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="login-password" type="password" required placeholder="Enter your password" />
+      </div>
+      <div class="auth-actions">
+        <button type="submit" class="btn-green" id="login-submit">Login</button>
+      </div>
+      <div class="auth-messages" id="login-message"></div>
+      <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,.35);margin-top:14px;">
+        Don't have an account? <a href="#" onclick="closeLoginModal();openRegisterModal();" style="color:var(--green);text-decoration:none;">Register here</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- ── REGISTER MODAL ── -->
+<div id="register-modal" class="auth-modal" aria-hidden="true">
+  <div class="auth-panel" role="dialog" aria-modal="true">
+    <button class="auth-close" onclick="closeRegisterModal()">×</button>
+    <div style="text-align:center;margin-bottom:22px;">
+      <div style="font-size:2rem;margin-bottom:8px;">🚀</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.01em;">Create Account</h2>
+      <p style="color:rgba(255,255,255,.4);font-size:.82rem;margin-top:4px;">Join ThriveMine and start earning today</p>
+    </div>
+    <form class="auth-form" id="register-form">
+      <div class="field">
+        <label>Full Name</label>
+        <input id="reg-fullname" type="text" required placeholder="Your full name" />
+      </div>
+      <div class="field">
+        <label>Username</label>
+        <input id="reg-username" type="text" required placeholder="Choose a username (no spaces)" />
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input id="reg-phone" type="tel" placeholder="+1 234 567 8900" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input id="reg-email" type="email" required placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="reg-password" type="password" required placeholder="Create a password" />
+      </div>
+      <div class="field">
+        <label>Confirm Password</label>
+        <input id="reg-confirm" type="password" required placeholder="Repeat your password" />
+      </div>
+      <div id="reg-ref-banner" style="display:none;background:rgba(57,255,20,.07);border:1px solid rgba(57,255,20,.25);border-radius:8px;padding:8px 12px;font-size:.78rem;color:#39ff14;margin-bottom:10px;">
+        🔗 Referred by code: <span style="font-weight:700;font-family:monospace"></span>
+      </div>
+      <div class="auth-actions">
+        <button type="submit" class="btn-green" id="register-submit">Create Account</button>
+      </div>
+      <div class="auth-messages" id="register-message"></div>
+      <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,.35);margin-top:14px;">
+        Already have an account? <a href="#" onclick="closeRegisterModal();openLoginModal();" style="color:var(--green);text-decoration:none;">Login here</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- keep old modal shell so existing JS references don't break -->
+<div id="auth-modal" style="display:none;"></div>
+
+<!-- ═════════════════ MOBILE MENU (matches screenshot exactly) ═════════════════ -->
+<div id="mobile-menu">
+
+  <!-- Login -->
+  <a href="#" class="mob-login">
+    <div class="mob-login-icon">👤</div>
+    Login
+  </a>
+
+  <!-- Home -->
+  <a href="#" class="mob-nav-link" onclick="toggleMenu()">Home</a>
+
+  <!-- About Us -->
+  <a href="#about" class="mob-nav-link" onclick="toggleMenu()">About Us</a>
+
+  <!-- Investment Plans — direct link -->
+  <a href="#investment-plans" class="mob-nav-link" onclick="toggleMenu()">Investment Plans</a>
+
+  <!-- Services -->
+  <a href="#services" class="mob-nav-link" onclick="toggleMenu()">Services</a>
+
+  <!-- Knowledge Hub -->
+  <a href="#how" class="mob-nav-link" onclick="toggleMenu()">Knowledge Hub</a>
+
+  <!-- Contact -->
+  <a href="#contact" class="mob-nav-link" onclick="toggleMenu()">Contact</a>
+  <a href="/dashboard/index.html" id="mob-dashboard" class="mob-dashboard" style="display:none!important;" onclick="toggleMenu()">Dashboard</a>
+
+  <!-- Bottom: language + buttons -->
+  <div class="mob-bottom">
+    <select class="mob-lang">
+      <option>Select Language</option>
+      <option>English</option>
+      <option>French</option>
+      <option>Spanish</option>
+      <option>Arabic</option>
+      <option>Portuguese</option>
+    </select>
+    <div class="mob-btns">
+      <a href="#" class="mob-btn1">Login</a>
+      <a href="#" class="mob-btn2">Register →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="grid-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Mainnet Live — 240K+ Active Validators</div>
+    <h1>Empowering Industries<br><em>Through Blockchain</em></h1>
+    <p class="hero-sub">
+      ThriveMine bridges decentralized technology with real-world industries — from crypto and agriculture
+      to textiles, energy, and beyond. Building a sustainable future, one block at a time.
+    </p>
+    <div class="hero-btns">
+      <a href="#services" class="btn-green">Explore Services ›</a>
+      <a href="#about"    class="btn-outline">Learn More</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">15K+</div><div class="hstat-l">TPS</div></div>
+      <div class="hstat"><div class="hstat-n">180+</div><div class="hstat-l">Countries</div></div>
+      <div class="hstat"><div class="hstat-n">240K</div><div class="hstat-l">Validators</div></div>
+      <div class="hstat"><div class="hstat-n">12</div><div class="hstat-l">Industries</div></div>
+    </div>
+  </div>
+  <div class="scroll-caret"><span></span></div>
+</section>
+
+<!-- ══════════ TICKER ══════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<!-- ══════════ BITCOIN TRADING CHART ══════════ -->
+<section id="chart-section">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="chart-hdr">
+      <div class="chart-hdr-left">
+        <div class="sec-tag">Live Market Data</div>
+        <div class="chart-hdr-title">
+          Bitcoin Trading Chart
+          <span class="chart-live-dot"></span>
+          <span class="chart-live-label">Live</span>
+        </div>
+      </div>
+      <!-- Coin selector pills -->
+      <div class="coin-pills">
+        <div class="coin-pill active" onclick="switchChart('BTCUSDT','BTC')" id="pill-BTC">
+          <span class="coin-pill-sym">₿ BTC</span>
+          <span class="coin-pill-price" id="price-BTC">$--</span>
+          <span class="coin-pill-chg up" id="chg-BTC">--</span>
+        </div>
+        <div class="coin-pill" onclick="switchChart('ETHUSDT','ETH')" id="pill-ETH">
+          <span class="coin-pill-sym">◈ ETH</span>
+          <span class="coin-pill-price" id="price-ETH">$--</span>
+          <span class="coin-pill-chg up" id="chg-ETH">--</span>
+        </div>
+        <div class="coin-pill" onclick="switchChart('LTCUSDT','LTC')" id="pill-LTC">
+          <span class="coin-pill-sym">Ł LTC</span>
+          <span class="coin-pill-price" id="price-LTC">$--</span>
+          <span class="coin-pill-chg up" id="chg-LTC">--</span>
+        </div>
+        <div class="coin-pill" onclick="switchChart('DOGEUSDT','DOGE')" id="pill-DOGE">
+          <span class="coin-pill-sym">Ð DOGE</span>
+          <span class="coin-pill-price" id="price-DOGE">$--</span>
+          <span class="coin-pill-chg up" id="chg-DOGE">--</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TradingView Chart — working iframe embed -->
+    <div class="chart-frame" id="chart-frame-wrap">
+      <iframe
+        id="tv-chart"
+        src="https://s.tradingview.com/widgetembed/?frameElementId=tv-chart&symbol=BINANCE%3ABTCUSDT&interval=60&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=0b0b0b&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&showpopupbutton=0&studies=[]&locale=en&utm_source=thrivemine.com&utm_medium=widget"
+        style="width:100%;height:500px;border:none;display:block;"
+        allowtransparency="true"
+        scrolling="no"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Bottom stats bar -->
+    <div class="chart-stats">
+      <div class="cstat">
+        <span class="cstat-v green" id="stat-price">Loading…</span>
+        <span class="cstat-l">BTC Price (USD)</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-change">--</span>
+        <span class="cstat-l">24h Change</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-high">--</span>
+        <span class="cstat-l">24h High</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-low">--</span>
+        <span class="cstat-l">24h Low</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80"
+          alt="Blockchain Network"
+          onerror="this.src='https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=800&q=80'"
+        />
+        <div class="about-badge">
+          <div class="about-badge-n">99.9%</div>
+          <div class="about-badge-l">Uptime</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <div class="sec-tag">Who We Are</div>
+        <h2 class="sec-title">A Blockchain Layer Built for the Real World</h2>
+        <p>ThriveMine is a purpose-built Layer-1 blockchain designed to transform real industries — not just digital finance. We connect agricultural supply chains, telecom networks, energy grids, and global trade on a single, secure, decentralized infrastructure.</p>
+        <p>Our hybrid PoW/PoS consensus delivers institutional-grade security with enterprise throughput, while keeping transaction costs fractions of a cent.</p>
+        <div class="feat-list">
+          <div class="feat-item">
+            <div class="feat-icon">🔒</div>
+            <div class="feat-text">
+              <strong>Privacy By Default</strong>
+              <span>Payment obfuscation and stealth addresses on every transaction.</span>
+            </div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon">⚡</div>
+            <div class="feat-text">
+              <strong>SwiftTX Instant Settlement</strong>
+              <span>Sub-second finality critical for real-time industry payments.</span>
+            </div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon">🌍</div>
+            <div class="feat-text">
+              <strong>180+ Countries</strong>
+              <span>Global masternode network ensuring always-on availability.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DIVERSITY & INCLUSION ══════════ -->
+<section id="diversity" style="background:#0a0a0a;padding:100px 0;border-top:1px solid rgba(255,255,255,.04);">
+  <div class="container">
+    <div class="div-grid">
+
+      <!-- Left: text content -->
+      <div class="div-text">
+        <div class="sec-tag">About Us</div>
+        <h2 class="div-title">Diversity and Inclusion</h2>
+
+        <div class="div-block">
+          <div class="div-icon">🤝👥</div>
+          <div class="div-block-text">
+            <h3 class="div-block-heading">Valuing and respecting our differences</h3>
+            <p class="div-block-desc">We know that having the right people on our team isn't just about delivering a great service to clients, it's also a core part of our community responsibility efforts.</p>
+          </div>
+        </div>
+
+        <div class="div-values">
+          <div class="div-val-item">
+            <span class="div-val-icon">🌍</span>
+            <div>
+              <strong>Global Team</strong>
+              <span>Professionals from 40+ countries working toward one mission.</span>
+            </div>
+          </div>
+          <div class="div-val-item">
+            <span class="div-val-icon">⚖️</span>
+            <div>
+              <strong>Equal Opportunity</strong>
+              <span>Merit-based culture where every voice is heard and valued.</span>
+            </div>
+          </div>
+          <div class="div-val-item">
+            <span class="div-val-icon">🤲</span>
+            <div>
+              <strong>Community First</strong>
+              <span>We invest back into the communities we operate in worldwide.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: team photo -->
+      <div class="div-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&q=85"
+          alt="Diverse team meeting around a table with laptops"
+          class="div-img"
+          onerror="this.src='https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80'"
+        />
+        <!-- floating stat badge -->
+        <div class="div-img-badge">
+          <span class="dib-n">40+</span>
+          <span class="dib-l">Nationalities</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ OUR SERVICES ══════════ -->
+<section id="services">
+  <div class="container">
+    <div class="services-hdr">
+      <div class="sec-tag">What We Do</div>
+      <h2 class="sec-title">Our Services</h2>
+      <p>We take pride in our diverse range of services designed to empower industries and shape a sustainable future.</p>
+    </div>
+
+    <div class="cards">
+
+      <!-- Cryptocurrency — matches screenshot 2 exactly -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1621416894569-0f39ed31d247?w=700&q=85"
+            alt="Cryptocurrency — Bitcoin, Ethereum, Litecoin coins"
+            onerror="this.src='https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=700&q=80'"
+          />
+        </div>
+        <div class="svc-label"><span>Cryptocurrency</span></div>
+      </div>
+
+      <!-- Agriculture / Textiles — matches screenshot 1 exactly -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=700&q=85"
+            alt="Agriculture — tractor spraying crops in field"
+            onerror="this.src='https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=700&q=80'"
+          />
+        </div>
+        <div class="svc-label"><span>Agriculture / Textiles</span></div>
+      </div>
+
+      <!-- Energy -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=700&q=85"
+            alt="Energy — wind turbines at sunset"
+            onerror="this.src='https://images.unsplash.com/photo-1509391366360-2e959784a276?w=700&q=80'"
+          />
+        </div>
+        <div class="svc-label"><span>Energy</span></div>
+      </div>
+
+      <!-- Telecommunications -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=700&q=85"
+            alt="Telecommunications — global network"
+          />
+        </div>
+        <div class="svc-label"><span>Telecommunications</span></div>
+      </div>
+
+      <!-- Real Estate -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=700&q=85"
+            alt="Real Estate — modern buildings"
+          />
+        </div>
+        <div class="svc-label"><span>Real Estate</span></div>
+      </div>
+
+      <!-- Global Trade & Logistics -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=700&q=85"
+            alt="Global Trade — container shipping"
+            onerror="this.src='https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=700&q=80'"
+          />
+        </div>
+        <div class="svc-label"><span>Global Trade &amp; Logistics</span></div>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&q=85"
+            alt="Healthcare — medical technology"
+          />
+        </div>
+        <div class="svc-label"><span>Healthcare</span></div>
+      </div>
+
+      <!-- Education -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=700&q=85"
+            alt="Education — books and learning"
+          />
+        </div>
+        <div class="svc-label"><span>Education</span></div>
+      </div>
+
+      <!-- Financial Services -->
+      <div class="svc-card">
+        <div class="svc-img">
+          <img
+            src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=700&q=85"
+            alt="Financial Services — stock market"
+            onerror="this.src='https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=700&q=80'"
+          />
+        </div>
+        <div class="svc-label"><span>Financial Services</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HOW IT WORKS ══════════ -->
+<section id="how">
+  <div class="container">
+    <div class="how-hdr">
+      <div class="sec-tag">The Process</div>
+      <h2 class="sec-title">How ThriveMine Works</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Connect Your Industry</div>
+        <p class="step-desc">Integrate your existing infrastructure with ThriveMine APIs and smart contract templates built for your sector.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Deploy Smart Contracts</div>
+        <p class="step-desc">Automate agreements, payments, and supply-chain events using our EVM-compatible smart contract engine.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Transact Securely</div>
+        <p class="step-desc">Every transaction is verified across 240K+ validators with privacy obfuscation and instant SwiftTX finality.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Scale Globally</div>
+        <p class="step-desc">Access 180+ country coverage with 15,000 TPS throughput — built for enterprise scale from day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ STATS BANNER ══════════ -->
+<div id="stats">
+  <div class="stats-grid container">
+    <div class="bstat"><div class="bstat-n">$142M</div><div class="bstat-l">Market Cap</div></div>
+    <div class="bstat"><div class="bstat-n">18.4%</div><div class="bstat-l">Staking APY</div></div>
+    <div class="bstat"><div class="bstat-n">$8.2M</div><div class="bstat-l">Daily Volume</div></div>
+    <div class="bstat"><div class="bstat-n">1B</div><div class="bstat-l">Total Supply</div></div>
+  </div>
+</div>
+
+<!-- ══════════ TESTIMONIALS ══════════ -->
+<section id="testi">
+  <div class="container">
+    <div class="testi-hdr">
+      <div class="sec-tag">What They Say</div>
+      <h2 class="sec-title">Trusted by Industry Leaders</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <p class="tcard-text">ThriveMine transformed our inter-carrier settlement process. Transactions that took 30 days now clear in seconds — at a fraction of the cost.</p>
+        <div class="tcard-author">
+          <div class="tcard-ava">👨‍💼</div>
+          <div><div class="tcard-name">James Whitfield</div><div class="tcard-role">CTO, EuroPay Solutions — London, UK</div></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <p class="tcard-text">We deployed smart contracts for our agricultural supply chain in 3 months. Full traceability from farm to shelf — zero middlemen.</p>
+        <div class="tcard-author">
+          <div class="tcard-ava">👩‍🌾</div>
+          <div><div class="tcard-name">Rachel Monroe</div><div class="tcard-role">CEO, Apex Venture Capital — New York, USA</div></div>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="tcard-q">"</div>
+        <p class="tcard-text">The privacy features are unmatched. Our clients needed transaction confidentiality at enterprise scale — ThriveMine delivers exactly that.</p>
+        <div class="tcard-author">
+          <div class="tcard-ava">🧑‍💻</div>
+          <div><div class="tcard-name">Park Min-jun</div><div class="tcard-role">Head of DeFi, KoreTech Finance — Seoul, South Korea</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ROADMAP ══════════ -->
+<section id="roadmap">
+  <div class="container">
+    <div class="road-hdr">
+      <div class="sec-tag">Development Timeline</div>
+      <h2 class="sec-title">Our Roadmap</h2>
+    </div>
+    <div class="road-track">
+
+      <div class="rm left">
+        <div class="rm-card">
+          <div class="rm-phase">Q1 2024 — Complete</div>
+          <div class="rm-title">Genesis &amp; Foundation</div>
+          <ul class="rm-list">
+            <li>Core protocol architecture</li>
+            <li>Whitepaper publication</li>
+            <li>Founding team assembled</li>
+            <li>Seed round closed</li>
+          </ul>
+        </div>
+        <div class="rm-dot"><div class="rm-dot-inner done"></div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <div class="rm right">
+        <div class="rm-empty"></div>
+        <div class="rm-dot"><div class="rm-dot-inner done"></div></div>
+        <div class="rm-card">
+          <div class="rm-phase">Q3 2024 — Complete</div>
+          <div class="rm-title">Testnet Launch</div>
+          <ul class="rm-list">
+            <li>SwiftTX protocol deployed</li>
+            <li>Masternode incentive layer</li>
+            <li>Developer SDK v1.0</li>
+            <li>Bug bounty program</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="rm left">
+        <div class="rm-card">
+          <div class="rm-phase gold">Q1 2025 — Active</div>
+          <div class="rm-title">Mainnet &amp; Token Launch</div>
+          <ul class="rm-list">
+            <li>Mainnet genesis block</li>
+            <li>THRIVE token TGE</li>
+            <li>Exchange listings</li>
+            <li>Wallet release</li>
+          </ul>
+        </div>
+        <div class="rm-dot"><div class="rm-dot-inner active"></div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+      <div class="rm right">
+        <div class="rm-empty"></div>
+        <div class="rm-dot"><div class="rm-dot-inner"></div></div>
+        <div class="rm-card">
+          <div class="rm-phase">Q3 2025 — Upcoming</div>
+          <div class="rm-title">Industry Integrations</div>
+          <ul class="rm-list">
+            <li>Telecom partner onboarding</li>
+            <li>Cross-chain bridges</li>
+            <li>Governance DAO launch</li>
+            <li>DApp ecosystem grants</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="rm left">
+        <div class="rm-card">
+          <div class="rm-phase">2026 — Vision</div>
+          <div class="rm-title">Global Industry Layer</div>
+          <ul class="rm-list">
+            <li>100+ enterprise integrations</li>
+            <li>5G node support</li>
+            <li>eSIM on-chain management</li>
+            <li>Roaming settlement network</li>
+          </ul>
+        </div>
+        <div class="rm-dot"><div class="rm-dot-inner"></div></div>
+        <div class="rm-empty"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════ INVESTMENT PLANS ══════════ -->
+<section id="investment-plans" style="background:#080808;padding:110px 0;border-top:1px solid rgba(255,255,255,.04);">
+  <div class="container">
+
+    <!-- Header -->
+    <div style="text-align:center;max-width:740px;margin:0 auto 60px;">
+      <div class="sec-tag">Earn Daily Returns</div>
+      <h2 class="sec-title" style="margin-bottom:14px;">Investment Plans</h2>
+      <p style="color:rgba(255,255,255,.4);font-size:1rem;line-height:1.75;">All plans include a <strong style="color:var(--green)">15% referral bonus</strong> on every invite. Returns paid directly to your wallet — transparent, automated and secured on ThriveMine blockchain.</p>
+    </div>
+
+    <!-- Plans loaded dynamically from database -->
+    <div id="iplanContainer" class="iplan-grid" style="justify-content:center;">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);">Loading plans…</div>
+    </div>
+
+    <p style="text-align:center;margin-top:32px;font-size:.72rem;color:rgba(255,255,255,.18);letter-spacing:.05em;">
+      All returns are generated through blockchain mining and trading operations. Built with a focus on security, transparency and long-term sustainability. Invest responsibly.
+    </p>
+  </div>
+</section>
+<script>
+(async function loadFrontendPlans(){
+  try {
+    const SURL = 'https://ohlyburyplamumonbqsn.supabase.co';
+    const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9obHlidXJ5cGxhbXVtb25icXNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NjQxNjEsImV4cCI6MjA5NjQ0MDE2MX0.IYDqaymyREpRgXmNM38sPHe6jH0DuIYVk84Yrk1kSAg';
+    const res  = await fetch(`${SURL}/rest/v1/investment_plans?is_active=eq.true&order=sort_order.asc`,{
+      headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}
+    });
+    const plans = await res.json();
+    if(!plans||!plans.length) return;
+    const fmt = n => '$'+parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+    let html = '';
+    plans.forEach(p => {
+      html += `
+        <div class="iplan-card" style="border-color:${p.color}33;--iplan-c:${p.color}">
+          <div class="iplan-top-bar" style="background:${p.color}"></div>
+          <div class="iplan-name" style="color:${p.color}">${p.name}</div>
+          <div class="iplan-roi-row"><span class="iplan-roi-n">${p.roi}</span><span class="iplan-roi-s">%</span></div>
+          <div class="iplan-roi-label">${p.period} Return on Investment</div>
+          <div class="iplan-cycle"><span class="iplan-ci">⏱</span> ${p.cycle_days}-Day Trading Cycle</div>
+          <div class="iplan-divider"></div>
+          <div class="iplan-range-label">Investment Range</div>
+          <div class="iplan-range">
+            <div class="iplan-range-box"><span class="iplan-ra">${fmt(p.min_amount)}</span><span class="iplan-rl">Minimum</span></div>
+            <span class="iplan-arrow">→</span>
+            <div class="iplan-range-box"><span class="iplan-ra">${p.max_amount?fmt(p.max_amount):'Unlimited'}</span><span class="iplan-rl">Maximum</span></div>
+          </div>
+          <ul class="iplan-feats">
+            <li>${p.roi}% ${p.period.toLowerCase()} profit on deposit</li>
+            <li>Returns paid every ${p.cycle_days} day(s)</li>
+            <li>Instant withdrawal after cycle ends</li>
+            <li>24/7 live dashboard tracking</li>
+            <li class="iplan-ref">🎁 15% Referral Bonus on every invite</li>
+          </ul>
+          <a href="#" class="iplan-btn" style="background:${p.color};color:#000;">Start Now →</a>
+        </div>`;
+    });
+    document.getElementById('iplanContainer').innerHTML = html;
+  } catch(e) { console.warn('Could not load plans:', e); }
+})();
+</script>
+
+<!-- ══════════ PROFIT CALCULATOR ══════════ -->
+<section id="profit-calculator" style="background:#060606;padding:110px 0;border-top:1px solid rgba(255,255,255,.04);">
+  <div class="container">
+
+    <!-- Header -->
+    <div style="text-align:center;max-width:680px;margin:0 auto 56px;">
+      <div class="sec-tag">Smart Tools</div>
+      <h2 class="sec-title" style="margin-bottom:14px;">Profit Calculator</h2>
+      <p style="color:rgba(255,255,255,.4);font-size:1rem;line-height:1.75;">Enter your investment amount and select a plan to see your projected returns instantly.</p>
+    </div>
+
+    <!-- Calculator card -->
+    <div style="max-width:860px;margin:0 auto;background:linear-gradient(135deg,rgba(13,22,13,.95),rgba(8,14,8,.95));border:1px solid rgba(57,255,20,.12);border-radius:24px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5);">
+
+      <!-- Top bar glow -->
+      <div style="height:3px;background:linear-gradient(90deg,#39ff14,#00e5ff,#39ff14);background-size:200% 100%;animation:calcBar 3s linear infinite;"></div>
+
+      <div style="padding:44px 40px;" id="calc-inner">
+
+        <!-- Inputs row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+
+          <!-- Amount input -->
+          <div>
+            <label style="display:block;font-size:.68rem;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">Investment Amount (USD)</label>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--green);font-size:1.1rem;font-weight:700;pointer-events:none;">$</span>
+              <input type="number" id="calc-amount" placeholder="e.g. 500" min="0"
+                style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(57,255,20,.2);border-radius:12px;padding:15px 14px 15px 34px;color:#fff;font-size:1.05rem;font-family:'Rajdhani',sans-serif;font-weight:600;outline:none;transition:border-color .2s;"
+                oninput="calcProfit()" onfocus="this.style.borderColor='rgba(57,255,20,.55)'" onblur="this.style.borderColor='rgba(57,255,20,.2)'"
+              />
+            </div>
+            <!-- Slider -->
+            <input type="range" id="calc-slider" min="0" max="50000" step="50" value="0"
+              style="width:100%;margin-top:12px;accent-color:#39ff14;cursor:pointer;"
+              oninput="document.getElementById('calc-amount').value=this.value;calcProfit()"
+            />
+            <div style="display:flex;justify-content:space-between;font-size:.62rem;color:rgba(255,255,255,.25);margin-top:2px;"><span>$0</span><span>$50,000</span></div>
+          </div>
+
+          <!-- Plan selector -->
+          <div>
+            <label style="display:block;font-size:.68rem;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">Select Plan</label>
+            <select id="calc-plan"
+              style="width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(57,255,20,.2);border-radius:12px;padding:15px 14px;color:#fff;font-size:1rem;font-family:'Rajdhani',sans-serif;font-weight:600;outline:none;cursor:pointer;appearance:none;transition:border-color .2s;"
+              onchange="calcProfit()" onfocus="this.style.borderColor='rgba(57,255,20,.55)'" onblur="this.style.borderColor='rgba(57,255,20,.2)'"
+            >
+              <option value="">Loading plans…</option>
+            </select>
+            <div id="calc-plan-info" style="margin-top:10px;font-size:.76rem;color:rgba(255,255,255,.3);min-height:18px;"></div>
+          </div>
+        </div>
+
+        <!-- Results grid -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;" id="calc-results">
+          <div class="calc-res-card" id="cr-invested">
+            <div class="cr-label">Your Investment</div>
+            <div class="cr-value cr-white">$0.00</div>
+          </div>
+          <div class="calc-res-card" id="cr-profit">
+            <div class="cr-label">Profit Earned</div>
+            <div class="cr-value cr-green">$0.00</div>
+          </div>
+          <div class="calc-res-card" id="cr-total">
+            <div class="cr-label">Total Return</div>
+            <div class="cr-value cr-gold">$0.00</div>
+          </div>
+          <div class="calc-res-card" id="cr-daily">
+            <div class="cr-label">Daily Earnings</div>
+            <div class="cr-value cr-cyan">$0.00</div>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div style="margin-bottom:28px;">
+          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:8px;">
+            <span>ROI Progress</span>
+            <span id="calc-roi-pct">0% ROI</span>
+          </div>
+          <div style="background:rgba(255,255,255,.06);border-radius:100px;height:8px;overflow:hidden;">
+            <div id="calc-bar" style="height:100%;border-radius:100px;background:linear-gradient(90deg,#39ff14,#00e5ff);width:0%;transition:width .5s ease;"></div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div style="text-align:center;">
+          <a href="dashboard/investments.html" class="btn-green" style="display:inline-block;padding:14px 48px;font-size:1rem;border-radius:100px;text-decoration:none;">Start Investing Now →</a>
+          <p style="margin-top:12px;font-size:.7rem;color:rgba(255,255,255,.2);">Returns are estimates based on selected plan. Past performance is not a guarantee of future results.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes calcBar{0%{background-position:0% 0}100%{background-position:200% 0}}
+.calc-res-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 16px;text-align:center;transition:border-color .3s,transform .2s;}
+.calc-res-card:hover{border-color:rgba(57,255,20,.2);transform:translateY(-2px);}
+.cr-label{font-size:.62rem;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:8px;}
+.cr-value{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-.01em;transition:all .3s;}
+.cr-white{color:#fff;}.cr-green{color:#39ff14;}.cr-gold{color:#f5c542;}.cr-cyan{color:#00e5ff;}
+@media(max-width:700px){
+  #calc-inner{padding:28px 20px !important;}
+  #calc-inner > div:first-child{grid-template-columns:1fr !important;}
+  #calc-results{grid-template-columns:1fr 1fr !important;}
+}
+</style>
+
+<script>
+(function(){
+  var calcPlans = [];
+
+  async function fetchCalcPlans(){
+    try {
+      const SURL = 'https://ohlyburyplamumonbqsn.supabase.co';
+      const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9obHlidXJ5cGxhbXVtb25icXNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NjQxNjEsImV4cCI6MjA5NjQ0MDE2MX0.IYDqaymyREpRgXmNM38sPHe6jH0DuIYVk84Yrk1kSAg';
+      const res = await fetch(`${SURL}/rest/v1/investment_plans?is_active=eq.true&order=sort_order.asc`,{
+        headers:{'apikey':SKEY,'Authorization':'Bearer '+SKEY}
+      });
+      calcPlans = await res.json();
+      var sel = document.getElementById('calc-plan');
+      if(!sel) return;
+      sel.innerHTML = '<option value="">— Choose a plan —</option>';
+      calcPlans.forEach(function(p,i){
+        var opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = p.name + ' — ' + p.roi + '% ' + p.period;
+        sel.appendChild(opt);
+      });
+      // Auto-select first plan
+      if(calcPlans.length){ sel.value = '0'; calcProfit(); }
+    } catch(e) {
+      var sel = document.getElementById('calc-plan');
+      if(sel) sel.innerHTML = '<option>Could not load plans</option>';
+    }
+  }
+
+  window.calcProfit = function(){
+    var amtRaw = parseFloat(document.getElementById('calc-amount').value) || 0;
+    var selIdx = document.getElementById('calc-plan').value;
+    var slider  = document.getElementById('calc-slider');
+    if(slider) slider.value = amtRaw;
+
+    var plan = (selIdx !== '') ? calcPlans[parseInt(selIdx)] : null;
+
+    // Update plan info line
+    var infoEl = document.getElementById('calc-plan-info');
+    if(infoEl && plan){
+      infoEl.textContent = 'Min: $' + plan.min_amount + (plan.max_amount?' · Max: $'+plan.max_amount:' · Max: Unlimited') + ' · ' + plan.cycle_days + '-day cycle';
+    } else if(infoEl){ infoEl.textContent = ''; }
+
+    var roi      = plan ? plan.roi / 100 : 0;
+    var days     = plan ? plan.cycle_days : 1;
+    var profit   = amtRaw * roi;
+    var total    = amtRaw + profit;
+    var daily    = days > 0 ? profit / days : 0;
+    var roiPct   = plan ? plan.roi : 0;
+
+    function fmt(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+    document.querySelector('#cr-invested .cr-value').textContent = fmt(amtRaw);
+    document.querySelector('#cr-profit  .cr-value').textContent = fmt(profit);
+    document.querySelector('#cr-total   .cr-value').textContent = fmt(total);
+    document.querySelector('#cr-daily   .cr-value').textContent = fmt(daily);
+
+    // Progress bar — cap at 100%
+    var barW = Math.min(roiPct, 100);
+    document.getElementById('calc-bar').style.width = barW + '%';
+    document.getElementById('calc-roi-pct').textContent = roiPct + '% ROI over ' + days + ' day(s)';
+
+    // Pulse animation on result cards
+    document.querySelectorAll('.calc-res-card').forEach(function(c){
+      c.style.borderColor = amtRaw > 0 && plan ? 'rgba(57,255,20,.25)' : 'rgba(255,255,255,.07)';
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', fetchCalcPlans);
+})();
+</script>
+
+<!-- ══════════ PAYMENT SYSTEMS ══════════ -->
+<section id="payments">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="pay-hdr">
+      <div class="sec-tag">Supported Networks</div>
+      <h2 class="sec-title">Payment Systems</h2>
+      <p>Our company does not charge commissions for opening an account as well as making a deposit in the platform.</p>
+    </div>
+
+    <!-- Deposit button -->
+    <div class="deposit-btn-wrap">
+      <a href="#" class="deposit-btn">Deposit</a>
+    </div>
+
+    <!-- Payment logos — staggered layout matching screenshot -->
+    <div class="pay-grid">
+
+      <!-- Row 1: Litecoin (left) | Perfect Money (right) -->
+      <div class="pay-item">
+        <div class="pay-icon">Ł</div>
+        <span class="pay-name italic">litecoin</span>
+      </div>
+      <div class="pay-item" style="justify-content:flex-end">
+        <div class="pay-icon pm">
+          <span>PM</span>
+        </div>
+        <div>
+          <div class="pay-name blue" style="font-size:1rem;line-height:1.1">Perfect</div>
+          <div class="pay-name blue" style="font-size:1rem;line-height:1.1">Money</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Ethereum — centered -->
+      <div class="pay-center">
+        <div class="pay-item eth">
+          <div class="pay-icon">◈</div>
+          <span class="pay-name">ethereum</span>
+        </div>
+      </div>
+
+      <!-- Row 3: TRC-20 (left) | Dogecoin (right) -->
+      <div class="pay-item">
+        <div class="pay-icon">₮</div>
+        <span class="pay-name">TRC-20</span>
+      </div>
+      <div class="pay-item" style="justify-content:flex-end">
+        <div class="pay-icon">Ð</div>
+        <span class="pay-name">DOGECOIN</span>
+      </div>
+
+      <!-- Row 4: Bitcoin — centered -->
+      <div class="pay-center">
+        <div class="pay-item btc">
+          <div class="pay-icon">₿</div>
+          <span class="pay-name italic" style="font-size:1.4rem">bitcoin</span>
+        </div>
+      </div>
+
+      <!-- Row 5: ERC-20 (left) | TRON (right) -->
+      <div class="pay-item">
+        <div class="pay-icon">₮</div>
+        <span class="pay-name">ERC-20</span>
+      </div>
+      <div class="pay-item" style="justify-content:flex-end">
+        <div class="pay-icon" style="font-size:1rem;font-weight:900">▷</div>
+        <span class="pay-name">TRON</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA ══════════ -->
+<section id="cta">
+  <h2>Ready to <em>Join</em> ThriveMine?</h2>
+  <p>Whether you're a developer, enterprise, or investor — the decentralized future of industry starts here.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-green">Launch App ›</a>
+    <a href="#" class="btn-outline">Read Whitepaper</a>
+  </div>
+</section>
+
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact" style="background:#0a0a0a;padding:110px 0;border-top:1px solid rgba(57,255,20,.07);">
+  <div class="container">
+
+    <div class="contact-grid">
+
+      <!-- Left: Info -->
+      <div class="contact-info">
+        <div class="sec-tag">Get In Touch</div>
+        <h2 class="sec-title" style="margin-bottom:20px;">Contact Us</h2>
+        <p style="color:rgba(255,255,255,.4);font-size:.98rem;line-height:1.8;font-weight:300;margin-bottom:36px;">
+          Have a question about investing, your account, or a partnership opportunity?
+          Our team is available 24/7 to assist you.
+        </p>
+
+        <!-- Info cards -->
+        <div class="contact-cards">
+
+          <div class="contact-card">
+            <div class="contact-card-icon">📧</div>
+            <div class="contact-card-body">
+              <div class="contact-card-title">Email Us</div>
+              <a href="mailto:support@thrivemine.com" class="contact-card-val">support@thrivemine.com</a>
+              <a href="mailto:invest@thrivemine.com"  class="contact-card-val">invest@thrivemine.com</a>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon">📍</div>
+            <div class="contact-card-body">
+              <div class="contact-card-title">Our Location</div>
+              <span class="contact-card-val">Rochester, New York City</span>
+              <span class="contact-card-val" style="color:rgba(255,255,255,.3);">United States</span>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon">⏰</div>
+            <div class="contact-card-body">
+              <div class="contact-card-title">Support Hours</div>
+              <span class="contact-card-val">24 Hours / 7 Days a Week</span>
+              <span class="contact-card-val" style="color:rgba(255,255,255,.3);">Response within 1 hour</span>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-card-icon">💬</div>
+            <div class="contact-card-body">
+              <div class="contact-card-title">Live Chat</div>
+              <span class="contact-card-val">Available on Telegram</span>
+              <a href="#" class="contact-card-val" style="color:var(--green);">@ThriveMineSupport</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: Contact form -->
+      <div class="contact-form-wrap">
+        <div class="contact-form-box">
+          <h3 class="contact-form-title">Send Us a Message</h3>
+          <p style="color:rgba(255,255,255,.35);font-size:.84rem;margin-bottom:24px;">Fill the form below and we'll get back to you within 1 hour.</p>
+
+          <form class="contact-form" onsubmit="submitContactForm(event)">
+            <div class="cf-row">
+              <div class="cf-field">
+                <label class="cf-label">Full Name</label>
+                <input type="text" class="cf-input" placeholder="John Doe" required />
+              </div>
+              <div class="cf-field">
+                <label class="cf-label">Email Address</label>
+                <input type="email" class="cf-input" placeholder="you@example.com" required />
+              </div>
+            </div>
+            <div class="cf-field">
+              <label class="cf-label">Subject</label>
+              <select class="cf-input cf-select">
+                <option value="">Select a topic…</option>
+                <option>Investment Plans</option>
+                <option>Deposit / Withdrawal</option>
+                <option>Account Support</option>
+                <option>Referral Program</option>
+                <option>Partnership / Business</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="cf-field">
+              <label class="cf-label">Message</label>
+              <textarea class="cf-input cf-textarea" placeholder="Tell us how we can help you…" required></textarea>
+            </div>
+            <button type="submit" class="cf-submit" id="cf-submit-btn">
+              <span id="cf-btn-text">Send Message →</span>
+            </button>
+          </form>
+
+          <!-- Success message -->
+          <div class="cf-success" id="cf-success" style="display:none;">
+            <span style="font-size:2rem;">✅</span>
+            <div>
+              <strong style="color:var(--green);display:block;font-size:1rem;margin-bottom:4px;">Message Sent!</strong>
+              <span style="color:rgba(255,255,255,.45);font-size:.85rem;">We'll reply to your email within 1 hour.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Map embed -->
+    <div class="contact-map">
+      <div class="contact-map-label">
+        <span style="color:var(--green);">📍</span> Rochester, New York City, United States
+      </div>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d186814.11!2d-77.756!3d43.156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d6b3059614b353%3A0x5a8e14b6a63b0d83!2sRochester%2C%20NY!5e0!3m2!1sen!2sus!4v1"
+        width="100%" height="280" style="border:0;display:block;filter:invert(90%) hue-rotate(160deg) saturate(0.4);"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-logo">
+          <div class="icon">T</div>
+          THRIVE<span>MINE</span>
+        </div>
+        <p class="footer-about">The decentralized Layer-1 built to empower real-world industries and shape a sustainable global future.</p>
+        <!-- Location & email in footer -->
+        <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:.8rem;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:8px;">
+            <span style="color:var(--green);">📍</span> Rochester, New York City, USA
+          </span>
+          <a href="mailto:support@thrivemine.com"
+             style="font-size:.8rem;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:8px;transition:color .2s;"
+             onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.3)'">
+            <span style="color:var(--green);">📧</span> support@thrivemine.com
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Protocol</div>
+        <ul class="footer-links">
+          <li><a href="#">Whitepaper</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Block Explorer</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#services">Cryptocurrency</a></li>
+          <li><a href="#services">Agriculture</a></li>
+          <li><a href="#services">Energy</a></li>
+          <li><a href="#services">Telecom</a></li>
+          <li><a href="#services">Real Estate</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Community</div>
+        <ul class="footer-links">
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">Twitter / X</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2023 ThriveMine.com — All rights reserved.</span>
+      <div class="socials">
+        <a href="#" class="soc">𝕏</a>
+        <a href="#" class="soc">tg</a>
+        <a href="#" class="soc">dc</a>
+        <a href="#" class="soc">gh</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<!-- ══════════ GOOGLE TRANSLATE (hidden engine) ══════════ -->
+<div id="google_translate_element"></div>
+
+<!-- Floating translate button (mobile) -->
+<div id="float-translate">
+  <button class="float-translate-btn" onclick="toggleTranslatePanel('mobile')" title="Translate">🌐</button>
+</div>
+
+<!-- Mobile translate panel -->
+<div id="mobile-translate-panel">
+  <div class="translate-panel-hdr">Select Language</div>
+  <div class="lang-list" id="mobileLangList"></div>
+</div>
+
+<!-- Google Translate script -->
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+/* ── GOOGLE TRANSLATE INIT ── */
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false
+  }, 'google_translate_element')
+}
+
+/* ── LANGUAGE DATA ── */
+const LANGUAGES = [
+  { code:'en',   name:'English',    flag:'🇬🇧' },
+  { code:'fr',   name:'French',     flag:'🇫🇷' },
+  { code:'es',   name:'Spanish',    flag:'🇪🇸' },
+  { code:'ar',   name:'Arabic',     flag:'🇸🇦' },
+  { code:'pt',   name:'Portuguese', flag:'🇧🇷' },
+  { code:'zh-CN',name:'Chinese',    flag:'🇨🇳' },
+  { code:'de',   name:'German',     flag:'🇩🇪' },
+  { code:'ru',   name:'Russian',    flag:'🇷🇺' },
+  { code:'it',   name:'Italian',    flag:'🇮🇹' },
+  { code:'ja',   name:'Japanese',   flag:'🇯🇵' },
+  { code:'ko',   name:'Korean',     flag:'🇰🇷' },
+  { code:'hi',   name:'Hindi',      flag:'🇮🇳' },
+  { code:'tr',   name:'Turkish',    flag:'🇹🇷' },
+  { code:'nl',   name:'Dutch',      flag:'🇳🇱' },
+  { code:'pl',   name:'Polish',     flag:'🇵🇱' },
+  { code:'sv',   name:'Swedish',    flag:'🇸🇪' },
+  { code:'vi',   name:'Vietnamese', flag:'🇻🇳' },
+  { code:'id',   name:'Indonesian', flag:'🇮🇩' },
+  { code:'th',   name:'Thai',       flag:'🇹🇭' },
+  { code:'ha',   name:'Hausa',      flag:'🇳🇬' },
+  { code:'yo',   name:'Yoruba',     flag:'🇳🇬' },
+  { code:'ig',   name:'Igbo',       flag:'🇳🇬' },
+  { code:'sw',   name:'Swahili',    flag:'🇰🇪' },
+  { code:'am',   name:'Amharic',    flag:'🇪🇹' },
+  { code:'ms',   name:'Malay',      flag:'🇲🇾' },
+  { code:'ro',   name:'Romanian',   flag:'🇷🇴' },
+  { code:'uk',   name:'Ukrainian',  flag:'🇺🇦' },
+]
+
+let currentLangCode = 'en'
+
+/* Build both lists */
+function buildLangLists() {
+  ['desktopLangList','mobileLangList'].forEach(id => {
+    const el = document.getElementById(id)
+    if(!el) return
+    el.innerHTML = ''
+    LANGUAGES.forEach(l => {
+      const div = document.createElement('div')
+      div.className = 'lang-item' + (l.code === currentLangCode ? ' active' : '')
+      div.innerHTML = `<span class="flag">${l.flag}</span><span class="lname">${l.name}</span><span class="lcode">${l.code.toUpperCase()}</span>`
+      div.onclick = () => applyLanguage(l.code, l.name)
+      el.appendChild(div)
+    })
+  })
+}
+buildLangLists()
+
+/* Apply translation via Google Translate cookie */
+function applyLanguage(code, name) {
+  currentLangCode = code
+
+  // Update button label
+  document.getElementById('current-lang-label').textContent = name
+
+  // Set Google Translate cookie
+  if(code === 'en') {
+    // Reset to English
+    const iframe = document.querySelector('.goog-te-banner-frame')
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname
+    location.reload()
+  } else {
+    document.cookie = `googtrans=/en/${code}`
+    document.cookie = `googtrans=/en/${code}; domain=${location.hostname}`
+    location.reload()
+  }
+
+  // Close panels
+  closeAllTranslatePanels()
+  buildLangLists()
+}
+
+/* Toggle panel open/close */
+function toggleTranslatePanel(type) {
+  if(type === 'desktop') {
+    const panel = document.getElementById('desktopTranslatePanel')
+    const btn   = document.getElementById('desktopTranslateBtn')
+    const isOpen = panel.classList.contains('open')
+    closeAllTranslatePanels()
+    if(!isOpen) {
+      panel.classList.add('open')
+      btn.classList.add('open')
+    }
+  } else {
+    const panel = document.getElementById('mobile-translate-panel')
+    panel.classList.toggle('open')
+  }
+}
+
+function closeAllTranslatePanels() {
+  document.getElementById('desktopTranslatePanel')?.classList.remove('open')
+  document.getElementById('desktopTranslateBtn')?.classList.remove('open')
+  document.getElementById('mobile-translate-panel')?.classList.remove('open')
+}
+
+/* Close panels when clicking outside */
+if (typeof document.addEventListener === 'function') {
+  document.addEventListener('click', e => {
+    const dWrap  = document.getElementById('desktopTranslateWrap')
+    const mPanel = document.getElementById('mobile-translate-panel')
+    const mBtn   = document.getElementById('float-translate')
+    if(dWrap && !dWrap.contains(e.target)) {
+      document.getElementById('desktopTranslatePanel')?.classList.remove('open')
+      document.getElementById('desktopTranslateBtn')?.classList.remove('open')
+    }
+    if(mPanel && !mPanel.contains(e.target) && mBtn && !mBtn.contains(e.target)) {
+      mPanel.classList.remove('open')
+    }
+  })
+} else if (typeof window.addEventListener === 'function') {
+  window.addEventListener('click', e => {
+    const dWrap  = document.getElementById('desktopTranslateWrap')
+    const mPanel = document.getElementById('mobile-translate-panel')
+    const mBtn   = document.getElementById('float-translate')
+    if(dWrap && !dWrap.contains(e.target)) {
+      document.getElementById('desktopTranslatePanel')?.classList.remove('open')
+      document.getElementById('desktopTranslateBtn')?.classList.remove('open')
+    }
+    if(mPanel && !mPanel.contains(e.target) && mBtn && !mBtn.contains(e.target)) {
+      mPanel.classList.remove('open')
+    }
+  })
+}
+
+/* Detect current lang from cookie on load */
+;(function detectCurrentLang(){
+  const match = document.cookie.match(/googtrans=\/en\/([^;]+)/)
+  if(match) {
+    const code = match[1]
+    const lang = LANGUAGES.find(l => l.code === code)
+    if(lang) {
+      currentLangCode = lang.code
+      const lbl = document.getElementById('current-lang-label')
+      if(lbl) lbl.textContent = lang.name
+      buildLangLists()
+    }
+  }
+})()
+/* ── MOBILE MENU ── */
+function toggleMenu(){
+  const m=document.getElementById('mobile-menu')
+  const h=document.getElementById('ham')
+  m.classList.toggle('open')
+  h.classList.toggle('open')
+}
+
+/* ── MOBILE INVESTMENT DROPDOWN ── */
+function toggleMobInv(){
+  const d=document.getElementById('mobInvDropdown')
+  const t=document.getElementById('mobInvToggle')
+  d.classList.toggle('open')
+  t.classList.toggle('open')
+}
+
+/* ── DESKTOP INVESTMENT DROPDOWN ── */
+function toggleDesktopDrop(){
+  const p=document.getElementById('desktopDrop')
+  const b=document.getElementById('desktopInvBtn')
+  p.classList.toggle('open')
+  b.classList.toggle('active')
+}
+function closeDesktopDrop(){
+  document.getElementById('desktopDrop').classList.remove('open')
+  document.getElementById('desktopInvBtn').classList.remove('active')
+}
+if (typeof document.addEventListener === 'function') {
+  document.addEventListener('click', e => {
+    const dd = document.querySelector('.nav-dropdown')
+    if (dd && !dd.contains(e.target)) closeDesktopDrop()
+  })
+} else if (typeof window.addEventListener === 'function') {
+  window.addEventListener('click', e => {
+    const dd = document.querySelector('.nav-dropdown')
+    if (dd && !dd.contains(e.target)) closeDesktopDrop()
+  })
+}
+
+/* ── PARTICLE CANVAS ── */
+(function(){
+  const c=document.getElementById('hero-canvas')
+  const ctx=c.getContext('2d')
+  let W,H,pts=[],animId
+
+  function resize(){
+    W=c.width=window.innerWidth
+    H=c.height=window.innerHeight
+  }
+  resize()
+  window.addEventListener('resize',resize)
+
+  for(let i=0;i<72;i++) pts.push({
+    x:Math.random()*window.innerWidth,
+    y:Math.random()*window.innerHeight,
+    vx:(Math.random()-.5)*.3,
+    vy:(Math.random()-.5)*.3,
+    r:Math.random()*1.5+.4,
+    o:Math.random()*.45+.08
+  })
+
+  function draw(){
+    ctx.clearRect(0,0,W,H)
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y
+        const d=Math.sqrt(dx*dx+dy*dy)
+        if(d<145){
+          ctx.beginPath()
+          ctx.strokeStyle=`rgba(57,255,20,${.13*(1-d/145)})`
+          ctx.lineWidth=.5
+          ctx.moveTo(pts[i].x,pts[i].y)
+          ctx.lineTo(pts[j].x,pts[j].y)
+          ctx.stroke()
+        }
+      }
+      ctx.beginPath()
+      ctx.arc(pts[i].x,pts[i].y,pts[i].r,0,Math.PI*2)
+      ctx.fillStyle=`rgba(57,255,20,${pts[i].o})`
+      ctx.fill()
+      pts[i].x+=pts[i].vx; pts[i].y+=pts[i].vy
+      if(pts[i].x<0||pts[i].x>W) pts[i].vx*=-1
+      if(pts[i].y<0||pts[i].y>H) pts[i].vy*=-1
+    }
+    animId=requestAnimationFrame(draw)
+  }
+  draw()
+})()
+
+/* ── TICKER ── */
+;(function(){
+  const items=[
+    'THRIVE / USDT  $0.284','TPS  15,000+','Validators  240K',
+    'Block Time  2.1s','APY  18.4%','Market Cap  $142M',
+    'Daily Vol  $8.2M','Countries  180+','Industries  12+','SwiftTX  Active'
+  ]
+  const track=document.getElementById('tickerTrack')
+  const doubled=[...items,...items]
+  doubled.forEach(t=>{
+    const el=document.createElement('span')
+    el.className='tick'
+    el.innerHTML=`<span class="gem">◆</span>${t}`
+    track.appendChild(el)
+  })
+})()
+
+/* ── SCROLL REVEAL ── */
+;(function(){
+  const els=document.querySelectorAll('.svc-card,.tcard,.step,.feat-item,.pcard,.rm-card,.pay-item,.deposit-btn,.xcard')
+  els.forEach(el=>{
+    el.style.opacity='0'
+    el.style.transform='translateY(22px)'
+    el.style.transition='opacity .55s ease, transform .55s ease'
+  })
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>{
+          e.target.style.opacity='1'
+          e.target.style.transform='translateY(0)'
+        },(i%3)*90)
+        obs.unobserve(e.target)
+      }
+    })
+  },{threshold:.12})
+  els.forEach(el=>obs.observe(el))
+})()
+
+/* ── TRADINGVIEW CHART ── */
+const TV_PAIRS = {
+  BTC:  'BINANCE%3ABTCUSDT',
+  ETH:  'BINANCE%3AETHUSDT',
+  LTC:  'BINANCE%3ALTCUSDT',
+  DOGE: 'BINANCE%3ADOGEUSDT',
+}
+
+function buildTVSrc(pair){
+  return 'https://s.tradingview.com/widgetembed/?frameElementId=tv-chart'
+    + '&symbol=' + pair
+    + '&interval=60'
+    + '&hidesidetoolbar=0'
+    + '&hidetoptoolbar=0'
+    + '&symboledit=1'
+    + '&saveimage=0'
+    + '&toolbarbg=0b0b0b'
+    + '&theme=dark'
+    + '&style=1'
+    + '&timezone=Etc%2FUTC'
+    + '&withdateranges=1'
+    + '&showpopupbutton=0'
+    + '&locale=en'
+    + '&hide_side_toolbar=0'
+    + '&allow_symbol_change=1'
+}
+
+let currentCoin = 'BTC'
+
+function switchChart(pair, coin){
+  document.querySelectorAll('.coin-pill').forEach(p => p.classList.remove('active'))
+  const pill = document.getElementById('pill-' + coin)
+  if(pill) pill.classList.add('active')
+  currentCoin = coin
+  const iframe = document.getElementById('tv-chart')
+  if(iframe) iframe.src = buildTVSrc(TV_PAIRS[coin])
+  // update stat bar coin label
+  const lbl = document.querySelector('#chart-section .cstat-l')
+  if(lbl) lbl.textContent = coin + ' Price (USD)'
+}
+
+/* ── LIVE PRICES via Binance public API ── */
+const PAIRS = {
+  BTC:  'BTCUSDT',
+  ETH:  'ETHUSDT',
+  LTC:  'LTCUSDT',
+  DOGE: 'DOGEUSDT',
+}
+
+async function fetchPrices(){
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=[%22BTCUSDT%22,%22ETHUSDT%22,%22LTCUSDT%22,%22DOGEUSDT%22]')
+    if(!res.ok) return
+    const data = await res.json()
+    data.forEach(t => {
+      const coin = Object.keys(PAIRS).find(k => PAIRS[k] === t.symbol)
+      if(!coin) return
+      const price  = parseFloat(t.lastPrice)
+      const chgPct = parseFloat(t.priceChangePercent)
+      const isUp   = chgPct >= 0
+      const fmt = price >= 1000
+        ? '$' + price.toLocaleString('en-US',{maximumFractionDigits:0})
+        : price >= 1 ? '$' + price.toFixed(2) : '$' + price.toFixed(4)
+
+      const el  = document.getElementById('price-' + coin)
+      const cel = document.getElementById('chg-'   + coin)
+      if(el)  el.textContent = fmt
+      if(cel){
+        cel.textContent = (isUp ? '▲ +' : '▼ ') + Math.abs(chgPct).toFixed(2) + '%'
+        cel.className   = 'coin-pill-chg ' + (isUp ? 'up' : 'dn')
+      }
+      if(coin === currentCoin){
+        const sp = document.getElementById('stat-price')
+        const sc = document.getElementById('stat-change')
+        const sh = document.getElementById('stat-high')
+        const sl = document.getElementById('stat-low')
+        if(sp) sp.textContent = fmt
+        if(sc){
+          sc.textContent = (isUp ? '+' : '') + chgPct.toFixed(2) + '%'
+          sc.style.color = isUp ? 'var(--green)' : '#ff5252'
+        }
+        if(sh) sh.textContent = '$' + parseFloat(t.highPrice).toLocaleString('en-US',{maximumFractionDigits: price >= 100 ? 0 : 2})
+        if(sl) sl.textContent = '$' + parseFloat(t.lowPrice).toLocaleString('en-US',{maximumFractionDigits: price >= 100 ? 0 : 2})
+      }
+    })
+  } catch(e){}
+}
+fetchPrices()
+setInterval(fetchPrices, 8000)
+
+/* ── LIVE INVESTMENT TOAST — Real IP Geolocation ── */
+
+// Random investment amounts pool
+const TOAST_AMOUNTS = [
+  '$1,200','$2,500','$3,800','$5,000','$7,500','$9,900',
+  '$12,400','$15,000','$18,500','$22,800','$800','$4,200',
+  '$6,050','$11,000','$14,200','$1,800','$3,200','$8,413',
+  '$25,000','$6,600','$2,100','$17,300','$4,750','$30,000'
+]
+
+// Fallback pool used while live data loads
+let livePool = [
+  {city:'New York City',  region:'New York',      country:'United States',       flag:'🇺🇸'},
+  {city:'London',         region:'England',       country:'United Kingdom',      flag:'🇬🇧'},
+  {city:'Tokyo',          region:'Tokyo',         country:'Japan',               flag:'🇯🇵'},
+  {city:'Dubai',          region:'Dubai',         country:'United Arab Emirates',flag:'🇦🇪'},
+  {city:'Singapore',      region:'',              country:'Singapore',           flag:'🇸🇬'},
+  {city:'Toronto',        region:'Ontario',       country:'Canada',              flag:'🇨🇦'},
+  {city:'Sydney',         region:'New South Wales',country:'Australia',          flag:'🇦🇺'},
+  {city:'Frankfurt',      region:'Hesse',         country:'Germany',             flag:'🇩🇪'},
+  {city:'Paris',          region:'Île-de-France', country:'France',              flag:'🇫🇷'},
+  {city:'São Paulo',      region:'São Paulo',     country:'Brazil',              flag:'🇧🇷'},
+]
+let toastPoolIdx = Math.floor(Math.random() * livePool.length)
+
+// Generate a random routable public IPv4
+function _randIP() {
+  while(true) {
+    var a=Math.floor(Math.random()*222)+1
+    if(a===10||a===127) continue
+    var b=Math.floor(Math.random()*256)
+    if(a===172&&b>=16&&b<=31) continue
+    if(a===192&&b===168) continue
+    var c=Math.floor(Math.random()*256)
+    var d=Math.floor(Math.random()*254)+1
+    return a+'.'+b+'.'+c+'.'+d
+  }
+}
+
+// Fetch location for one IP with 6s timeout
+async function _fetchIPLoc(ip) {
+  try {
+    var ctrl=new AbortController()
+    var timer=setTimeout(function(){ctrl.abort()},6000)
+    var res=await fetch('https://ipwho.is/'+ip,{signal:ctrl.signal})
+    clearTimeout(timer)
+    var d=await res.json()
+    if(d.success&&d.city&&d.country){
+      return {
+        city:    d.city,
+        region:  d.region||'',
+        country: d.country,
+        flag:    (d.flag&&d.flag.emoji)?d.flag.emoji:'🌍'
+      }
+    }
+  } catch(e){}
+  return null
+}
+
+// Pre-fetch a batch of live IP locations and push into pool
+function _prefetchPool(count) {
+  for(var i=0;i<count;i++){
+    _fetchIPLoc(_randIP()).then(function(loc){
+      if(loc) livePool.push(loc)
+    })
+  }
+}
+
+function _fmtLoc(d) {
+  var parts = [d.city]
+  if(d.region && d.region !== d.city && d.region !== d.country) parts.push(d.region)
+  parts.push(d.country)
+  return d.flag + ' ' + parts.join(', ')
+}
+
+function _randAmt() {
+  return TOAST_AMOUNTS[Math.floor(Math.random()*TOAST_AMOUNTS.length)]
+}
+
+const toast  = document.getElementById('live-toast')
+const ltLine = document.getElementById('lt-line1')
+const ltAmt  = document.getElementById('lt-amount')
+const ltText = toast ? toast.querySelector('.lt-text') : null
+
+function updateToastContent() {
+  if(window.toastDismissed) return
+  const d = livePool[toastPoolIdx % livePool.length]
+  toastPoolIdx++
+  if(!ltLine || !ltAmt) return
+
+  if(ltText) ltText.style.opacity = '0'
+  setTimeout(function() {
+    var locEl = document.getElementById('lt-country')
+    if(locEl) locEl.textContent = _fmtLoc(d)
+    ltAmt.textContent = _randAmt()
+    if(ltText) ltText.style.opacity = '1'
+  }, 350)
+}
+
+window.toastDismissed = false
+let _toastInterval = null
+
+function closeLiveToast() {
+  if(!toast) return
+  window.toastDismissed = true
+  clearInterval(_toastInterval)
+  _toastInterval = null
+  toast.classList.remove('show')
+  toast.style.setProperty('transform', 'translateY(-110%)', 'important')
+  toast.style.setProperty('display', 'none', 'important')
+  document.body.classList.remove('toast-open')
+}
+
+window.addEventListener('load', function() {
+  if(!toast) return
+
+  // Kick off 25 live IP lookups in background
+  _prefetchPool(25)
+
+  // Show first entry from fallback pool immediately
+  var first = livePool[toastPoolIdx % livePool.length]
+  toastPoolIdx++
+  var locEl = document.getElementById('lt-country')
+  if(locEl) locEl.textContent = _fmtLoc(first)
+  if(ltAmt) ltAmt.textContent = _randAmt()
+  if(ltText) ltText.style.transition = 'opacity .35s ease'
+
+  // Slide in after 1.5s
+  setTimeout(function() {
+    if(window.toastDismissed) return
+    toast.classList.add('show')
+    document.body.classList.add('toast-open')
+  }, 1500)
+
+  // Rotate every 5 seconds
+  _toastInterval = setInterval(function() {
+    if(window.toastDismissed) { clearInterval(_toastInterval); return }
+    updateToastContent()
+  }, 5000)
+})
+
+/* ── CONTACT FORM ── */
+function submitContactForm(e){
+  e.preventDefault()
+  const btn  = document.getElementById('cf-submit-btn')
+  const txt  = document.getElementById('cf-btn-text')
+  const succ = document.getElementById('cf-success')
+  const form = e.target
+  btn.disabled = true
+  txt.textContent = 'Sending…'
+  setTimeout(()=>{
+    form.style.display = 'none'
+    succ.style.display = 'flex'
+  }, 1200)
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').style.background=
+    window.scrollY>50?'rgba(10,10,10,0.97)':'rgba(10,10,10,0.92)'
+})
+/* ── CLOSE MOBILE MENU ON OUTSIDE CLICK ── */
+if (typeof document.addEventListener === 'function') {
+  document.addEventListener('click', e => {
+    const menu = document.getElementById('mobile-menu')
+    const ham = document.getElementById('ham')
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)){
+      menu.classList.remove('open')
+      ham.classList.remove('open')
+    }
+  })
+} else if (typeof window.addEventListener === 'function') {
+  window.addEventListener('click', e => {
+    const menu = document.getElementById('mobile-menu')
+    const ham = document.getElementById('ham')
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)){
+      menu.classList.remove('open')
+      ham.classList.remove('open')
+    }
+  })
+}
+</script>
+<!-- ── MODAL UI — runs immediately, zero Supabase dependency ── -->
+<script>
+(function () {
+  var authModal      = document.getElementById('auth-modal')
+  var authClose      = document.getElementById('auth-close')
+  var authLoginBtn   = document.getElementById('auth-login-btn')
+  var authSignupBtn  = document.getElementById('auth-signup-btn')
+  var authConfirmRow = document.getElementById('auth-confirm-row')
+  var authMessage    = document.getElementById('auth-message')
+  var authNote       = document.getElementById('auth-note')
+  var authSubmit     = document.getElementById('auth-submit')
+
+  window.openLoginModal = function () {
+    document.getElementById('login-modal').classList.add('open')
+    document.getElementById('login-modal').setAttribute('aria-hidden','false')
+    document.getElementById('login-message').textContent = ''
+  }
+  window.closeLoginModal = function () {
+    document.getElementById('login-modal').classList.remove('open')
+    document.getElementById('login-modal').setAttribute('aria-hidden','true')
+    document.getElementById('login-form').reset()
+  }
+  window.openRegisterModal = function () {
+    document.getElementById('register-modal').classList.add('open')
+    document.getElementById('register-modal').setAttribute('aria-hidden','false')
+    document.getElementById('register-message').textContent = ''
+    // Show referral banner if a ref code is present
+    var refCode = sessionStorage.getItem('_refCode') || new URLSearchParams(window.location.search).get('ref') || ''
+    var banner = document.getElementById('reg-ref-banner')
+    if(banner && refCode){
+      banner.style.display='block'
+      banner.querySelector('span').textContent = refCode.toUpperCase()
+    }
+  }
+  window.closeRegisterModal = function () {
+    document.getElementById('register-modal').classList.remove('open')
+    document.getElementById('register-modal').setAttribute('aria-hidden','true')
+    document.getElementById('register-form').reset()
+  }
+
+  // Keep openAuthModal alias so existing code doesn't break
+  window.openAuthModal = function (mode) {
+    if (mode === 'signup') openRegisterModal(); else openLoginModal();
+  }
+
+  window.closeAuthModal = function () {
+    closeLoginModal(); closeRegisterModal();
+  }
+
+  var _unused = function () {
+    authModal.classList.remove('open')
+    authModal.setAttribute('aria-hidden', 'true')
+  }
+
+  function attachTriggers () {
+    document.querySelectorAll('.nav-signin, .mob-login, .mob-btn1').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault()
+        openLoginModal()
+        var mob = document.getElementById('mobile-menu')
+        var ham = document.getElementById('ham')
+        if (mob) mob.classList.remove('open')
+        if (ham) ham.classList.remove('open')
+      })
+    })
+    document.querySelectorAll('.nav-cta, .mob-btn2').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault()
+        openRegisterModal()
+        var mob = document.getElementById('mobile-menu')
+        var ham = document.getElementById('ham')
+        if (mob && mob.classList.contains('open')) {
+          mob.classList.remove('open')
+          if (ham) ham.classList.remove('open')
+        }
+      })
+    })
+    authClose    && authClose.addEventListener('click', closeAuthModal)
+    authLoginBtn && authLoginBtn.addEventListener('click',  function () { openAuthModal('login')  })
+    authSignupBtn&& authSignupBtn.addEventListener('click', function () { openAuthModal('signup') })
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAuthModal() })
+  }
+
+  /* run as soon as DOM is ready */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachTriggers)
+  } else {
+    attachTriggers()
+  }
+})()
+</script>
+
+<!-- ── SUPABASE CDN ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<!-- ── SUPABASE AUTH — safely isolated; modal still works if this fails ── -->
+<script>
+(function () {
+  var SUPABASE_URL      = 'https://ohlyburyplamumonbqsn.supabase.co'
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9obHlidXJ5cGxhbXVtb25icXNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NjQxNjEsImV4cCI6MjA5NjQ0MDE2MX0.IYDqaymyREpRgXmNM38sPHe6jH0DuIYVk84Yrk1kSAg'
+
+  var authClient = null
+  try {
+    authClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  } catch (e) {
+    console.warn('Supabase init failed:', e)
+    return
+  }
+
+  var navDashboardLink = document.getElementById('nav-dashboard')
+  var mobDashboardLink = document.getElementById('mob-dashboard')
+  var authForm         = document.getElementById('auth-form')
+  var authEmail        = document.getElementById('auth-email')
+  var authPassword     = document.getElementById('auth-password')
+  var authPasswordConfirm = document.getElementById('auth-password-confirm')
+  var authMessage      = document.getElementById('auth-message')
+  var authLoginBtn     = document.getElementById('auth-login-btn')
+
+  function updateAuthLinks () {
+    authClient.auth.getSession().then(function (res) {
+      var session  = res.data && res.data.session
+      var signedIn = !!session
+      if (navDashboardLink) navDashboardLink.style.display = signedIn ? 'inline-flex' : 'none'
+      if (mobDashboardLink) mobDashboardLink.style.display = signedIn ? 'block' : 'none'
+      document.querySelectorAll('.nav-signin, .nav-cta, .mob-login, .mob-btn1, .mob-btn2').forEach(function (el) {
+        el.style.display = signedIn ? 'none' : ''
+      })
+
+      // Identify visitor in Smartsupp so their name/email shows in your dashboard
+      if (typeof smartsupp === 'function') {
+        if (signedIn && session.user) {
+          var meta = session.user.user_metadata || {}
+          var visitorName  = meta.full_name || meta.username || ''
+          var visitorEmail = session.user.email || ''
+          if (visitorName)  smartsupp('name',  visitorName)
+          if (visitorEmail) smartsupp('email', visitorEmail)
+        } else {
+          // Guest visitor — clear identity
+          smartsupp('name',  'Guest Visitor')
+          smartsupp('email', '')
+        }
+      }
+    }).catch(function () {})
+  }
+
+  window.addEventListener('load', updateAuthLinks)
+  authClient.auth.onAuthStateChange(updateAuthLinks)
+
+  // ── LOGIN FORM SUBMIT ──
+  var loginForm = document.getElementById('login-form')
+  loginForm && loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault()
+    var msg = document.getElementById('login-message')
+    var btn = document.getElementById('login-submit')
+    msg.textContent = ''
+    var identifier = document.getElementById('login-identifier').value.trim()
+    var password   = document.getElementById('login-password').value
+    if (!identifier || !password) { msg.textContent = 'Please fill in all fields.'; return }
+    btn.disabled = true; btn.textContent = 'Signing in…'
+
+    var loginEmail = identifier
+    if (!identifier.includes('@')) {
+      var lookup = await authClient.from('profiles').select('email').eq('username', identifier).single()
+      if (lookup.error || !lookup.data) {
+        msg.textContent = 'Username not found. Try your email instead.'
+        btn.disabled = false; btn.textContent = 'Login'; return
+      }
+      loginEmail = lookup.data.email
+    }
+    var si = await authClient.auth.signInWithPassword({ email: loginEmail, password: password })
+    btn.disabled = false; btn.textContent = 'Login'
+    if (si.error) { msg.textContent = si.error.message; return }
+    msg.style.color = 'var(--green)'
+    msg.textContent = 'Login successful — redirecting…'
+    loginForm.reset()
+    setTimeout(function () { window.location.href = '/dashboard/index.html' }, 600)
+  })
+
+  // ── REGISTER FORM SUBMIT ──
+  var registerForm = document.getElementById('register-form')
+  registerForm && registerForm.addEventListener('submit', async function (e) {
+    e.preventDefault()
+    var msg = document.getElementById('register-message')
+    var btn = document.getElementById('register-submit')
+    msg.textContent = ''
+    var fullname = document.getElementById('reg-fullname').value.trim()
+    var username = document.getElementById('reg-username').value.trim().toLowerCase().replace(/\s+/g,'')
+    var phone    = document.getElementById('reg-phone').value.trim()
+    var email    = document.getElementById('reg-email').value.trim()
+    var password = document.getElementById('reg-password').value
+    var confirm  = document.getElementById('reg-confirm').value
+    if (!fullname) { msg.textContent = 'Please enter your full name.'; return }
+    if (!username) { msg.textContent = 'Please choose a username.'; return }
+    if (!email)    { msg.textContent = 'Please enter your email.'; return }
+    if (!password) { msg.textContent = 'Please enter a password.'; return }
+    if (password !== confirm) { msg.textContent = 'Passwords do not match.'; return }
+    btn.disabled = true; btn.textContent = 'Creating account…'
+
+    var su = await authClient.auth.signUp({
+      email: email, password: password,
+      options: { data: { full_name: fullname, username: username, phone: phone } }
+    })
+    btn.disabled = false; btn.textContent = 'Create Account'
+    if (su.error) { msg.textContent = su.error.message; return }
+    if (su.data && su.data.user) {
+      var refCode = sessionStorage.getItem('_refCode') || ''
+      var profileUpdate = { username: username, full_name: fullname, phone: phone }
+      if (refCode) profileUpdate.referred_by = refCode
+
+      await authClient.from('profiles').update(profileUpdate).eq('id', su.data.user.id)
+
+      // Link referral record if a referral code was used
+      if (refCode) {
+        var {data: referrerProf} = await authClient.from('profiles').select('id').eq('referral_code', refCode).single()
+        if (referrerProf) {
+          await authClient.from('referrals').insert({
+            referrer_id: referrerProf.id,
+            referred_id: su.data.user.id,
+            bonus_amount: 0,
+            status: 'pending'
+          }).then(()=>{}).catch(()=>{})
+        }
+        sessionStorage.removeItem('_refCode')
+      }
+    }
+    msg.style.color = 'var(--green)'
+    msg.textContent = 'Account created! You can now log in.'
+    registerForm.reset()
+    setTimeout(function(){ closeRegisterModal(); openLoginModal(); }, 1800)
+  })
+
+  var dashboardLogoutBtn = document.getElementById('dashboard-logout-btn')
+  dashboardLogoutBtn && dashboardLogoutBtn.addEventListener('click', async function () {
+    await authClient.auth.signOut()
+    updateAuthLinks()
+    openAuthModal('login')
+  })
+})()
+</script>
+<section id="user-dashboard" aria-hidden="true" style="display:none; padding:3rem; background:#070707; color:#fff; border-top:1px solid rgba(255,255,255,.08);">
+  <div style="max-width:900px; margin:0 auto;">
+    <h2 style="font-size:2rem; margin-bottom:0.75rem;">Welcome to your dashboard</h2>
+    <p style="font-size:1rem; color:#c8c8c8; margin-bottom:1rem;">Logged in as <strong id="dashboard-user-email">Member</strong>.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-bottom:1.25rem;">
+      <button id="dashboard-logout-btn" style="border:none; padding:0.85rem 1.4rem; background:#06f; color:#fff; font-weight:700; border-radius:999px; cursor:pointer;">Sign out</button>
+      <span style="color:#9a9a9a;">You can now continue to the app or reopen the member access panel to switch accounts.</span>
+    </div>
+    <div style="background:rgba(255,255,255,.03); padding:1.25rem; border-radius:16px;">
+      <p style="margin:0; color:#ddd;">This page currently uses a local browser auth flow. After sign-in, this dashboard section confirms authentication. You can extend it later with your actual app routes or member-only content.</p>
+    </div>
+  </div>
+</section>
+<script>
+// Clear any stale session so Login+Register buttons show correctly
+localStorage.removeItem('sb-ohlyburyplamumonbqsn-auth-token');
+sessionStorage.clear();
+
+// Capture referral code from ?ref=CODE URL param
+;(function(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if(ref) {
+    sessionStorage.setItem('_refCode', ref.toUpperCase());
+    // Show a subtle banner in the register modal if open
+    var banner = document.getElementById('reg-ref-banner');
+    if(banner){ banner.style.display='block'; banner.querySelector('span').textContent = ref.toUpperCase(); }
+  }
+})();
+
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey&&e.shiftKey&&e.key==='A'){
+    e.preventDefault();
+    window.location.href='/admin/dashboard.html';
+  }
+});
+</script>
+
+</body>
+</html>

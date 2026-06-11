@@ -1,0 +1,28 @@
+# Environment / secrets
+.env
+.env.local
+.env.*
+
+# Executables and installers
+*.exe
+*.msi
+*.zip
+
+# Media files
+*.mp4
+*.htm
+*.jpeg
+*.jpg
+*.png
+*.gif
+
+# Node
+node_modules/
+package-lock.json
+
+# Jupyter
+*.ipynb
+
+# Misc
+desktop.ini
+*.bak

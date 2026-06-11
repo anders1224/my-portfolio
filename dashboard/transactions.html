@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Transactions — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .filter-bar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .filter-chip {
+      padding:6px 16px; border-radius:20px; font-size:.75rem; font-weight:600;
+      border:1px solid var(--border2); cursor:pointer; transition:all .2s;
+    }
+    .filter-chip:hover  { border-color:var(--border); }
+    .filter-chip.active { border-color:var(--green); background:rgba(57,255,20,.08); color:var(--green); }
+    .alert{display:none;}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr">
+        <h1>Transaction History</h1>
+        <p>All your deposits, withdrawals, and earnings.</p>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-chip active" onclick="filterTx('all',this)">All</div>
+        <div class="filter-chip" onclick="filterTx('deposit',this)">Deposits</div>
+        <div class="filter-chip" onclick="filterTx('withdrawal',this)">Withdrawals</div>
+        <div class="filter-chip" onclick="filterTx('earning',this)">Earnings</div>
+        <div class="filter-chip" onclick="filterTx('referral',this)">Referrals</div>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Reference</th><th>Type</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr>
+            </thead>
+            <tbody id="txBody">
+              <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">
+                <div class="spinner"></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let allTx = [];
+(async () => {
+  const user = await requireUser();
+  if (!user) return;
+  document.getElementById('sidebar').innerHTML = renderSidebar('transactions', user);
+  document.getElementById('topbar').innerHTML  = renderTopbar('Transactions');
+
+  const { data } = await db.from('transactions').select('*')
+    .eq('user_id', user.id).order('created_at', { ascending:false });
+  allTx = data || [];
+  renderTx(allTx);
+})();
+
+function renderTx(txns) {
+  const tb = document.getElementById('txBody');
+  if (!txns.length) {
+    tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><p>No transactions found.</p></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML = txns.map(t => `
+    <tr>
+      <td style="font-family:monospace;font-size:.78rem;color:var(--muted);">${t.reference || '—'}</td>
+      <td style="text-transform:capitalize;">${t.type}</td>
+      <td class="${['deposit','earning','referral','bonus'].includes(t.type)?'text-green':'text-danger'}">${fmt(t.amount)}</td>
+      <td>${t.method || '—'}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td>${fmtDateTime(t.created_at)}</td>
+    </tr>
+  `).join('');
+}
+
+function filterTx(type, el) {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderTx(type === 'all' ? allTx : allTx.filter(t => t.type === type));
+}
+</script>
+</body>
+</html>

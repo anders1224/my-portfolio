@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Referrals — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .ref-card{background:linear-gradient(135deg,rgba(57,255,20,.08),rgba(0,229,176,.04));
+      border:1px solid var(--border);border-radius:12px;padding:28px;text-align:center;margin-bottom:24px;}
+    .ref-code{font-family:monospace;font-size:1.6rem;letter-spacing:.2em;color:var(--green);
+      background:rgba(57,255,20,.08);border:1px dashed var(--border);padding:12px 20px;
+      border-radius:6px;display:inline-block;margin:12px 0;}
+    .ref-link{font-size:.78rem;color:var(--muted);word-break:break-all;margin-top:6px;}
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr"><h1>Referral Program</h1><p>Earn 15% bonus on every friend you invite.</p></div>
+
+      <div class="ref-card">
+        <div style="font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);">Your Referral Code</div>
+        <div class="ref-code" id="refCode">Loading…</div>
+        <div class="ref-link" id="refLink"></div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+          <button class="btn btn-green btn-sm" onclick="copyLink()">📋 Copy Link</button>
+          <button class="btn btn-outline btn-sm" onclick="shareWA()">📱 Share on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="stat-card">
+          <div class="label">Total Referrals</div>
+          <div class="value green" id="totalRefs">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Referral Earnings</div>
+          <div class="value green" id="refEarnings">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Pending Bonus</div>
+          <div class="value" id="pendingBonus">$0.00</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">Referred Users</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Joined</th><th>Status</th><th>Your Bonus</th></tr></thead>
+            <tbody id="refBody"><tr><td colspan="4" style="text-align:center;padding:24px;"><div class="spinner"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card card-green" style="margin-top:16px;">
+        <h3 style="font-family:'Rajdhani',sans-serif;font-size:.9rem;margin-bottom:10px;">How Referrals Work</h3>
+        <ul style="color:var(--muted);font-size:.83rem;line-height:2;padding-left:16px;">
+          <li>Share your unique referral link with friends</li>
+          <li>When they sign up and make their first investment, you earn <strong style="color:#fff;">15%</strong> of their deposit as bonus</li>
+          <li>Referral bonuses are credited automatically to your wallet</li>
+          <li>No limit on how many friends you can refer!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let refLink='';
+(async()=>{
+  const user=await requireUser();
+  if(!user)return;
+  document.getElementById('sidebar').innerHTML=renderSidebar('referrals',user);
+  document.getElementById('topbar').innerHTML=renderTopbar('Referrals');
+
+  document.getElementById('refCode').textContent=user.referral_code||'—';
+  refLink=window.location.origin+'/auth/signup.html?ref='+(user.referral_code||'');
+  document.getElementById('refLink').textContent=refLink;
+
+  // Referred users
+  const{data:refs}=await db.from('profiles').select('full_name,email,status,created_at').eq('referred_by',user.id);
+  const refEarn=await db.from('transactions').select('amount').eq('user_id',user.id).eq('type','referral');
+
+  const totalEarn=(refEarn.data||[]).reduce((s,t)=>s+t.amount,0);
+  document.getElementById('totalRefs').textContent=(refs||[]).length;
+  document.getElementById('refEarnings').textContent=fmt(totalEarn);
+  document.getElementById('pendingBonus').textContent=fmt(0);
+
+  const tb=document.getElementById('refBody');
+  if(!refs||!refs.length){
+    tb.innerHTML='<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">🎁</div><p>No referrals yet. Share your link to start earning!</p></div></td></tr>';
+  } else {
+    tb.innerHTML=refs.map(r=>`
+      <tr>
+        <td>${r.full_name||'—'}<br><span style="color:var(--muted);font-size:.72rem;">${r.email||''}</span></td>
+        <td>${fmtDate(r.created_at)}</td>
+        <td>${statusBadge(r.status)}</td>
+        <td class="text-green">15% bonus</td>
+      </tr>
+    `).join('');
+  }
+})();
+
+function copyLink(){navigator.clipboard.writeText(refLink);alert('✅ Referral link copied!');}
+function shareWA(){window.open('https://wa.me/?text=Join+ThriveMine+and+start+earning+daily+returns!+Use+my+link:+'+encodeURIComponent(refLink));}
+</script>
+</body>
+</html>

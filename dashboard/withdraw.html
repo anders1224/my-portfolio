@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Withdraw — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .bal-box {
+      background:linear-gradient(135deg,rgba(57,255,20,.08),rgba(0,229,176,.04));
+      border:1px solid var(--border); border-radius:12px;
+      padding:24px; margin-bottom:24px; text-align:center;
+    }
+    .bal-label { font-size:.7rem; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); }
+    .bal-value { font-family:'Rajdhani',sans-serif; font-weight:700; font-size:2.8rem;
+      color:var(--green); text-shadow:var(--glow-sm); margin:6px 0; }
+    .alert { display:none; }
+    .method-row {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;
+    }
+    @media(max-width:500px){ .method-row{grid-template-columns:1fr 1fr;} }
+    .method-chip {
+      border:1px solid var(--border2); border-radius:6px; padding:10px;
+      text-align:center; font-size:.78rem; cursor:pointer; transition:all .2s;
+    }
+    .method-chip:hover  { border-color:var(--border); }
+    .method-chip.active { border-color:var(--green); background:rgba(57,255,20,.06); color:var(--green); }
+    .fee-row {
+      display:flex; justify-content:space-between;
+      font-size:.82rem; color:var(--muted); padding:8px 0;
+      border-bottom:1px solid var(--border2);
+    }
+    .fee-row.total { color:#fff; font-weight:600; border-bottom:none; }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr">
+        <h1>Withdraw Funds</h1>
+        <p>Withdraw your earnings to your crypto wallet.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <div>
+          <!-- Balance -->
+          <div class="bal-box">
+            <div class="bal-label">Available Balance</div>
+            <div class="bal-value" id="balValue">$0.00</div>
+            <div style="font-size:.78rem;color:var(--muted);">Ready to withdraw</div>
+          </div>
+
+          <div class="card">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:1rem;margin-bottom:16px;">Withdrawal Request</h3>
+            <div id="alertBox" class="alert"></div>
+            <form id="withdrawForm">
+              <div class="field">
+                <label>Select Method</label>
+                <div class="method-row">
+                  <div class="method-chip active" onclick="selectM('Bitcoin')"    id="wm-Bitcoin">₿ Bitcoin</div>
+                  <div class="method-chip"        onclick="selectM('Ethereum')"   id="wm-Ethereum">◈ ETH</div>
+                  <div class="method-chip"        onclick="selectM('USDT TRC-20')" id="wm-USDT TRC-20">₮ USDT</div>
+                  <div class="method-chip"        onclick="selectM('Litecoin')"   id="wm-Litecoin">Ł LTC</div>
+                  <div class="method-chip"        onclick="selectM('Dogecoin')"   id="wm-Dogecoin">Ð DOGE</div>
+                  <div class="method-chip"        onclick="selectM('TRON')"       id="wm-TRON">▷ TRON</div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Your Wallet Address</label>
+                <input type="text" id="walletAddr" class="input" placeholder="Enter your receiving wallet address" required/>
+              </div>
+              <div class="field">
+                <label>Amount (USD)</label>
+                <input type="number" id="amount" class="input" placeholder="Minimum $50"
+                  min="50" step="0.01" required oninput="calcFee()"/>
+              </div>
+              <!-- Fee breakdown -->
+              <div id="feeBreakdown" style="background:var(--bg3);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:none;">
+                <div class="fee-row"><span>Amount requested</span><span id="feeAmt">$0.00</span></div>
+                <div class="fee-row"><span>Processing fee (2%)</span><span id="feeCharge" style="color:var(--warning);">$0.00</span></div>
+                <div class="fee-row total"><span>You will receive</span><span id="feeNet" style="color:var(--green);">$0.00</span></div>
+              </div>
+              <button type="submit" class="btn btn-green btn-full" id="withdrawBtn">Request Withdrawal</button>
+            </form>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:.95rem;margin-bottom:14px;">Withdrawal Rules</h3>
+            <ul style="color:var(--muted);font-size:.83rem;line-height:2;padding-left:16px;">
+              <li>Minimum withdrawal: <strong style="color:#fff;">$50</strong></li>
+              <li>Processing fee: <strong style="color:#fff;">2%</strong></li>
+              <li>Processing time: <strong style="color:#fff;">12–48 hours</strong></li>
+              <li>Only confirmed earnings can be withdrawn</li>
+              <li>Double-check your wallet address</li>
+              <li>Wrong address = lost funds (not recoverable)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 style="font-family:'Rajdhani',sans-serif;font-size:.95rem;margin-bottom:14px;">Recent Withdrawals</h3>
+            <div id="recentWithdrawals">
+              <div style="text-align:center;color:var(--muted);padding:20px;font-size:.85rem;">Loading…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let currentUser = null;
+let wMethod = 'Bitcoin';
+
+(async () => {
+  currentUser = await requireUser();
+  if (!currentUser) return;
+  document.getElementById('sidebar').innerHTML = renderSidebar('withdraw', currentUser);
+  document.getElementById('topbar').innerHTML  = renderTopbar('Withdraw Funds');
+  document.getElementById('balValue').textContent = fmt(currentUser.wallet_balance);
+
+  // Recent withdrawals
+  const { data: txns } = await db.from('transactions').select('*')
+    .eq('user_id', currentUser.id).eq('type','withdrawal')
+    .order('created_at',{ascending:false}).limit(5);
+
+  const rw = document.getElementById('recentWithdrawals');
+  if (!txns || txns.length === 0) {
+    rw.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:.83rem;">No withdrawals yet.</div>';
+  } else {
+    rw.innerHTML = txns.map(t => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border2);font-size:.82rem;">
+        <div>${t.method || '—'} <br><span style="color:var(--muted);font-size:.72rem;">${fmtDate(t.created_at)}</span></div>
+        <div style="text-align:right;">${fmt(t.amount)}<br>${statusBadge(t.status)}</div>
+      </div>
+    `).join('');
+  }
+})();
+
+function selectM(m) {
+  wMethod = m;
+  document.querySelectorAll('.method-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('wm-' + m)?.classList.add('active');
+}
+
+function calcFee() {
+  const amt = parseFloat(document.getElementById('amount').value) || 0;
+  if (amt < 1) { document.getElementById('feeBreakdown').style.display='none'; return; }
+  const fee = amt * 0.02;
+  const net = amt - fee;
+  document.getElementById('feeAmt').textContent    = fmt(amt);
+  document.getElementById('feeCharge').textContent = '-' + fmt(fee);
+  document.getElementById('feeNet').textContent    = fmt(net);
+  document.getElementById('feeBreakdown').style.display = 'block';
+}
+
+document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn   = document.getElementById('withdrawBtn');
+  const alert = document.getElementById('alertBox');
+  const amt   = parseFloat(document.getElementById('amount').value);
+
+  if (amt > currentUser.wallet_balance) {
+    showAlert(alert, 'Insufficient balance. Your available balance is ' + fmt(currentUser.wallet_balance));
+    return;
+  }
+  if (amt < 50) { showAlert(alert, 'Minimum withdrawal is $50.'); return; }
+
+  setLoading(btn, true, 'Submitting…');
+
+  const { error } = await db.from('transactions').insert({
+    user_id:        currentUser.id,
+    type:           'withdrawal',
+    amount:         amt,
+    method:         wMethod,
+    wallet_address: document.getElementById('walletAddr').value.trim(),
+    status:         'pending',
+  });
+
+  setLoading(btn, false);
+  if (error) { showAlert(alert, error.message); return; }
+
+  await db.from('notifications').insert({
+    user_id: currentUser.id,
+    title:   'Withdrawal Requested',
+    message: `Your withdrawal of ${fmt(amt)} via ${wMethod} is being processed.`,
+    type:    'info'
+  });
+
+  showAlert(alert, '✅ Withdrawal request submitted! Processing within 12–48 hours.', 'success');
+  e.target.reset();
+  document.getElementById('feeBreakdown').style.display = 'none';
+});
+</script>
+</body>
+</html>
