@@ -515,7 +515,8 @@
       display: none;
       position: fixed;
       bottom: 140px;
-      right: 16px;
+      left: 16px;
+      right: auto;
       width: 240px;
       background: #0f0f0f;
       border: 1px solid rgba(57,255,20,.25);
@@ -523,6 +524,18 @@
       z-index: 400;
       overflow: hidden;
       box-shadow: 0 16px 48px rgba(0,0,0,.9);
+    }
+
+    /* Force Smartsupp chat to bottom-right on mobile, above everything */
+    @media(max-width:900px){
+      #smartsupp-widget-container,
+      #chat-application,
+      #smartsupp-widget-container iframe {
+        right: 16px !important;
+        left: auto !important;
+        bottom: 16px !important;
+        z-index: 99999 !important;
+      }
     }
     #mobile-translate-panel.open { display: block; animation: fadeUp .2s ease; }
 
