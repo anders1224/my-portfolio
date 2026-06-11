@@ -26,3 +26,5 @@ package-lock.json
 # Misc
 desktop.ini
 *.bak
+
+.vercel
