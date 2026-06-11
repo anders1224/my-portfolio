@@ -492,7 +492,9 @@
       z-index: 300;
       display: none;
     }
-    @media(max-width:900px) { #float-translate { display: block; } }
+    @media(max-width:900px) {
+      #float-translate { display: block; right: auto; left: 20px; }
+    }
 
     .float-translate-btn {
       width: 46px; height: 46px;
@@ -1914,6 +1916,7 @@ var _smartsupp = _smartsupp || {};
 _smartsupp.key = '308e0ef38d9bbd56978969064da2eb01349607da';
 _smartsupp.offsetX = 20;
 _smartsupp.offsetY = 20;
+_smartsupp.hideWidget = false;
 window.smartsupp||(function(d) {
   var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
   s=d.getElementsByTagName('script')[0];c=d.createElement('script');
