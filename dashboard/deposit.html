@@ -201,7 +201,6 @@ document.getElementById('depositForm').addEventListener('submit', async (e) => {
     amount:         parseFloat(document.getElementById('amount').value),
     method:         currentMethod,
     txn_hash:       document.getElementById('txHash').value.trim(),
-    note:           document.getElementById('note').value.trim(),
     status:         'pending',
   });
 
