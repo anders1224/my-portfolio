@@ -2833,9 +2833,9 @@ window.smartsupp||(function(d) {
 
     var roi      = plan ? plan.roi / 100 : 0;
     var days     = plan ? plan.cycle_days : 1;
-    var profit   = amtRaw * roi;
+    var daily    = amtRaw * roi;
+    var profit   = daily * days;
     var total    = amtRaw + profit;
-    var daily    = days > 0 ? profit / days : 0;
     var roiPct   = plan ? plan.roi : 0;
 
     function fmt(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
