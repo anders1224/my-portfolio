@@ -59,25 +59,7 @@ async function requireUser(redirectTo) {
   const user = await getUser();
   if (!user) { window.location.href = redirectTo || _loginPage(); return null; }
   if (user.role === 'admin') { window.location.href = '../admin/dashboard.html'; return null; }
-  if (user.account_status === 'pending') {
-    document.body.innerHTML = `
-      <div style="min-height:100vh;background:#060d0a;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;padding:20px;">
-        <div style="background:#0d1f15;border:1px solid rgba(57,255,20,.15);border-radius:16px;padding:48px 40px;max-width:480px;width:100%;text-align:center;">
-          <div style="font-size:3rem;margin-bottom:16px;">⏳</div>
-          <h2 style="color:#39ff14;font-size:1.6rem;font-weight:700;margin-bottom:10px;">Account Pending Approval</h2>
-          <p style="color:#8a9a8e;font-size:.95rem;line-height:1.7;margin-bottom:28px;">
-            Your account has been created and is awaiting admin approval.<br>
-            You will be notified once your account is activated.
-          </p>
-          <button onclick="(async()=>{await db.auth.signOut();window.location.href='../${_loginPage()}'})()"
-            style="background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);color:#39ff14;padding:10px 28px;border-radius:8px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;">
-            Sign Out
-          </button>
-        </div>
-      </div>`;
-    return null;
-  }
-  if (user.account_status === 'rejected') {
+if (user.account_status === 'rejected') {
     document.body.innerHTML = `
       <div style="min-height:100vh;background:#060d0a;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;padding:20px;">
         <div style="background:#1a0d0d;border:1px solid rgba(239,68,68,.2);border-radius:16px;padding:48px 40px;max-width:480px;width:100%;text-align:center;">
