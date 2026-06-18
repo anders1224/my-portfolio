@@ -212,7 +212,7 @@ document.getElementById('depositForm').addEventListener('submit', async (e) => {
     user_id: currentUser.id,
     title:   'Deposit Submitted',
     message: `Your deposit of $${document.getElementById('amount').value} via ${currentMethod} is under review.`,
-    type:    'info'
+    type:    'success'
   });
 
   showAlert(alert, '✅ Deposit submitted successfully! Admin will confirm within 1–3 hours.', 'success');

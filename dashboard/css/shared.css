@@ -183,7 +183,7 @@ tr:hover td { background:rgba(255,255,255,.015); }
   display:flex; align-items:flex-start; gap:10px; margin-bottom:16px;
 }
 .alert-error   { background:rgba(255,77,77,.1); border:1px solid rgba(255,77,77,.25); color:#ff8080; }
-.alert-success { background:rgba(255,119,0,.08); border:1px solid rgba(255,119,0,.2); color:var(--green); }
+.alert-success { background:rgba(57,255,20,.08); border:1px solid rgba(57,255,20,.25); color:#39ff14; }
 .alert-info    { background:rgba(0,180,255,.08); border:1px solid rgba(0,180,255,.2); color:var(--info); }
 
 /* ── SIDEBAR ── */

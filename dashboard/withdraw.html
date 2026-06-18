@@ -192,7 +192,7 @@ document.getElementById('withdrawForm').addEventListener('submit', async (e) => 
     user_id: currentUser.id,
     title:   'Withdrawal Requested',
     message: `Your withdrawal of ${fmt(amt)} via ${wMethod} is being processed.`,
-    type:    'info'
+    type:    'error'
   });
 
   showAlert(alert, '✅ Withdrawal request submitted! Processing within 12–48 hours.', 'success');
