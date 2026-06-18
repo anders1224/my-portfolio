@@ -453,12 +453,10 @@ function calcReturn() {
   if (!selectedPlan) return;
   const amt = parseFloat(document.getElementById('investAmt').value) || 0;
   if (!amt) { document.getElementById('returnBox').style.display = 'none'; return; }
-  const profit  = amt * (selectedPlan.roi / 100);                          // total cycle profit
-  const daily   = selectedPlan.cycle_days > 0 ? profit / selectedPlan.cycle_days : 0; // daily earnings
-  const payout  = amt + profit;                                             // principal + profit
+  const total   = amt * (selectedPlan.roi / 100) * selectedPlan.cycle_days;
   const endDate = new Date(Date.now() + selectedPlan.cycle_days * 86400000);
   const after   = Math.max(0, (currentUser?.wallet_balance || 0) - amt);
-  document.getElementById('retTotal').textContent   = fmt(profit) + ' profit  |  ' + fmt(payout) + ' total payout';
+  document.getElementById('retTotal').textContent   = fmt(total) + ' (total)';
   document.getElementById('retBalance').textContent = fmt(after);
   document.getElementById('retEnd').textContent     = fmtDate(endDate.toISOString());
   document.getElementById('returnBox').style.display = 'block';
