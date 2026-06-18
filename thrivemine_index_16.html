@@ -14,18 +14,18 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
-      background:#05091a;
+      background:#0a0a0a;
       color:#fff;
       font-family:'Exo 2',sans-serif;
       overflow-x:hidden;
     }
     ::-webkit-scrollbar{width:3px}
-    ::-webkit-scrollbar-track{background:#05091a}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
     ::-webkit-scrollbar-thumb{background:#ff7700;border-radius:2px}
     a{text-decoration:none;color:inherit}
     img{display:block;width:100%}
 
-    /* ═══════════════════════════════════════
+    /* 
        CSS VARIABLES
     ═══════════════════════════════════════ */
     :root{
@@ -34,7 +34,7 @@
       --glow-sm:0 0 14px rgba(255,119,0,.4);
       --glow-md:0 0 24px rgba(255,119,0,.45),0 0 50px rgba(255,119,0,.15);
       --glow-lg:0 0 32px rgba(255,119,0,.6),0 0 80px rgba(255,119,0,.2);
-      --card-bg:#0d1228;
+      --card-bg:#141414;
       --border:rgba(255,119,0,.3);
       --muted:#a8a8a8;
     }
@@ -149,7 +149,7 @@
     }
     .auth-modal.open{opacity:1;pointer-events:auto}
     .auth-panel{
-      width:min(540px,calc(100% - 40px));background:#04081a;
+      width:min(540px,calc(100% - 40px));background:#080808;
       border:1px solid rgba(255,119,0,.2);padding:32px 28px;
       border-radius:22px;box-shadow:0 0 70px rgba(0,0,0,.6);position:relative;
     }
@@ -162,7 +162,7 @@
     .auth-switch button.active{background:var(--green);color:#000;border-color:var(--green)}
     .auth-form .field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
     .auth-form label{font-size:.85rem;color:#aaa}
-    .auth-form input{width:100%;padding:14px 16px;background:#0a1020;
+    .auth-form input{width:100%;padding:14px 16px;background:#111;
       border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff}
     .auth-actions{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
     .auth-messages{margin-top:16px;color:#fff;font-size:.95rem;min-height:22px}
@@ -276,7 +276,7 @@
        BITCOIN TRADING CHART SECTION
     ═══════════════════════════════════════ */
     #chart-section{
-      background:#04081a;
+      background:#080808;
       padding:80px 0 90px;
       border-bottom:1px solid rgba(255,119,0,.07);
     }
@@ -311,7 +311,7 @@
     }
     .coin-pill{
       display:flex;align-items:center;gap:8px;
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.15);
       padding:8px 16px;
       cursor:pointer;
@@ -342,7 +342,7 @@
       border:1px solid rgba(255,119,0,.18);
       border-radius:8px;
       overflow:hidden;
-      background:#060a1b;
+      background:#0b0b0b;
       box-shadow:0 0 40px rgba(0,0,0,.6),0 0 1px rgba(255,119,0,.2);
       min-height:500px;
       position:relative;
@@ -352,7 +352,7 @@
       width:100%;
       height:500px;
       border:none;
-      background:#060a1b;
+      background:#0b0b0b;
     }
     @media(max-width:768px){
       .chart-frame { min-height:340px; }
@@ -436,7 +436,7 @@
       position: absolute;
       top: calc(100% + 10px);
       right: 0;
-      background: #090d1f;
+      background: #0f0f0f;
       border: 1px solid rgba(255,119,0,.2);
       border-radius: 8px;
       width: 220px;
@@ -497,18 +497,23 @@
     }
 
     .float-translate-btn {
-      width: 46px; height: 46px;
+      width: 54px; height: 54px;
       border-radius: 50%;
-      background: var(--green);
+      background: radial-gradient(circle at 35% 35%, #7fff00, #39ff14 60%, #00cc00);
       color: #000;
-      border: none;
-      font-size: 1.2rem;
+      border: 2px solid rgba(57,255,20,.7);
+      font-size: 1.35rem;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: var(--glow-md);
+      box-shadow: 0 0 14px rgba(57,255,20,.95), 0 0 32px rgba(57,255,20,.65), 0 0 64px rgba(57,255,20,.35);
+      animation: greenGlowPulse 2s ease-in-out infinite;
       transition: transform .2s;
     }
-    .float-translate-btn:hover { transform: scale(1.1); }
+    .float-translate-btn:hover { transform: scale(1.15); }
+    @keyframes greenGlowPulse {
+      0%,100% { box-shadow: 0 0 14px rgba(57,255,20,.95), 0 0 32px rgba(57,255,20,.65), 0 0 64px rgba(57,255,20,.35); }
+      50%      { box-shadow: 0 0 22px rgba(57,255,20,1),   0 0 50px rgba(57,255,20,.85), 0 0 90px rgba(57,255,20,.5), 0 0 130px rgba(57,255,20,.2); }
+    }
 
     /* Mobile translate panel */
     #mobile-translate-panel {
@@ -518,7 +523,7 @@
       left: 16px;
       right: auto;
       width: 240px;
-      background: #090d1f;
+      background: #0f0f0f;
       border: 1px solid rgba(255,119,0,.25);
       border-radius: 10px;
       z-index: 400;
@@ -549,7 +554,7 @@
       overflow:hidden;
       border-top:1px solid rgba(255,119,0,.08);
       border-bottom:1px solid rgba(255,119,0,.08);
-      background:#070b1d;padding:11px 0;
+      background:#0d0d0d;padding:11px 0;
     }
     .ticker-track{display:flex;animation:tickRun 35s linear infinite;white-space:nowrap}
     .tick{
@@ -563,7 +568,7 @@
     /* ═══════════════════════════════════════
        ABOUT
     ═══════════════════════════════════════ */
-    #about{background:#080c1e;padding:110px 0}
+    #about{background:#0e0e0e;padding:110px 0}
     .about-grid{
       display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
     }
@@ -704,7 +709,7 @@
     /* ═══════════════════════════════════════
        SERVICES  ← Main section matching screenshots
     ═══════════════════════════════════════ */
-    #services{background:#05091a;padding:110px 0}
+    #services{background:#0a0a0a;padding:110px 0}
     .services-hdr{text-align:center;max-width:700px;margin:0 auto 64px}
     .services-hdr .sec-title{margin-bottom:16px}
     .services-hdr p{color:rgba(255,255,255,.8);font-size:1.05rem;line-height:1.75;font-weight:400}
@@ -729,7 +734,7 @@
       border:2px solid var(--green);
       box-shadow:var(--glow-md);
       overflow:hidden;
-      background:#0a1020;
+      background:#111;
       cursor:pointer;
       transition:transform .35s ease, box-shadow .35s ease;
     }
@@ -758,7 +763,7 @@
     /* ═══════════════════════════════════════
        HOW IT WORKS
     ═══════════════════════════════════════ */
-    #how{background:#080c1e;padding:110px 0}
+    #how{background:#0e0e0e;padding:110px 0}
     .how-hdr{text-align:center;max-width:580px;margin:0 auto 72px}
     .how-hdr .sec-title{margin-bottom:0}
     .steps{
@@ -781,7 +786,7 @@
       border:2px solid rgba(255,119,0,.4);
       display:flex;align-items:center;justify-content:center;
       font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.5rem;color:var(--green);
-      margin:0 auto 20px;background:#080c1e;
+      margin:0 auto 20px;background:#0e0e0e;
       transition:border-color .3s,box-shadow .3s;
     }
     .step:hover .step-num{border-color:var(--green);box-shadow:var(--glow-sm)}
@@ -820,12 +825,12 @@
     /* ═══════════════════════════════════════
        TESTIMONIALS
     ═══════════════════════════════════════ */
-    #testi{background:#05091a;padding:110px 0}
+    #testi{background:#0a0a0a;padding:110px 0}
     .testi-hdr{text-align:center;max-width:580px;margin:0 auto 60px}
     .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
     @media(max-width:900px){.testi-grid{grid-template-columns:1fr}}
     .tcard{
-      background:#0a1020;border:1px solid rgba(255,119,0,.12);
+      background:#111;border:1px solid rgba(255,119,0,.12);
       padding:32px 28px;
       transition:border-color .3s,transform .3s;
     }
@@ -844,7 +849,7 @@
     /* ═══════════════════════════════════════
        ROADMAP
     ═══════════════════════════════════════ */
-    #roadmap{background:#080c1e;padding:110px 0}
+    #roadmap{background:#0e0e0e;padding:110px 0}
     .road-hdr{text-align:center;max-width:600px;margin:0 auto 72px}
     .road-track{
       max-width:1000px;margin:0 auto;
@@ -880,7 +885,7 @@
     .rm-dot{display:flex;justify-content:center;padding-top:14px}
     .rm-dot-inner{
       width:12px;height:12px;border-radius:50%;
-      border:2px solid rgba(255,119,0,.5);background:#080c1e;
+      border:2px solid rgba(255,119,0,.5);background:#0e0e0e;
       position:relative;z-index:1;
     }
     .rm-dot-inner.done{background:var(--green);border-color:var(--green);box-shadow:0 0 12px rgba(255,119,0,.6)}
@@ -890,7 +895,7 @@
     }
     @keyframes rmPulse{0%,100%{box-shadow:0 0 0 0 rgba(240,180,41,.4)}50%{box-shadow:0 0 0 7px rgba(240,180,41,0)}}
     .rm-card{
-      background:#0a1020;border:1px solid rgba(255,119,0,.1);
+      background:#111;border:1px solid rgba(255,119,0,.1);
       padding:24px 28px;transition:border-color .3s;
     }
     .rm-card:hover{border-color:rgba(255,119,0,.28)}
@@ -913,7 +918,7 @@
     /* ═══════════════════════════════════════
        PRICING
     ═══════════════════════════════════════ */
-    #pricing{background:#05091a;padding:110px 0}
+    #pricing{background:#0a0a0a;padding:110px 0}
     .price-hdr{text-align:center;max-width:560px;margin:0 auto 60px}
     .price-hdr .sec-title{margin-bottom:14px}
     .price-hdr p{color:rgba(255,255,255,.8);font-size:.98rem}
@@ -925,7 +930,7 @@
 
     /* The card itself */
     .pcard{
-      background:#0a1020;
+      background:#111;
       border:2px solid var(--green);
       border-radius:20px;
       padding:44px 40px 40px;
@@ -1054,7 +1059,7 @@
 
     /* Base card */
     .iplan-card{
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.18);
       border-radius:16px;
       padding:0 24px 24px;
@@ -1188,7 +1193,7 @@
        PAYMENT SYSTEMS SECTION
     ═══════════════════════════════════════ */
     #payments{
-      background:#05091a;
+      background:#070d0d;
       padding:100px 0;
       border-top:1px solid rgba(255,119,0,.07);
       border-bottom:1px solid rgba(255,119,0,.07);
@@ -1303,7 +1308,7 @@
     .contact-cards{display:flex;flex-direction:column;gap:14px}
     .contact-card{
       display:flex;align-items:flex-start;gap:16px;
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.12);
       border-radius:10px;
       padding:18px 20px;
@@ -1330,7 +1335,7 @@
 
     /* Form box */
     .contact-form-box{
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.15);
       border-radius:16px;
       padding:36px 32px;
@@ -1366,7 +1371,7 @@
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2339ff14' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:right 14px center;
     }
-    .cf-select option{background:#090d1f;color:#fff}
+    .cf-select option{background:#0f0f0f;color:#fff}
     .cf-textarea{resize:vertical;min-height:110px;line-height:1.6}
     .cf-submit{
       background:var(--green);color:#000;
@@ -1395,7 +1400,7 @@
       overflow:hidden;
     }
     .contact-map-label{
-      background:#090d1f;
+      background:#0f0f0f;
       padding:12px 20px;
       font-size:.78rem;letter-spacing:.1em;
       color:rgba(255,255,255,.8);
@@ -1408,7 +1413,7 @@
     ═══════════════════════════════════════ */
     #cta{
       padding:120px 24px;text-align:center;
-      background:#080c1e;
+      background:#0e0e0e;
       border-top:1px solid rgba(255,119,0,.06);
       border-bottom:1px solid rgba(255,119,0,.06);
       position:relative;overflow:hidden;
@@ -1547,7 +1552,7 @@
     .nav-drop-panel{
       display:none;position:absolute;top:calc(100% + 18px);left:50%;
       transform:translateX(-50%);
-      background:#070b1d;border:1px solid rgba(255,119,0,.18);
+      background:#0d0d0d;border:1px solid rgba(255,119,0,.18);
       min-width:220px;z-index:300;
       box-shadow:0 16px 48px rgba(0,0,0,.7);
     }
@@ -1628,7 +1633,7 @@
     /* Language & buttons bottom */
     .mob-bottom{padding:20px}
     .mob-lang{
-      width:100%;background:#0a1020;border:1px solid rgba(255,255,255,.1);
+      width:100%;background:#111;border:1px solid rgba(255,255,255,.1);
       color:rgba(255,255,255,.5);padding:12px 16px;font-size:.88rem;
       margin-bottom:14px;appearance:none;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -1651,7 +1656,7 @@
     /* ═══════════════════════════════════════
        INVESTMENT PLANS  SECTION
     ═══════════════════════════════════════ */
-    #investment-plans{background:#04081a;padding:110px 0}
+    #investment-plans{background:#080808;padding:110px 0}
 
     /* ── section header ── */
     .plans-hdr{text-align:center;max-width:720px;margin:0 auto 64px}
@@ -1671,7 +1676,7 @@
     /* ── base plan card ── */
     .xcard{
       --ac:var(--green);
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.2);
       border-radius:16px;
       padding:28px 24px 24px;
@@ -1814,7 +1819,7 @@
 
     /* Each plan card */
     .inv-card{
-      background:#090d1f;
+      background:#0f0f0f;
       border:1px solid rgba(255,119,0,.18);
       border-radius:14px;
       padding:28px 24px 24px;
@@ -2268,7 +2273,7 @@ window.smartsupp||(function(d) {
 </section>
 
 <!-- ══════════ DIVERSITY & INCLUSION ══════════ -->
-<section id="diversity" style="background:#05091a;padding:100px 0;border-top:1px solid rgba(255,255,255,.04);">
+<section id="diversity" style="background:#0a0a0a;padding:100px 0;border-top:1px solid rgba(255,255,255,.04);">
   <div class="container">
     <div class="div-grid">
 
@@ -2423,7 +2428,7 @@ window.smartsupp||(function(d) {
 
       <!-- Shares / Stocks -->
       <div class="svc-card">
-        <div class="svc-img" style="background:#050918;position:relative;overflow:hidden;">
+        <div class="svc-img" style="background:#090909;position:relative;overflow:hidden;">
           <!-- Tesla: large red -->
           <div style="position:absolute;width:78px;height:78px;border-radius:50%;top:6%;left:3%;background:#E31937;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.85);">
             <span style="font-family:'Rajdhani',Arial,sans-serif;font-weight:900;font-size:2.2rem;color:#fff;">T</span>
@@ -2673,7 +2678,7 @@ window.smartsupp||(function(d) {
 
 
 <!-- ══════════ INVESTMENT PLANS ══════════ -->
-<section id="investment-plans" style="background:#04081a;padding:110px 0;border-top:1px solid rgba(255,255,255,.04);">
+<section id="investment-plans" style="background:#080808;padding:110px 0;border-top:1px solid rgba(255,255,255,.04);">
   <div class="container">
 
     <!-- Header -->
@@ -3001,7 +3006,7 @@ window.smartsupp||(function(d) {
 </section>
 
 <!-- ══════════ CONTACT ══════════ -->
-<section id="contact" style="background:#05091a;padding:110px 0;border-top:1px solid rgba(255,119,0,.07);">
+<section id="contact" style="background:#0a0a0a;padding:110px 0;border-top:1px solid rgba(255,119,0,.07);">
   <div class="container">
 
     <div class="contact-grid">
