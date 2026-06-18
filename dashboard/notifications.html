@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Notifications — ThriveMine</title>
+  <link rel="stylesheet" href="css/shared.css"/>
+  <style>
+    .notif-list { display:flex; flex-direction:column; gap:10px; }
+    .notif-item {
+      display:flex; align-items:flex-start; gap:14px;
+      padding:16px 18px; border-radius:10px;
+      border:1px solid var(--border2);
+      background:var(--bg2);
+      transition:border-color .2s;
+      cursor:default;
+    }
+    .notif-item.unread { border-left:3px solid var(--green); background:rgba(255,119,0,.04); }
+    .notif-item.type-success .notif-icon { color:#39ff14; }
+    .notif-item.type-error   .notif-icon { color:#ff4d4d; }
+    .notif-item.type-info    .notif-icon { color:#00b4ff; }
+    .notif-item.type-success { border-left-color:#39ff14; }
+    .notif-item.type-error   { border-left-color:#ff4d4d; }
+    .notif-item.type-info    { border-left-color:#00b4ff; }
+    .notif-icon { font-size:1.4rem; flex-shrink:0; margin-top:2px; }
+    .notif-body { flex:1; min-width:0; }
+    .notif-title { font-weight:600; font-size:.9rem; margin-bottom:3px; }
+    .notif-msg   { font-size:.82rem; color:var(--muted); line-height:1.5; }
+    .notif-time  { font-size:.7rem; color:rgba(255,255,255,.25); margin-top:5px; }
+    .notif-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:var(--green); flex-shrink:0; margin-top:6px;
+    }
+    .mark-read-btn {
+      font-size:.72rem; padding:5px 14px;
+      background:rgba(255,119,0,.08); border:1px solid var(--border);
+      color:var(--green); cursor:pointer; border-radius:4px;
+      font-family:'Rajdhani',sans-serif; font-weight:700; letter-spacing:.1em;
+    }
+    .mark-read-btn:hover { background:rgba(255,119,0,.18); }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="main-content">
+    <div class="topbar" id="topbar"></div>
+    <div class="page-content">
+      <div class="page-hdr page-hdr-row">
+        <div>
+          <h1>Notifications</h1>
+          <p>Your account activity and updates.</p>
+        </div>
+        <button class="mark-read-btn" id="markAllBtn" onclick="markAllRead()">✓ Mark All Read</button>
+      </div>
+
+      <div id="notifContainer">
+        <div style="text-align:center;color:var(--muted);padding:48px;font-size:.88rem;">Loading…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="lib/supabase.js"></script>
+<script src="js/dashboard-layout.js"></script>
+<script>
+let currentUser = null;
+let allNotifs = [];
+
+function typeIcon(type) {
+  if (type === 'success') return '✅';
+  if (type === 'error')   return '🔴';
+  if (type === 'info')    return '🔵';
+  return '🔔';
+}
+
+function renderNotifs() {
+  const container = document.getElementById('notifContainer');
+  if (!allNotifs || allNotifs.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔔</div>
+        <p>No notifications yet. Activity on your account will appear here.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="notif-list">${allNotifs.map(n => `
+    <div class="notif-item ${n.is_read ? '' : 'unread'} type-${n.type || 'info'}">
+      <div class="notif-icon">${typeIcon(n.type)}</div>
+      <div class="notif-body">
+        <div class="notif-title">${n.title || 'Notification'}</div>
+        <div class="notif-msg">${n.message || ''}</div>
+        <div class="notif-time">${fmtDate(n.created_at)}</div>
+      </div>
+      ${n.is_read ? '' : '<div class="notif-dot"></div>'}
+    </div>
+  `).join('')}</div>`;
+}
+
+async function markAllRead() {
+  if (!currentUser) return;
+  await db.from('notifications')
+    .update({ is_read: true })
+    .eq('user_id', currentUser.id)
+    .eq('is_read', false);
+  allNotifs = allNotifs.map(n => ({ ...n, is_read: true }));
+  renderNotifs();
+  document.getElementById('markAllBtn').textContent = '✓ All Read';
+}
+
+(async () => {
+  currentUser = await requireUser();
+  if (!currentUser) return;
+  document.getElementById('sidebar').innerHTML = renderSidebar('notifications', currentUser);
+  document.getElementById('topbar').innerHTML  = renderTopbar('Notifications');
+
+  const { data } = await db.from('notifications')
+    .select('*')
+    .eq('user_id', currentUser.id)
+    .order('created_at', { ascending: false });
+
+  allNotifs = data || [];
+  renderNotifs();
+})();
+</script>
+</body>
+</html>
