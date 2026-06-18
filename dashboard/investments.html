@@ -161,11 +161,15 @@
 
     /* ── Pulse dot ── */
     .live-dot {
-      width:8px; height:8px; border-radius:50%;
-      background:var(--green); box-shadow:0 0 8px var(--green);
-      animation:livepulse 1.6s infinite; flex-shrink:0;
+      width:10px; height:10px; border-radius:50%;
+      background:#39ff14;
+      box-shadow:0 0 8px #39ff14, 0 0 18px rgba(57,255,20,.7), 0 0 32px rgba(57,255,20,.4);
+      animation:livepulse 1.6s ease-in-out infinite; flex-shrink:0;
     }
-    @keyframes livepulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+    @keyframes livepulse {
+      0%,100%{ box-shadow:0 0 8px #39ff14, 0 0 18px rgba(57,255,20,.7), 0 0 32px rgba(57,255,20,.4); }
+      50%    { box-shadow:0 0 14px #39ff14, 0 0 30px rgba(57,255,20,.9), 0 0 55px rgba(57,255,20,.6); opacity:.75; }
+    }
 
     /* ── Guest mode: hide sidebar/topbar chrome ── */
     body.guest .sidebar { display:none; }
