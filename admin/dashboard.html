@@ -1056,7 +1056,7 @@ if(window.innerWidth<=900) document.getElementById('hmbtn').style.display='inlin
       </div>
       <div>
         <label style="font-size:.7rem;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px;">Card Color</label>
-        <input id="planColor" type="color" value="#39ff14" style="width:100%;height:42px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:4px;cursor:pointer;"/>
+        <input id="planColor" type="color" value="#ff7700" style="width:100%;height:42px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:4px;cursor:pointer;"/>
       </div>
       <div>
         <label style="font-size:.7rem;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px;">Sort Order</label>
@@ -1118,7 +1118,7 @@ function openPlanModal(plan=null){
   document.getElementById('planDays').value  = plan?plan.cycle_days:'';
   document.getElementById('planMin').value   = plan?plan.min_amount:'';
   document.getElementById('planMax').value   = plan&&plan.max_amount?plan.max_amount:'';
-  document.getElementById('planColor').value = plan?plan.color:'#39ff14';
+  document.getElementById('planColor').value = plan?plan.color:'#ff7700';
   document.getElementById('planSort').value  = plan?plan.sort_order:'';
   document.getElementById('planActive').checked = plan?plan.is_active:true;
   document.getElementById('planErr').style.display='none';
