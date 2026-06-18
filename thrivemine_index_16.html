@@ -3862,12 +3862,12 @@ if (typeof document.addEventListener === 'function') {
 
     var loginEmail = identifier
     if (!identifier.includes('@')) {
-      var lookup = await authClient.from('profiles').select('email').eq('username', identifier).single()
+      var lookup = await authClient.rpc('get_email_by_username', { p_username: identifier })
       if (lookup.error || !lookup.data) {
         msg.textContent = 'Username not found. Try your email instead.'
         btn.disabled = false; btn.textContent = 'Login'; return
       }
-      loginEmail = lookup.data.email
+      loginEmail = lookup.data
     }
     var si = await authClient.auth.signInWithPassword({ email: loginEmail, password: password })
     btn.disabled = false; btn.textContent = 'Login'
