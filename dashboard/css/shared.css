@@ -44,9 +44,9 @@ img { display:block; max-width:100%; }
   font-size:1.35rem; letter-spacing:.1em; color:#fff;
 }
 .logo-icon {
-  width:32px; height:32px; background:var(--green);
+  width:32px; height:32px; background:transparent;
   display:flex; align-items:center; justify-content:center;
-  font-size:.9rem; color:#000; font-weight:900;
+  font-size:1.6rem; color:#f5c542; font-weight:900;
 }
 .logo span { color:var(--green); }
 

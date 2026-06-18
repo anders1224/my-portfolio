@@ -21,7 +21,7 @@ function renderSidebar(activePage, user) {
   return `
     <div class="sidebar-logo">
       <a href="../index.html" class="logo">
-        <div class="logo-icon">T</div> THRIVE<span>MINE</span>
+        <div class="logo-icon">⚡</div> THRIVE<span>MINE</span>
       </a>
     </div>
     <nav class="sidebar-nav">
