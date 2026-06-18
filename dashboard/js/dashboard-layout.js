@@ -56,12 +56,6 @@ function renderTopbar(title, unreadCount = 0) {
       <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;">${title}</h2>
     </div>
     <div class="topbar-right">
-      <a href="notifications.html" style="position:relative;color:var(--muted);font-size:1.2rem;">
-        🔔
-        ${unreadCount > 0 ? `<span style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;
-          background:var(--green);border-radius:50%;font-size:.6rem;color:#000;font-family:'Rajdhani',sans-serif;
-          font-weight:700;display:flex;align-items:center;justify-content:center;">${unreadCount}</span>` : ''}
-      </a>
       <a href="profile.html" style="width:34px;height:34px;border-radius:50%;
         background:rgba(57,255,20,.1);border:1px solid var(--border);
         display:flex;align-items:center;justify-content:center;
@@ -82,14 +76,8 @@ function initLayout(activePage, pageTitle) {
     const user = await requireUser();
     if (!user) return;
 
-    // Unread notifications
-    const { count } = await db.from('notifications')
-      .select('*', { count:'exact', head:true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
-
     document.getElementById('sidebar').innerHTML  = renderSidebar(activePage, user);
-    document.getElementById('topbar').innerHTML   = renderTopbar(pageTitle, count || 0);
+    document.getElementById('topbar').innerHTML   = renderTopbar(pageTitle);
 
     // Update avatar initial
     document.querySelectorAll('.user-initial').forEach(el => {
