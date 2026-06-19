@@ -180,7 +180,7 @@
               <tr>
                 <td>${t.reference || '—'}</td>
                 <td style="text-transform:capitalize;">${t.type}</td>
-                <td class="${t.type==='deposit'||t.type==='earning'||t.type==='referral'?'text-green':'text-danger'}">${fmt(t.amount)}</td>
+                <td style="color:${t.type==='deposit'||t.type==='earning'||t.type==='referral'?'#39ff14':'#ff4d4d'};font-weight:600;">${fmt(t.amount)}</td>
                 <td>${statusBadge(t.status)}</td>
                 <td>${fmtDate(t.created_at)}</td>
               </tr>
