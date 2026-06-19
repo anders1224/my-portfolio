@@ -139,7 +139,7 @@ let wMethod = 'Bitcoin';
     rw.innerHTML = txns.map(t => `
       <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border2);font-size:.82rem;">
         <div>${t.method || '—'} <br><span style="color:var(--muted);font-size:.72rem;">${fmtDate(t.created_at)}</span></div>
-        <div style="text-align:right;">${fmt(t.amount)}<br>${statusBadge(t.status)}</div>
+        <div style="text-align:right;">${fmt(t.amount)}<br><span class="badge badge-danger">${t.status}</span></div>
       </div>
     `).join('');
   }
