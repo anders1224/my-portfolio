@@ -215,11 +215,14 @@
     }
     .hero-badge .dot{
       width:7px;height:7px;border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 8px var(--green);
-      animation:blink 1.5s infinite;
+      background:#39ff14;
+      box-shadow:0 0 8px #39ff14, 0 0 18px rgba(57,255,20,.7);
+      animation:greenDotPulse 1.8s ease-in-out infinite;
     }
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    @keyframes greenDotPulse{
+      0%,100%{box-shadow:0 0 8px #39ff14, 0 0 18px rgba(57,255,20,.7);}
+      50%{box-shadow:0 0 14px #39ff14, 0 0 30px rgba(57,255,20,.9), 0 0 50px rgba(57,255,20,.4);}
+    }
     h1{
       font-family:'Rajdhani',sans-serif;font-weight:700;
       font-size:clamp(3.4rem,10vw,7.5rem);
