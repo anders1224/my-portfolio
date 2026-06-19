@@ -364,8 +364,8 @@ let selectedPlan = null;
         : invs.map(i => `
             <tr>
               <td><strong>${i.plan_name || '—'}</strong></td>
-              <td class="text-green">${fmt(i.amount)}</td>
-              <td style="color:var(--warning);">${i.roi_percent}%</td>
+              <td style="color:#39ff14;font-weight:600;">${fmt(i.amount)}</td>
+              <td style="color:#39ff14;">${i.roi_percent}%</td>
               <td>${fmtDate(i.start_date || i.created_at)}</td>
               <td>${fmtDate(i.end_date)}</td>
               <td>${statusBadge(i.status)}</td>

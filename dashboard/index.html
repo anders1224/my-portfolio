@@ -149,8 +149,8 @@
             ${invs.map(i => `
               <tr>
                 <td>${i.plan_name || i.investment_plans?.name || '—'}</td>
-                <td class="text-green">${fmt(i.amount)}</td>
-                <td>${i.roi_percent}%</td>
+                <td style="color:#39ff14;font-weight:600;">${fmt(i.amount)}</td>
+                <td style="color:#39ff14;">${i.roi_percent}%</td>
                 <td>${fmtDate(i.end_date)}</td>
                 <td>${statusBadge(i.status)}</td>
               </tr>
