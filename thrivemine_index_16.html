@@ -4025,7 +4025,7 @@ document.addEventListener('keydown',function(e){
 
     <!-- Featured Properties -->
     <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px;color:#fff;">Featured Properties</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px;" id="re-grid">
 
       <!-- Property 1 -->
       <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;">
@@ -4077,6 +4077,75 @@ document.addEventListener('keydown',function(e){
 
     </div>
 
+      <!-- Property 4 — Starter: $37,563 -->
+      <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;">
+        <div style="height:200px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1575517111839-3a3843ee7f5d?w=700&q=90"
+               alt="Starter Home"
+               style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+               onerror="this.src='https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?w=700&q=80'"/>
+        </div>
+        <div style="padding:16px;">
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px;">Starter Home — Ghana</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:10px;">2 Bed · 1 Bath · Garden</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.4rem;color:#ff7700;">$37,563</div>
+          <div style="font-size:.7rem;color:rgba(57,255,20,.8);margin-top:3px;">Est. Return: 10% / yr</div>
+        </div>
+      </div>
+
+      <!-- Property 5 — Mid-Low: $98,672 -->
+      <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;">
+        <div style="height:200px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=700&q=90"
+               alt="Mid-Range Home"
+               style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+               onerror="this.src='https://images.unsplash.com/photo-1570129477492-45c003dc3b5e?w=700&q=80'"/>
+        </div>
+        <div style="padding:16px;">
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px;">Family Home — Nigeria</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:10px;">3 Bed · 2 Bath · Compound</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.4rem;color:#ff7700;">$98,672</div>
+          <div style="font-size:.7rem;color:rgba(57,255,20,.8);margin-top:3px;">Est. Return: 12% / yr</div>
+        </div>
+      </div>
+
+      <!-- Property 6 — Mid: $340,000 -->
+      <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;">
+        <div style="height:200px;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=700&q=90"
+               alt="Executive Home"
+               style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+               onerror="this.src='https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80'"/>
+        </div>
+        <div style="padding:16px;">
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px;">Executive Home — Portugal</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:10px;">4 Bed · 3 Bath · Terrace</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.4rem;color:#ff7700;">$340,000</div>
+          <div style="font-size:.7rem;color:rgba(57,255,20,.8);margin-top:3px;">Est. Return: 16% / yr</div>
+        </div>
+      </div>
+
+      <!-- Property 7 — Premium: $8.75M -->
+      <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;grid-column:span 3;">
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:0;">
+          <div style="height:240px;overflow:hidden;">
+            <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=900&q=90"
+                 alt="Ultra Luxury Estate"
+                 style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"
+                 onerror="this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80'"/>
+          </div>
+          <div style="padding:24px 22px;display:flex;flex-direction:column;justify-content:center;">
+            <div style="font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:#ff7700;margin-bottom:8px;">⭐ Premium Listing</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:6px;">Ultra-Luxury Estate — Monaco</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:14px;">7 Bed · 6 Bath · Pool · Private Beach · Helipad</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;color:#ff7700;line-height:1;">$8,750,000</div>
+            <div style="font-size:.7rem;color:rgba(57,255,20,.8);margin-top:6px;">Est. Return: 22% / yr · Fractional investment available</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- CTA -->
     <div style="text-align:center;">
       <a href="dashboard/deposit.html" style="display:inline-block;background:#ff7700;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 40px;border-radius:6px;text-decoration:none;box-shadow:0 0 24px rgba(255,119,0,.4);">Invest Now ›</a>
@@ -4087,7 +4156,9 @@ document.addEventListener('keydown',function(e){
 <style>
   @media(max-width:700px){
     #realEstateModal > div { padding:28px 18px; }
-    #realEstateModal > div > div[style*="grid-template-columns:repeat(3"] { grid-template-columns:1fr !important; }
+    #re-grid { grid-template-columns:1fr !important; }
+    #re-grid > div[style*="grid-column:span 3"] { grid-column:span 1 !important; }
+    #re-grid > div[style*="grid-column:span 3"] > div { grid-template-columns:1fr !important; }
   }
 </style>
 
