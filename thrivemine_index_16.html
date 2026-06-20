@@ -2475,16 +2475,16 @@ window.smartsupp||(function(d) {
         <div class="svc-label"><span>Shares/Stocks</span></div>
       </div>
 
-      <!-- Financial Services -->
-      <div class="svc-card">
+      <!-- Financial Planning -->
+      <div class="svc-card" onclick="openFinancialModal()" style="cursor:pointer;">
         <div class="svc-img">
           <img
             src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=700&q=85"
-            alt="Financial Services — stock market"
+            alt="Financial Planning — stock market"
             onerror="this.src='https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=700&q=80'"
           />
         </div>
-        <div class="svc-label"><span>Financial Services</span></div>
+        <div class="svc-label"><span>Financial Planning</span></div>
       </div>
 
     </div>
@@ -3128,7 +3128,7 @@ window.smartsupp||(function(d) {
           <li><a href="#services">Oil/Gas Investment</a></li>
           <li><a href="#services">Real Estate</a></li>
           <li><a href="#shares-stocks">Stock Investment</a></li>
-          <li><a href="#shares-stocks">Financial Services</a></li>
+          <li><a href="#services">Financial Planning</a></li>
         </ul>
       </div>
     </div>
@@ -4269,6 +4269,94 @@ document.getElementById('realEstateModal').addEventListener('click', function(e)
 
   </div>
 </div>
+
+<!-- ══════════ FINANCIAL PLANNING MODAL ══════════ -->
+<div id="financialModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:#080c1e;border:1px solid rgba(57,255,20,.2);border-radius:20px;max-width:860px;width:100%;margin:auto;padding:44px 40px;position:relative;animation:fadeUp .3s ease;">
+
+    <!-- Close -->
+    <button onclick="closeFinancialModal()" style="position:absolute;top:18px;right:22px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.6rem;cursor:pointer;line-height:1;">×</button>
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,rgba(57,255,20,.15),rgba(57,255,20,.04));border:1px solid rgba(57,255,20,.3);display:inline-flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:16px;">📊</div>
+      <div style="font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:#39ff14;margin-bottom:8px;">ThriveMine Investment</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;margin-bottom:6px;">Financial Planning</h2>
+      <p style="color:rgba(255,255,255,.45);font-size:.88rem;">Wealth Management · Future Planning · Smart Investment Strategy</p>
+    </div>
+
+    <!-- Hero image -->
+    <div style="height:240px;border-radius:14px;overflow:hidden;margin-bottom:28px;border:1px solid rgba(57,255,20,.1);">
+      <img src="financial-planning.jpg" alt="Financial Planning" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+    </div>
+
+    <!-- About Financial Planning -->
+    <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:28px 30px;margin-bottom:22px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:#39ff14;margin-bottom:14px;">What is Financial Planning?</div>
+
+      <p style="color:rgba(255,255,255,.72);font-size:.92rem;line-height:1.85;margin-bottom:14px;">
+        A financial plan is a <span style="color:#fff;font-weight:600;">comprehensive evaluation of an investor's current and future financial state</span>
+        by using currently known variables to predict future cash flows, asset values and withdrawal plans.
+        Most individuals work in conjunction with their preferred financial planner and use
+        <span style="color:#39ff14;font-weight:600;">current net worth, tax liabilities, asset allocation</span>, and future retirement and estate
+        plans in developing financial plans.
+      </p>
+
+      <p style="color:rgba(255,255,255,.72);font-size:.92rem;line-height:1.85;">
+        These metrics are used along with estimates of asset growth to determine if a person's
+        <span style="color:#ff7700;font-weight:600;">financial goals can be met in the future</span>,
+        or what steps need to be taken to ensure that they are.
+      </p>
+    </div>
+
+    <!-- Our Services list (matching screenshot) -->
+    <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:24px 30px;margin-bottom:22px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:16px;">Our Services</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Cryptocurrency Trading <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Gold Investments <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Oil and Gas <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Stock Investment <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.35);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#39ff14;font-weight:700;">Financial Planning <span style="color:#39ff14;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Forex Trading <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,119,0,.09);border:1px solid rgba(255,119,0,.18);border-radius:7px;padding:13px 18px;font-size:.88rem;color:#fff;font-weight:600;">Real Estate <span style="color:#ff7700;font-size:1.1rem;">→</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;margin-top:24px;">
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="closeFinancialModal();openLoginModal();" style="background:transparent;color:#ff7700;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:13px 40px;border-radius:6px;border:2px solid #ff7700;cursor:pointer;">Login</button>
+        <button onclick="closeFinancialModal();openRegisterModal();" style="background:#ff7700;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 40px;border-radius:6px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(255,119,0,.45);">Create Account</button>
+      </div>
+      <div style="margin-top:10px;font-size:.72rem;color:rgba(255,255,255,.3);">Start your financial planning journey · No hidden fees · Expert-backed strategy</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #financialModal { overflow-y:auto !important; }
+  @media(max-width:700px){
+    #financialModal > div { padding:22px 16px !important; }
+  }
+</style>
+
+<script>
+function openFinancialModal(){
+  const m = document.getElementById('financialModal');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeFinancialModal(){
+  const m = document.getElementById('financialModal');
+  m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('financialModal').addEventListener('click', function(e){
+  if(e.target === this) closeFinancialModal();
+});
+</script>
 
 <!-- ══════════ GOLD INVESTMENT MODAL ══════════ -->
 <div id="goldModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
