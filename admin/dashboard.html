@@ -354,7 +354,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="panel">
           <div class="ph"><div class="pt">User Accounts</div><button class="abtn" onclick="loadUsers()">🔄 Refresh</button></div>
           <div class="fbar"><input type="text" placeholder="Search name or email..." oninput="filterTbl(this,'user-tbl')"/></div>
-          <div class="tw"><table><thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Total Invested</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="user-tbl"><tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)"><span class="spin"></span> Loading…</td></tr></tbody></table></div>
+          <div class="tw"><table><thead><tr><th>User</th><th>Email</th><th>Phone</th><th>Balance</th><th>Total Invested</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="user-tbl"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)"><span class="spin"></span> Loading…</td></tr></tbody></table></div>
         </div>
       </div>
 
@@ -713,6 +713,7 @@ function renderUsersTable(profiles){
         <div style="font-size:.8rem;font-weight:500">${u.full_name||'—'}</div>
       </div></td>
       <td style="color:var(--muted);font-size:.76rem">${u.email||'—'}</td>
+      <td style="font-size:.76rem;color:var(--cyan)">${u.phone||'—'}</td>
       <td style="font-family:'Syne',sans-serif;font-weight:600;color:#22c55e">${fmtAmt(u.wallet_balance)}</td>
       <td>${fmtAmt(u.total_invested)}</td>
       <td>${isPending?'<span class="badge ba">Pending</span>':sBadge(u.role||'user')}</td>
@@ -727,7 +728,7 @@ function renderUsersTable(profiles){
       </div></td>
     </tr>`;
   });
-  document.getElementById('user-tbl').innerHTML=h||'<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No users yet.</td></tr>';
+  document.getElementById('user-tbl').innerHTML=h||'<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">No users yet.</td></tr>';
 }
 
 function renderDashPending(){
