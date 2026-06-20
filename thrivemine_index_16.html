@@ -2849,6 +2849,15 @@ window.smartsupp||(function(d) {
           <li><a href="#cta">Contact Us</a></li>
         </ul>
       </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#" onclick="openFaqModal();return false;">FAQ's</a></li>
+          <li><a href="#" onclick="openTermsModal();return false;">Terms of Use</a></li>
+          <li><a href="#" onclick="openLegalModal();return false;">Legal</a></li>
+          <li><a href="#" onclick="openPrivacyModal();return false;">Privacy Policy</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer-bottom">
       <span>© 2023 ThriveMine.com — All rights reserved.</span>
@@ -4801,6 +4810,172 @@ function closeStocksModal(){
 }
 document.getElementById('stocksModal').addEventListener('click', function(e){
   if(e.target === this) closeStocksModal();
+});
+</script>
+
+<!-- ===== FAQ MODAL ===== -->
+<div id="faqModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#080c1e;border:1px solid #ff7700;border-radius:14px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;padding:40px 36px;position:relative;">
+    <button onclick="closeFaqModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:28px;cursor:pointer;">&times;</button>
+    <h2 style="color:#ff7700;font-size:1.6rem;margin-bottom:24px;">Frequently Asked Questions</h2>
+
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">What is ThriveMine?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine is a leading financial investment platform that provides high-quality international investment services across cryptocurrency, stocks, oil/gas, gold, real estate, and more. We partner with individuals and companies worldwide to help grow their wealth.</p>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">How do I get started?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">Simply create an account, choose an investment plan that suits your goals, and make your first deposit. Our team will guide you through the entire process. You can start with our Starter Plan and upgrade at any time.</p>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">Is my investment safe?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">We employ rigorous risk management strategies and diversify across multiple asset classes to protect your capital. All investments carry some degree of risk, and we encourage investors to review our plans carefully before committing funds.</p>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">What are the minimum and maximum investment amounts?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">Our plans vary in entry requirements. The Starter Plan has a low minimum to make investing accessible to everyone. Please review our Investment Plans section or contact our support team for full details on each tier.</p>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">How do I withdraw my earnings?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">Withdrawals can be requested directly from your dashboard. Processing times vary based on your plan tier and payment method. Most withdrawals are processed within 1–3 business days.</p>
+    </div>
+    <div style="margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.05rem;margin-bottom:6px;">How can I contact support?</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">You can reach our support team via email, Telegram, or Discord. Links are available in the Community section of our footer. We aim to respond to all inquiries within 24 hours.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="closeFaqModal()" style="background:#ff7700;color:#fff;border:none;padding:13px 40px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TERMS OF USE MODAL ===== -->
+<div id="termsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#080c1e;border:1px solid #ff7700;border-radius:14px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;padding:40px 36px;position:relative;">
+    <button onclick="closeTermsModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:28px;cursor:pointer;">&times;</button>
+    <h2 style="color:#ff7700;font-size:1.6rem;margin-bottom:6px;">Terms of Use</h2>
+    <p style="color:#666;font-size:0.85rem;margin-bottom:28px;">Last updated: June 2025</p>
+
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">1. Acceptance of Terms</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">By accessing or using the ThriveMine platform, you agree to be bound by these Terms of Use and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use our services.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">2. Eligibility</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">You must be at least 18 years of age to use ThriveMine. By using our platform, you represent and warrant that you meet this requirement and have the legal capacity to enter into a binding agreement.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">3. Account Responsibilities</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">4. Investment Risk Disclosure</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">All investments carry risk. Past performance does not guarantee future results. ThriveMine does not guarantee any specific rate of return. You should only invest funds you can afford to lose and seek independent financial advice if needed.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">5. Prohibited Activities</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">You agree not to use ThriveMine for any unlawful purpose, including but not limited to money laundering, fraud, or financing of illegal activities. We reserve the right to suspend or terminate accounts engaged in prohibited conduct.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">6. Modifications</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine reserves the right to modify these Terms of Use at any time. Continued use of the platform following any changes constitutes your acceptance of the revised terms.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="closeTermsModal()" style="background:#ff7700;color:#fff;border:none;padding:13px 40px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEGAL MODAL ===== -->
+<div id="legalModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#080c1e;border:1px solid #ff7700;border-radius:14px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;padding:40px 36px;position:relative;">
+    <button onclick="closeLegalModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:28px;cursor:pointer;">&times;</button>
+    <h2 style="color:#ff7700;font-size:1.6rem;margin-bottom:6px;">Legal Notices</h2>
+    <p style="color:#666;font-size:0.85rem;margin-bottom:28px;">Last updated: June 2025</p>
+
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Regulatory Compliance</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine operates in compliance with applicable financial regulations in the jurisdictions where it provides services. We are committed to maintaining the highest standards of regulatory adherence and financial integrity.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Disclaimer of Warranties</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine provides its platform and services on an "as is" basis without warranties of any kind, either express or implied. We do not warrant that the platform will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Limitation of Liability</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">To the fullest extent permitted by law, ThriveMine shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the platform or services.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Intellectual Property</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">All content, trademarks, logos, and intellectual property on the ThriveMine platform are the exclusive property of ThriveMine or its licensors. Unauthorized use, reproduction, or distribution is strictly prohibited.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Governing Law</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">These legal notices and all related matters shall be governed by and construed in accordance with applicable international financial law. Any disputes shall be resolved through binding arbitration in accordance with our dispute resolution policy.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Anti-Money Laundering (AML) Policy</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine maintains a strict AML policy. We conduct identity verification (KYC) on all users and report suspicious activity to relevant authorities as required by law. We do not tolerate the use of our platform for illicit financial activities.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="closeLegalModal()" style="background:#ff7700;color:#fff;border:none;padding:13px 40px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRIVACY POLICY MODAL ===== -->
+<div id="privacyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#080c1e;border:1px solid #ff7700;border-radius:14px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;padding:40px 36px;position:relative;">
+    <button onclick="closePrivacyModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#aaa;font-size:28px;cursor:pointer;">&times;</button>
+    <h2 style="color:#ff7700;font-size:1.6rem;margin-bottom:6px;">Privacy Policy</h2>
+    <p style="color:#666;font-size:0.85rem;margin-bottom:28px;">Last updated: June 2025</p>
+
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Information We Collect</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">We collect information you provide directly, including your name, email address, and financial details needed to process transactions. We also collect usage data and technical information when you interact with our platform.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">How We Use Your Information</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">Your information is used to provide and improve our services, process transactions, send account-related communications, comply with legal obligations, and prevent fraud. We do not sell your personal data to third parties.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Data Security</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">We implement industry-standard security measures including encryption, secure servers, and regular security audits to protect your personal data. However, no method of transmission over the internet is 100% secure.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Cookies</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">ThriveMine uses cookies and similar tracking technologies to enhance your experience on our platform. You may disable cookies through your browser settings, but this may affect some functionality of the platform.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Third-Party Services</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">We may share data with trusted third-party service providers who assist in operating our platform, conducting our business, or serving our users. All third parties are required to maintain the confidentiality of your information.</p>
+    </div>
+    <div style="margin-bottom:22px;">
+      <h3 style="color:#fff;font-size:1rem;margin-bottom:6px;">Your Rights</h3>
+      <p style="color:#b0b8d0;line-height:1.7;">You have the right to access, correct, or delete your personal data at any time. To exercise these rights, please contact our support team. We will respond to all requests within 30 days in accordance with applicable data protection laws.</p>
+    </div>
+
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="closePrivacyModal()" style="background:#ff7700;color:#fff;border:none;padding:13px 40px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openFaqModal(){document.getElementById('faqModal').style.display='flex';document.body.style.overflow='hidden';}
+function closeFaqModal(){document.getElementById('faqModal').style.display='none';document.body.style.overflow='';}
+function openTermsModal(){document.getElementById('termsModal').style.display='flex';document.body.style.overflow='hidden';}
+function closeTermsModal(){document.getElementById('termsModal').style.display='none';document.body.style.overflow='';}
+function openLegalModal(){document.getElementById('legalModal').style.display='flex';document.body.style.overflow='hidden';}
+function closeLegalModal(){document.getElementById('legalModal').style.display='none';document.body.style.overflow='';}
+function openPrivacyModal(){document.getElementById('privacyModal').style.display='flex';document.body.style.overflow='hidden';}
+function closePrivacyModal(){document.getElementById('privacyModal').style.display='none';document.body.style.overflow='';}
+// close on outside click
+['faqModal','termsModal','legalModal','privacyModal'].forEach(function(id){
+  document.getElementById(id).addEventListener('click',function(e){if(e.target===this){this.style.display='none';document.body.style.overflow='';}});
 });
 </script>
 
