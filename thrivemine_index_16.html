@@ -2397,7 +2397,7 @@ window.smartsupp||(function(d) {
       </div>
 
       <!-- Healthcare -->
-      <div class="svc-card">
+      <div class="svc-card" onclick="openHealthcareModal()" style="cursor:pointer;">
         <div class="svc-img">
           <img
             src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700&q=85"
@@ -4269,6 +4269,139 @@ document.getElementById('realEstateModal').addEventListener('click', function(e)
 
   </div>
 </div>
+
+<!-- ══════════ HEALTHCARE MODAL ══════════ -->
+<div id="healthcareModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:#080c1e;border:1px solid rgba(0,180,255,.25);border-radius:20px;max-width:880px;width:100%;margin:auto;padding:44px 40px;position:relative;animation:fadeUp .3s ease;">
+
+    <!-- Close -->
+    <button onclick="closeHealthcareModal()" style="position:absolute;top:18px;right:22px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.6rem;cursor:pointer;line-height:1;">×</button>
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,rgba(0,180,255,.18),rgba(0,180,255,.05));border:1px solid rgba(0,180,255,.35);display:inline-flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:16px;">🏥</div>
+      <div style="font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:#00b4ff;margin-bottom:8px;">ThriveMine Investment</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;margin-bottom:6px;">Healthcare Investment</h2>
+      <p style="color:rgba(255,255,255,.45);font-size:.88rem;">Pharma · Biotech · MedTech · AI Health · Genomics · Global Markets</p>
+    </div>
+
+    <!-- Hero image -->
+    <div style="height:240px;border-radius:14px;overflow:hidden;margin-bottom:28px;border:1px solid rgba(0,180,255,.12);">
+      <img src="healthcare.jpg" alt="Healthcare Investment" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"/>
+    </div>
+
+    <!-- Sectors grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;" id="hc-sectors">
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">💊</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Pharma</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🧬</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Biotech &amp; Genomics</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🤖</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">AI in Healthcare</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">📡</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Telemedicine</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🔬</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Diagnostics</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🏨</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Healthcare REITs</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🦾</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Medical Devices</div>
+      </div>
+      <div style="background:#0d1228;border:1px solid rgba(0,180,255,.15);border-radius:10px;padding:14px 10px;text-align:center;">
+        <div style="font-size:1.4rem;margin-bottom:6px;">🌱</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.78rem;color:#00b4ff;">Health Startups</div>
+      </div>
+    </div>
+
+    <!-- Main description -->
+    <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:28px 30px;margin-bottom:22px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:#00b4ff;margin-bottom:14px;">Global Healthcare Investment Strategy</div>
+
+      <p style="color:rgba(255,255,255,.72);font-size:.92rem;line-height:1.85;margin-bottom:14px;">
+        ThriveMine operates as a <span style="color:#fff;font-weight:600;">world-class global healthcare investment strategist</span> with expertise in
+        financial markets, healthcare innovation, and international economic trends. We deliver comprehensive,
+        <span style="color:#00b4ff;font-weight:600;">data-driven investment insights</span> covering pharmaceutical companies, biotechnology,
+        medical technology, healthcare REITs, hospitals, telemedicine, artificial intelligence in healthcare,
+        diagnostics, genomics, medical devices, health insurance, and emerging healthcare startups across
+        <span style="color:#39ff14;font-weight:600;">North America, Europe, Asia-Pacific, the Middle East, Africa, and Latin America</span>.
+      </p>
+
+      <p style="color:rgba(255,255,255,.72);font-size:.92rem;line-height:1.85;">
+        We provide analysis of <span style="color:#ff7700;font-weight:600;">market trends, growth opportunities, company performance, valuation metrics,
+        industry risks, regulatory developments, mergers and acquisitions, dividend potential, ESG considerations</span>,
+        and macroeconomic factors affecting the healthcare sector. We highlight both
+        <span style="color:#fff;font-weight:600;">established industry leaders and promising emerging companies</span>
+        while comparing regional investment opportunities.
+      </p>
+    </div>
+
+    <!-- Regions -->
+    <div style="background:#0d1228;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:24px 30px;margin-bottom:22px;">
+      <div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;color:#00b4ff;margin-bottom:16px;">Global Coverage</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="hc-regions">
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🌎</span> North America</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🌍</span> Europe</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🌏</span> Asia-Pacific</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🕌</span> Middle East</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🌍</span> Africa</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.83rem;color:rgba(255,255,255,.7);"><span style="color:#00b4ff;">🌎</span> Latin America</div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.7;">
+        All information is presented in a professional, investor-friendly format with balanced risk assessments and scenario analysis.
+        Content is educational and objective, based on credible financial and healthcare data.
+        <span style="color:rgba(255,255,255,.25);">This is not personalised financial advice.</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center;margin-top:24px;">
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="closeHealthcareModal();openLoginModal();" style="background:transparent;color:#ff7700;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:13px 40px;border-radius:6px;border:2px solid #ff7700;cursor:pointer;">Login</button>
+        <button onclick="closeHealthcareModal();openRegisterModal();" style="background:#ff7700;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 40px;border-radius:6px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(255,119,0,.45);">Create Account</button>
+      </div>
+      <div style="margin-top:10px;font-size:.72rem;color:rgba(255,255,255,.3);">Invest in the future of global healthcare · Diversified · Data-driven · 24/7 access</div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #healthcareModal { overflow-y:auto !important; }
+  @media(max-width:700px){
+    #healthcareModal > div { padding:22px 16px !important; }
+    #hc-sectors  { grid-template-columns:repeat(2,1fr) !important; }
+    #hc-regions  { grid-template-columns:1fr 1fr !important; }
+  }
+</style>
+
+<script>
+function openHealthcareModal(){
+  const m = document.getElementById('healthcareModal');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeHealthcareModal(){
+  const m = document.getElementById('healthcareModal');
+  m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('healthcareModal').addEventListener('click', function(e){
+  if(e.target === this) closeHealthcareModal();
+});
+</script>
 
 <!-- ══════════ FINANCIAL PLANNING MODAL ══════════ -->
 <div id="financialModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
