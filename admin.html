@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ThriveMine — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060A10;--surface:#0C1118;--surface2:#111923;--surface3:#161F2C;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --gold:#F5C542;--gold2:#E8A000;--cyan:#00D4FF;
+  --green:#22c55e;--red:#ef4444;--amber:#f59e0b;--purple:#A78BFA;
+  --text:#EEF2F7;--muted:#7A8899;
+  --sidebar-w:240px;
+  --fh:var(--font-head,'Syne',sans-serif);--fb:'DM Sans',sans-serif;
+  --tr:0.28s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);font-weight:300;overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(245,197,66,0.3);border-radius:2px}
+a{text-decoration:none;color:inherit}
+input,select,textarea,button{font-family:var(--fb)}
+
+/* ── LOGIN SCREEN ── */
+#loginScreen{
+  position:fixed;inset:0;z-index:1000;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.login-card{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:20px;padding:44px 40px;width:100%;max-width:420px;
+  box-shadow:0 40px 80px rgba(0,0,0,0.6);
+}
+.login-brand{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.admin-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);
+  color:#ef4444;font-size:0.65rem;font-family:var(--fh);font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;
+  border-radius:100px;margin-bottom:12px;
+}
+.login-title{font-family:var(--fh);font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:6px}
+.login-sub{font-size:0.82rem;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.fl{display:flex;flex-direction:column;gap:14px}
+.fg label{display:block;font-size:0.68rem;font-family:var(--fh);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fg input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-size:0.88rem;outline:none;transition:border-color var(--tr)}
+.fg input:focus{border-color:rgba(245,197,66,0.4)}
+.fg input::placeholder{color:var(--muted);opacity:.5}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:40px}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem}
+.login-err{font-size:0.75rem;color:var(--red);background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:10px 12px;display:none}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0A0600;border:none;border-radius:9px;font-family:var(--fh);font-size:0.85rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:var(--tr);margin-top:4px}
+.btn-login:hover{opacity:.9;transform:translateY(-1px)}
+.login-hint{font-size:0.72rem;color:var(--muted);text-align:center;margin-top:14px}
+.login-hint code{background:var(--surface2);padding:2px 7px;border-radius:4px;color:var(--text)}
+
+/* ── APP SHELL ── */
+#app{display:none;min-height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:var(--surface);
+  border-right:1px solid var(--border);position:fixed;left:0;top:0;z-index:50;
+  display:flex;flex-direction:column;transition:transform var(--tr);
+}
+.sb-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:0.95rem;font-weight:800;color:#0A0600;flex-shrink:0}
+.logo-txt{font-family:var(--fh);font-size:1.15rem;font-weight:800;letter-spacing:-0.03em}
+.logo-txt span{color:var(--gold)}
+.admin-pill{font-size:0.55rem;font-family:var(--fh);font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2);padding:2px 7px;border-radius:4px;margin-left:2px}
+.sb-nav{flex:1;padding:16px 10px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.sb-sec{font-size:0.58rem;font-family:var(--fh);font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px}
+.sb-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  font-size:0.82rem;color:var(--muted);cursor:pointer;transition:var(--tr);position:relative;
+}
+.sb-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.sb-item.active{background:rgba(245,197,66,0.1);color:var(--gold)}
+.sb-item.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;background:var(--gold);border-radius:0 3px 3px 0}
+.sb-icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--red);color:#fff;font-size:0.55rem;font-weight:700;padding:2px 6px;border-radius:10px;font-family:var(--fh)}
+.sb-bottom{padding:14px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.admin-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),#c026d3);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:0.8rem;color:#fff;flex-shrink:0}
+.admin-name{font-family:var(--fh);font-size:0.82rem;font-weight:600}
+.admin-role{font-size:0.65rem;color:var(--muted)}
+.sb-logout{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;padding:5px;border-radius:5px;transition:var(--tr)}
+.sb-logout:hover{color:var(--red)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  height:58px;display:flex;align-items:center;padding:0 24px;
+  justify-content:space-between;position:sticky;top:0;z-index:40;
+}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-title{font-family:var(--fh);font-size:1rem;font-weight:700;letter-spacing:-0.02em}
+.tb-right{display:flex;align-items:center;gap:10px}
+.tb-date{font-size:0.72rem;color:var(--muted)}
+.icon-btn{width:34px;height:34px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.88rem;transition:var(--tr);position:relative}
+.icon-btn:hover{border-color:var(--border2)}
+.notif-dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--red);border:2px solid var(--surface)}
+
+/* ── CONTENT ── */
+.content{padding:22px;flex:1}
+
+/* ── PAGE VIEWS ── */
+.pv{display:none}
+.pv.active{display:block}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.sc{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:18px;position:relative;overflow:hidden;transition:var(--tr);
+}
+.sc:hover{border-color:var(--border2);transform:translateY(-2px)}
+.sc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.sc.c1::after{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.sc.c2::after{background:linear-gradient(90deg,var(--cyan),#0099CC)}
+.sc.c3::after{background:linear-gradient(90deg,var(--green),#16a34a)}
+.sc.c4::after{background:linear-gradient(90deg,var(--red),#c026d3)}
+.sc.c5::after{background:linear-gradient(90deg,var(--purple),#7C3AED)}
+.sc.c6::after{background:linear-gradient(90deg,var(--amber),#d97706)}
+.sc-icon{font-size:1.2rem;margin-bottom:8px}
+.sc-num{font-family:var(--fh);font-size:1.55rem;font-weight:800;letter-spacing:-0.03em;margin-bottom:3px}
+.sc-lbl{font-size:0.72rem;color:var(--muted)}
+.sc-delta{font-size:0.68rem;margin-top:6px;font-weight:500}
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--muted)}
+
+/* ── PANEL ── */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.ph{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pt{font-family:var(--fh);font-size:0.9rem;font-weight:700}
+.pa{font-size:0.72rem;color:var(--gold);font-family:var(--fh);font-weight:600;cursor:pointer}
+.pb{padding:18px}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.8rem}
+thead tr{border-bottom:1px solid var(--border)}
+th{padding:9px 14px;text-align:left;font-family:var(--fh);font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:0.65rem;font-family:var(--fh);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.b-green{background:rgba(34,197,94,0.12);color:#22c55e}.b-green::before{background:#22c55e}
+.b-red{background:rgba(239,68,68,0.12);color:#ef4444}.b-red::before{background:#ef4444}
+.b-amber{background:rgba(245,158,11,0.12);color:#f59e0b}.b-amber::before{background:#f59e0b}
+.b-cyan{background:rgba(0,212,255,0.1);color:var(--cyan)}.b-cyan::before{background:var(--cyan)}
+.b-gold{background:rgba(245,197,66,0.12);color:var(--gold)}.b-gold::before{background:var(--gold)}
+.b-purple{background:rgba(167,139,250,0.12);color:var(--purple)}.b-purple::before{background:var(--purple)}
+.b-gray{background:rgba(255,255,255,0.07);color:var(--muted)}.b-gray::before{background:var(--muted)}
+
+/* ── ACTION BUTTONS ── */
+.act-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.68rem;font-family:var(--fh);font-weight:600;color:var(--muted);cursor:pointer;transition:var(--tr);white-space:nowrap}
+.act-btn:hover{border-color:var(--border2);color:var(--text)}
+.act-btn.approve{border-color:rgba(34,197,94,0.3);color:var(--green)}
+.act-btn.approve:hover{background:rgba(34,197,94,0.1)}
+.act-btn.reject{border-color:rgba(239,68,68,0.3);color:var(--red)}
+.act-btn.reject:hover{background:rgba(239,68,68,0.1)}
+.act-btn.view{border-color:rgba(245,197,66,0.3);color:var(--gold)}
+.act-btn.view:hover{background:rgba(245,197,66,0.08)}
+.act-btn.edit{border-color:rgba(0,212,255,0.3);color:var(--cyan)}
+.act-btn.edit:hover{background:rgba(0,212,255,0.08)}
+.act-btn.send{border-color:rgba(167,139,250,0.3);color:var(--purple)}
+.act-btn.send:hover{background:rgba(167,139,250,0.08)}
+.act-btn.del{border-color:rgba(239,68,68,0.25);color:var(--red)}
+.act-btn.del:hover{background:rgba(239,68,68,0.08)}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.filter-bar input,.filter-bar select{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:7px 11px;color:var(--text);font-size:0.78rem;outline:none;transition:border-color var(--tr)}
+.filter-bar input:focus,.filter-bar select:focus{border-color:rgba(245,197,66,0.35)}
+.filter-bar input{flex:1;min-width:180px}
+.filter-bar select{min-width:140px;cursor:pointer}
+
+/* ── FORM ELEMENTS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+.form-grid.full{grid-template-columns:1fr}
+.fg2{margin-bottom:0}
+.fg2 label{display:block;font-size:0.68rem;font-family:var(--fh);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fg2 input,.fg2 select,.fg2 textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:0.82rem;outline:none;transition:border-color var(--tr)}
+.fg2 input:focus,.fg2 select:focus,.fg2 textarea:focus{border-color:rgba(245,197,66,0.4)}
+.fg2 textarea{resize:vertical;min-height:90px}
+.save-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0A0600;border:none;padding:10px 24px;border-radius:8px;font-family:var(--fh);font-size:0.78rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:var(--tr)}
+.save-btn:hover{opacity:.9;transform:translateY(-1px)}
+.cancel-btn{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 20px;border-radius:8px;font-family:var(--fh);font-size:0.78rem;font-weight:600;letter-spacing:0.05em;cursor:pointer;transition:var(--tr)}
+.cancel-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:32px;width:100%;max-width:500px;position:relative;animation:mIn .3s cubic-bezier(.4,0,.2,1)}
+@keyframes mIn{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;transition:color var(--tr)}
+.modal-close:hover{color:var(--text)}
+.modal-title{font-family:var(--fh);font-size:1.15rem;font-weight:800;margin-bottom:6px}
+.modal-sub{font-size:0.78rem;color:var(--muted);margin-bottom:22px;line-height:1.6}
+
+/* ── EMAIL COMPOSER ── */
+.email-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px}
+.email-card-title{font-family:var(--fh);font-size:0.82rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.tpl-btn{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;transition:var(--tr);text-align:center}
+.tpl-btn:hover{border-color:rgba(245,197,66,0.3);background:rgba(245,197,66,0.04)}
+.tpl-btn.sel{border-color:rgba(245,197,66,0.4);background:rgba(245,197,66,0.07)}
+.tpl-icon{font-size:1.4rem;margin-bottom:6px}
+.tpl-name{font-family:var(--fh);font-size:0.7rem;font-weight:700;margin-bottom:2px}
+.tpl-desc{font-size:0.62rem;color:var(--muted)}
+
+/* ── CHART CONTAINERS ── */
+.chart-wrap{position:relative;width:100%}
+.h220{height:220px}
+.h180{height:180px}
+
+/* ── DASH GRID ── */
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.dg-wide{grid-column:1/-1}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:3px;background:var(--surface2);padding:4px;border-radius:8px;width:fit-content;margin-bottom:16px}
+.tab{padding:6px 16px;border-radius:6px;border:none;background:none;color:var(--muted);font-family:var(--fh);font-size:0.72rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:var(--tr)}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:22px;z-index:500;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.5);transform:translateY(60px);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);pointer-events:none;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1;pointer-events:auto}
+.toast-icon{font-size:1rem;flex-shrink:0}
+.toast-msg{font-size:0.78rem;line-height:1.4}
+.toast-x{background:none;border:none;color:var(--muted);cursor:pointer;margin-left:auto;font-size:0.9rem}
+
+/* ── TOGGLE ── */
+.tog{position:relative;width:38px;height:20px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-sl{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:var(--tr)}
+.tog-sl::before{content:'';position:absolute;width:14px;height:14px;left:2px;top:50%;transform:translateY(-50%);background:var(--muted);border-radius:50%;transition:var(--tr)}
+.tog input:checked+.tog-sl{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3)}
+.tog input:checked+.tog-sl::before{background:var(--green);transform:translateY(-50%) translateX(18px)}
+
+/* ── USER AVATAR ── */
+.ua{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:700;font-size:0.7rem;flex-shrink:0}
+
+/* ── ACTIVITY FEED ── */
+.act-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.act-text{font-size:0.78rem;line-height:1.5;flex:1}
+.act-time{font-size:0.68rem;color:var(--muted);white-space:nowrap;flex-shrink:0}
+
+/* ── PLAN CARDS ── */
+.plan-admin-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:18px}
+.pac-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pac-roi{font-family:var(--fh);font-size:1.8rem;font-weight:800;line-height:1}
+.pac-detail{font-size:0.72rem;color:var(--muted);margin-bottom:12px}
+.pac-stat{display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:6px}
+.pac-stat span:first-child{color:var(--muted)}
+.pac-stat span:last-child{font-family:var(--fh);font-weight:600}
+.pac-prog{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.pac-prog-fill{height:100%;border-radius:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.stat-row{grid-template-columns:repeat(2,1fr)}.dg{grid-template-columns:1fr}.dg3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr 1fr}.content{padding:14px}.form-grid{grid-template-columns:1fr}.form-grid.cols3{grid-template-columns:1fr}}
+/* ── WALLET MANAGER ── */
+.wm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;margin-bottom:24px}
+.wm-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:var(--tr)}
+.wm-card:hover{border-color:var(--border2)}
+.wm-card.inactive{opacity:.55}
+.wm-card-top{padding:16px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.wm-coin-pill{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;flex-shrink:0}
+.wm-coin-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:1px}
+.wm-coin-net{font-size:.68rem;color:var(--muted)}
+.wm-card-body{padding:14px 18px}
+.wm-addr-label{font-size:.62rem;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.wm-addr-bar{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:10px;transition:var(--tr)}
+.wm-addr-bar:hover{border-color:var(--border2)}
+.wm-addr-text{font-family:monospace;font-size:.72rem;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.01em}
+.wm-addr-copy{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.82rem;padding:2px 4px;transition:color var(--tr);flex-shrink:0}
+.wm-addr-copy:hover{color:var(--gold)}
+.wm-card-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:rgba(255,255,255,.02);border-top:1px solid var(--border)}
+.wm-status{display:flex;align-items:center;gap:6px;font-size:.7rem}
+.wm-status-dot{width:6px;height:6px;border-radius:50%}
+.wm-actions{display:flex;gap:6px}
+/* add wallet form */
+.aw-panel{background:var(--surface);border:2px dashed var(--border2);border-radius:14px;padding:22px;margin-bottom:24px}
+.aw-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.aw-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end}
+.aw-form input,.aw-form select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.82rem;outline:none;width:100%;transition:border-color var(--tr);font-family:'DM Sans',sans-serif}
+.aw-form input:focus,.aw-form select:focus{border-color:rgba(245,197,66,.4)}
+.aw-form input::placeholder{color:var(--muted);opacity:.5}
+.aw-add-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0A0600;border:none;border-radius:8px;padding:10px 20px;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:var(--tr)}
+.aw-add-btn:hover{opacity:.9;transform:translateY(-1px)}
+.aw-lbl{font-size:.65rem;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+/* edit wallet inline */
+.wm-edit-row{padding:12px 18px;background:rgba(245,197,66,.04);border-top:1px solid rgba(245,197,66,.15);display:none}
+.wm-edit-row.open{display:block}
+.wm-edit-row input{width:100%;background:var(--surface2);border:1px solid rgba(245,197,66,.3);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.82rem;font-family:monospace;outline:none;margin-bottom:10px;letter-spacing:.02em}
+.wm-edit-row input:focus{border-color:rgba(245,197,66,.6)}
+/* stat strip */
+.wm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:900px){.aw-form{grid-template-columns:1fr 1fr}.aw-form .aw-add-btn{grid-column:1/-1}}
+@media(max-width:600px){.wm-grid{grid-template-columns:1fr}.wm-stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- ════════ LOGIN ════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="logo-icon">T</div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;letter-spacing:-.03em">Thrive<span style="color:var(--gold)">Mine</span></div>
+    </div>
+    <div class="admin-badge">🔐 Admin Access Only</div>
+    <div class="login-title">Admin Sign In</div>
+    <div class="login-sub">Enter your administrator credentials to access the ThriveMine control panel.</div>
+    <div class="fl">
+      <div class="fg"><label>Admin Email</label><input type="email" id="li-em" placeholder="admin@thrivemine.com" autocomplete="username"/></div>
+      <div class="fg"><label>Password</label><div class="pw-wrap"><input type="password" id="li-pw" placeholder="••••••••" autocomplete="current-password"/><button class="pw-eye" type="button" onclick="togglePw('li-pw',this)">👁</button></div></div>
+      <div class="login-err" id="loginErr">Invalid credentials. Please try again.</div>
+      <button class="btn-login" onclick="doLogin()">Access Admin Panel →</button>
+    </div>
+    <div class="login-hint">Demo: <code>admin@thrivemine.com</code> / <code>Admin@2026</code></div>
+  </div>
+</div>
+
+<!-- ════════ APP ════════ -->
+<div id="app">
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div class="logo-icon">T</div>
+    <div style="display:flex;align-items:center;gap:4px">
+      <div class="logo-txt">Thrive<span>Mine</span></div>
+      <div class="admin-pill">admin</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Overview</div>
+    <div class="sb-item active" onclick="showPage('dashboard',this)"><span class="sb-icon">📊</span>Dashboard</div>
+    <div class="sb-item" onclick="showPage('analytics',this)"><span class="sb-icon">📈</span>Analytics</div>
+
+    <div class="sb-sec">Finance</div>
+    <div class="sb-item" onclick="showPage('deposits',this)"><span class="sb-icon">💰</span>Deposits<span class="sb-badge" id="depBadge">7</span></div>
+    <div class="sb-item" onclick="showPage('withdrawals',this)"><span class="sb-icon">🏦</span>Withdrawals<span class="sb-badge" id="withBadge">4</span></div>
+    <div class="sb-item" onclick="showPage('plans',this)"><span class="sb-icon">📋</span>Investment Plans</div>
+
+    <div class="sb-sec">Users</div>
+    <div class="sb-item" onclick="showPage('users',this)"><span class="sb-icon">👥</span>User Management</div>
+    <div class="sb-item" onclick="showPage('kyc',this)"><span class="sb-icon">🛡️</span>KYC Verification<span class="sb-badge">3</span></div>
+
+    <div class="sb-sec">Communication</div>
+    <div class="sb-item" onclick="showPage('email',this)"><span class="sb-icon">✉️</span>Email Notifications</div>
+    <div class="sb-item" onclick="showPage('activity',this)"><span class="sb-icon">🔔</span>Activity Log</div>
+
+    <div class="sb-sec">System</div>
+    <div class="sb-item" onclick="showPage('wallets',this)"><span class="sb-icon">👛</span>Wallet Manager</div>
+    <div class="sb-item" onclick="showPage('settings',this)"><span class="sb-icon">⚙️</span>Site Settings</div>
+  </nav>
+  <div class="sb-bottom">
+    <div class="admin-avatar">SA</div>
+    <div><div class="admin-name">Super Admin</div><div class="admin-role">admin@thrivemine.com</div></div>
+    <button class="sb-logout" onclick="doLogout()" title="Logout">⏻</button>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <header class="topbar">
+    <div class="tb-left">
+      <button style="background:none;border:none;color:var(--text);cursor:pointer;font-size:1.1rem;display:none" id="sidebarToggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div class="tb-title" id="pageTitle">Dashboard</div>
+    </div>
+    <div class="tb-right">
+      <div class="tb-date" id="topDate"></div>
+      <div class="icon-btn" onclick="toast('🔔','3 pending approvals require your attention.')">🔔<div class="notif-dot"></div></div>
+      <div class="icon-btn" title="View site" onclick="window.open('index.html','_blank')">🌐</div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ═══════ DASHBOARD ═══════ -->
+    <div class="pv active" id="pv-dashboard">
+      <div class="stat-row">
+        <div class="sc c1"><div class="sc-icon">💰</div><div class="sc-num" id="totalAUM">$147.3M</div><div class="sc-lbl">Total Assets Under Mgmt</div><div class="sc-delta up">▲ +$4.2M this month</div></div>
+        <div class="sc c2"><div class="sc-icon">👥</div><div class="sc-num" id="totalUsers">98,421</div><div class="sc-lbl">Total Registered Users</div><div class="sc-delta up">▲ +1,204 this week</div></div>
+        <div class="sc c3"><div class="sc-icon">📥</div><div class="sc-num">$2.84M</div><div class="sc-lbl">Deposits This Month</div><div class="sc-delta up">▲ +18.4% vs last month</div></div>
+        <div class="sc c4"><div class="sc-icon">📤</div><div class="sc-num">$1.12M</div><div class="sc-lbl">Withdrawals This Month</div><div class="sc-delta dn">▲ +8.1% vs last month</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="sc c5"><div class="sc-icon">📋</div><div class="sc-num">12,847</div><div class="sc-lbl">Active Investments</div><div class="sc-delta up">▲ +342 today</div></div>
+        <div class="sc c6"><div class="sc-icon">⏳</div><div class="sc-num" id="pendingCount">11</div><div class="sc-lbl">Pending Approvals</div><div class="sc-delta dn">7 deposits · 4 withdrawals</div></div>
+        <div class="sc c1"><div class="sc-icon">🎁</div><div class="sc-num">$84,200</div><div class="sc-lbl">Referral Commissions</div><div class="sc-delta up">▲ +$3,100 today</div></div>
+        <div class="sc c3"><div class="sc-icon">📧</div><div class="sc-num">47,230</div><div class="sc-lbl">Emails Sent This Month</div><div class="sc-delta neu">Open rate: 68.4%</div></div>
+      </div>
+
+      <div class="dg">
+        <div class="panel">
+          <div class="ph"><div class="pt">Revenue — Monthly</div><div class="pa" onclick="showPage('analytics',null)">Full report →</div></div>
+          <div class="pb">
+            <div class="chart-wrap h220"><canvas id="revChart" role="img" aria-label="Monthly revenue bar chart for 2026"></canvas></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="pt">User Growth</div></div>
+          <div class="pb">
+            <div class="chart-wrap h220"><canvas id="growthChart" role="img" aria-label="Cumulative user growth line chart"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dg">
+        <!-- Recent Pending -->
+        <div class="panel">
+          <div class="ph"><div class="pt">🟡 Pending Approvals</div><div class="pa" onclick="showPage('deposits',null)">Manage →</div></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Time</th><th>Action</th></tr></thead>
+              <tbody id="pendingTbl"></tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Activity Feed -->
+        <div class="panel">
+          <div class="ph"><div class="pt">Live Activity</div><div class="pa" onclick="showPage('activity',null)">View all →</div></div>
+          <div class="pb" style="padding:8px 18px" id="liveFeed"></div>
+        </div>
+      </div>
+
+      <!-- Plan Distribution -->
+      <div class="panel">
+        <div class="ph"><div class="pt">Plan Distribution</div></div>
+        <div class="pb" style="display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center">
+          <div class="chart-wrap" style="height:200px"><canvas id="planPieChart" role="img" aria-label="Pie chart showing investment plan distribution"></canvas></div>
+          <div id="planLegend" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ ANALYTICS ═══════ -->
+    <div class="pv" id="pv-analytics">
+      <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c1"><div class="sc-icon">📊</div><div class="sc-num">$147.3M</div><div class="sc-lbl">Total AUM</div><div class="sc-delta up">▲ +2.9% YTD</div></div>
+        <div class="sc c3"><div class="sc-icon">📈</div><div class="sc-num">$18.4M</div><div class="sc-lbl">Total Returns Paid</div><div class="sc-delta up">▲ +$1.2M MTD</div></div>
+        <div class="sc c2"><div class="sc-icon">💹</div><div class="sc-num">63.2%</div><div class="sc-lbl">Avg Platform ROI</div><div class="sc-delta up">▲ +1.4% vs Q1</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">AUM & Deposits — 2026</div></div>
+        <div class="pb"><div class="chart-wrap h220"><canvas id="aumChart" role="img" aria-label="Monthly AUM and deposit line chart for 2026"></canvas></div></div>
+      </div>
+      <div class="dg">
+        <div class="panel">
+          <div class="ph"><div class="pt">Top Countries by Volume</div></div>
+          <div class="pb"><div class="chart-wrap h180"><canvas id="countryChart" role="img" aria-label="Horizontal bar chart of top countries by investment volume"></canvas></div></div>
+        </div>
+        <div class="panel">
+          <div class="ph"><div class="pt">Deposit Methods</div></div>
+          <div class="pb" style="display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center">
+            <div class="chart-wrap" style="height:150px"><canvas id="methodChart" role="img" aria-label="Donut chart of deposit methods"></canvas></div>
+            <div id="methodLegend" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ DEPOSITS ═══════ -->
+    <div class="pv" id="pv-deposits">
+      <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num">$2.62M</div><div class="sc-lbl">Approved This Month</div><div class="sc-delta up">▲ 94.3% of total</div></div>
+        <div class="sc c6"><div class="sc-icon">⏳</div><div class="sc-num">$220K</div><div class="sc-lbl">Pending Review</div><div class="sc-delta neu">7 transactions</div></div>
+        <div class="sc c4"><div class="sc-icon">❌</div><div class="sc-num">$18K</div><div class="sc-lbl">Rejected</div><div class="sc-delta neu">3 transactions</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">Deposit Requests</div>
+          <div style="display:flex;gap:8px">
+            <button class="act-btn approve" onclick="bulkApprove('dep')">Approve Selected</button>
+            <button class="act-btn" onclick="toast('📤','Exported deposits to CSV')">Export CSV</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <input type="text" placeholder="Search by user or tx hash..." oninput="filterTable(this,'depTbl')"/>
+          <select onchange="filterTableSel(this,'depTbl',4)">
+            <option value="">All Status</option>
+            <option>Pending</option><option>Approved</option><option>Rejected</option>
+          </select>
+          <select onchange="filterTableSel(this,'depTbl',3)">
+            <option value="">All Coins</option>
+            <option>BTC</option><option>ETH</option><option>USDT</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th><input type="checkbox" onchange="checkAll('depTbl',this)"/></th><th>User</th><th>Amount (USD)</th><th>Coin</th><th>Status</th><th>Date</th><th>Tx Hash</th><th>Actions</th></tr></thead>
+            <tbody id="depTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ WITHDRAWALS ═══════ -->
+    <div class="pv" id="pv-withdrawals">
+      <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num">$980K</div><div class="sc-lbl">Processed This Month</div><div class="sc-delta up">▲ 87.5% completed</div></div>
+        <div class="sc c6"><div class="sc-icon">⏳</div><div class="sc-num">$142K</div><div class="sc-lbl">Pending Review</div><div class="sc-delta neu">4 requests</div></div>
+        <div class="sc c4"><div class="sc-icon">🛑</div><div class="sc-num">$0</div><div class="sc-lbl">Flagged / On Hold</div><div class="sc-delta neu">0 flagged</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">Withdrawal Requests</div>
+          <div style="display:flex;gap:8px">
+            <button class="act-btn approve" onclick="bulkApprove('with')">Process Selected</button>
+            <button class="act-btn" onclick="toast('📤','Exported withdrawals to CSV')">Export CSV</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <input type="text" placeholder="Search by user or wallet..." oninput="filterTable(this,'withTbl')"/>
+          <select onchange="filterTableSel(this,'withTbl',4)">
+            <option value="">All Status</option>
+            <option>Pending</option><option>Processing</option><option>Completed</option><option>Rejected</option>
+          </select>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th><input type="checkbox" onchange="checkAll('withTbl',this)"/></th><th>User</th><th>Amount (USD)</th><th>Coin</th><th>Status</th><th>Wallet Address</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="withTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ PLANS ═══════ -->
+    <div class="pv" id="pv-plans">
+      <div class="dg3" id="planCards"></div>
+      <div class="panel" style="margin-top:20px">
+        <div class="ph"><div class="pt">Edit Investment Plan</div></div>
+        <div class="pb">
+          <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap" id="planEditTabs"></div>
+          <div id="planEditForm"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ USERS ═══════ -->
+    <div class="pv" id="pv-users">
+      <div class="stat-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="sc c1"><div class="sc-icon">👤</div><div class="sc-num">98,421</div><div class="sc-lbl">Total Users</div></div>
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num">87,209</div><div class="sc-lbl">Verified (KYC)</div></div>
+        <div class="sc c6"><div class="sc-icon">⏳</div><div class="sc-num">9,843</div><div class="sc-lbl">Unverified</div></div>
+        <div class="sc c4"><div class="sc-icon">🚫</div><div class="sc-num">1,369</div><div class="sc-lbl">Suspended</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">User Accounts</div>
+          <div style="display:flex;gap:8px">
+            <button class="act-btn" onclick="openModal('addUserModal')">+ Add User</button>
+            <button class="act-btn" onclick="toast('📤','User list exported')">Export</button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <input type="text" placeholder="Search name, email, phone..." oninput="filterTable(this,'userTbl')"/>
+          <select onchange="filterTableSel(this,'userTbl',5)">
+            <option value="">All Status</option>
+            <option>Active</option><option>Suspended</option><option>Pending KYC</option>
+          </select>
+          <button class="act-btn" onclick="loadRealUsers()" style="white-space:nowrap">🔄 Refresh</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Email</th><th>Phone</th><th>Username</th><th>Balance (USD)</th><th>KYC</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="userTbl"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Loading users…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ KYC ═══════ -->
+    <div class="pv" id="pv-kyc">
+      <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc c6"><div class="sc-icon">🔍</div><div class="sc-num">3</div><div class="sc-lbl">Pending KYC Review</div></div>
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num">87,209</div><div class="sc-lbl">Verified Users</div></div>
+        <div class="sc c4"><div class="sc-icon">❌</div><div class="sc-num">412</div><div class="sc-lbl">Rejected KYC</div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="pt">KYC Applications</div></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>User</th><th>Document Type</th><th>Country</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="kycTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ EMAIL ═══════ -->
+    <div class="pv" id="pv-email">
+      <div class="stat-row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="sc c5"><div class="sc-icon">📧</div><div class="sc-num">47,230</div><div class="sc-lbl">Sent This Month</div></div>
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num">68.4%</div><div class="sc-lbl">Open Rate</div></div>
+        <div class="sc c1"><div class="sc-icon">🖱️</div><div class="sc-num">24.1%</div><div class="sc-lbl">Click Rate</div></div>
+        <div class="sc c4"><div class="sc-icon">🚫</div><div class="sc-num">0.3%</div><div class="sc-lbl">Unsubscribe Rate</div></div>
+      </div>
+      <div class="dg">
+        <!-- Compose -->
+        <div class="panel">
+          <div class="ph"><div class="pt">Compose Notification</div></div>
+          <div class="pb">
+            <div style="font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px">Select Template</div>
+            <div class="template-grid">
+              <div class="tpl-btn sel" id="tpl-welcome" onclick="setTpl('welcome')"><div class="tpl-icon">👋</div><div class="tpl-name">Welcome</div><div class="tpl-desc">New user greeting</div></div>
+              <div class="tpl-btn" id="tpl-deposit" onclick="setTpl('deposit')"><div class="tpl-icon">💰</div><div class="tpl-name">Deposit</div><div class="tpl-desc">Confirm receipt</div></div>
+              <div class="tpl-btn" id="tpl-withdraw" onclick="setTpl('withdraw')"><div class="tpl-icon">🏦</div><div class="tpl-name">Withdrawal</div><div class="tpl-desc">Process update</div></div>
+              <div class="tpl-btn" id="tpl-returns" onclick="setTpl('returns')"><div class="tpl-icon">📈</div><div class="tpl-name">Returns</div><div class="tpl-desc">Daily credited</div></div>
+              <div class="tpl-btn" id="tpl-kyc" onclick="setTpl('kyc')"><div class="tpl-icon">🛡️</div><div class="tpl-name">KYC Alert</div><div class="tpl-desc">Verify identity</div></div>
+              <div class="tpl-btn" id="tpl-custom" onclick="setTpl('custom')"><div class="tpl-icon">✏️</div><div class="tpl-name">Custom</div><div class="tpl-desc">Write your own</div></div>
+            </div>
+            <div class="form-grid" style="margin-bottom:12px">
+              <div class="fg2"><label>Recipients</label>
+                <select class="fg2" id="emailTo" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.82rem;outline:none">
+                  <option>All Users (98,421)</option>
+                  <option>Active Investors Only</option>
+                  <option>Pending KYC Users</option>
+                  <option>Starter Plan Users</option>
+                  <option>Silver Plan Users</option>
+                  <option>Gold Plan Users</option>
+                  <option>Platinum & Diamond Users</option>
+                  <option>Specific Email Address</option>
+                </select>
+              </div>
+              <div class="fg2"><label>Subject</label><input type="text" id="emailSubj" placeholder="Email subject line..."/></div>
+            </div>
+            <div class="fg2" style="margin-bottom:14px"><label>Message Body</label><textarea id="emailBody" style="min-height:120px" placeholder="Write your message here..."></textarea></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="save-btn" onclick="sendEmail()">Send Email →</button>
+              <button class="cancel-btn" onclick="toast('💾','Draft saved')">Save Draft</button>
+              <button class="cancel-btn" onclick="toast('👁','Preview opened in new window')">Preview</button>
+            </div>
+          </div>
+        </div>
+        <!-- History -->
+        <div class="panel">
+          <div class="ph"><div class="pt">Email History</div></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Subject</th><th>Sent To</th><th>Date</th><th>Open%</th><th>Status</th></tr></thead>
+              <tbody id="emailHistTbl"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ ACTIVITY LOG ═══════ -->
+    <div class="pv" id="pv-activity">
+      <div class="panel">
+        <div class="ph"><div class="pt">System Activity Log</div>
+          <div style="display:flex;gap:8px">
+            <select style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-size:.75rem;outline:none">
+              <option>All Events</option><option>Logins</option><option>Transactions</option><option>Admin Actions</option>
+            </select>
+            <button class="act-btn" onclick="toast('📤','Activity log exported')">Export</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>User</th><th>Event</th><th>IP Address</th><th>Details</th></tr></thead>
+            <tbody id="actTbl"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ SETTINGS ═══════ -->
+    <div class="pv" id="pv-settings">
+      <div class="dg">
+        <!-- Site Config -->
+        <div class="panel">
+          <div class="ph"><div class="pt">Site Configuration</div></div>
+          <div class="pb">
+            <div class="form-grid" style="margin-bottom:14px">
+              <div class="fg2"><label>Site Name</label><input type="text" value="ThriveMine Inc."/></div>
+              <div class="fg2"><label>Support Email</label><input type="email" value="support@thrivemine.com"/></div>
+              <div class="fg2"><label>Support Phone</label><input type="tel" value="+1 (800) 874-8463"/></div>
+              <div class="fg2"><label>HQ Address</label><input type="text" value="101 Financial Blvd, New York"/></div>
+            </div>
+            <div class="fg2" style="margin-bottom:14px"><label>Site Announcement Banner</label><textarea style="min-height:70px">🚀 ThriveMine is now accepting Diamond Plan investors. Limited slots available!</textarea></div>
+            <div style="display:flex;flex-direction:column;gap:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+                <div><div style="font-size:.82rem;font-weight:500">Maintenance Mode</div><div style="font-size:.7rem;color:var(--muted)">Show maintenance page to users</div></div>
+                <label class="tog"><input type="checkbox"/><span class="tog-sl"></span></label>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+                <div><div style="font-size:.82rem;font-weight:500">New Registrations</div><div style="font-size:.7rem;color:var(--muted)">Allow new user sign-ups</div></div>
+                <label class="tog"><input type="checkbox" checked/><span class="tog-sl"></span></label>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0">
+                <div><div style="font-size:.82rem;font-weight:500">Auto-approve Small Deposits</div><div style="font-size:.7rem;color:var(--muted)">Auto-approve deposits under $1,000</div></div>
+                <label class="tog"><input type="checkbox" checked/><span class="tog-sl"></span></label>
+              </div>
+            </div>
+            <button class="save-btn" style="margin-top:16px" onclick="toast('✅','Site settings saved')">Save Settings</button>
+          </div>
+        </div>
+        <!-- Security -->
+        <div class="panel">
+          <div class="ph"><div class="pt">Admin Security</div></div>
+          <div class="pb">
+            <div class="form-grid" style="margin-bottom:14px">
+              <div class="fg2"><label>Admin Email</label><input type="email" value="admin@thrivemine.com"/></div>
+              <div class="fg2"><label>2FA Status</label><input type="text" value="Enabled ✅" readonly style="color:var(--green)"/></div>
+              <div class="fg2"><label>New Password</label><input type="password" placeholder="Min. 12 characters"/></div>
+              <div class="fg2"><label>Confirm Password</label><input type="password" placeholder="Re-enter password"/></div>
+            </div>
+            <div style="background:rgba(245,197,66,0.06);border:1px solid rgba(245,197,66,0.2);border-radius:10px;padding:14px;font-size:.75rem;color:var(--muted);line-height:1.7;margin-bottom:14px">
+              🔐 <strong style="color:var(--text)">Security Note:</strong> This admin panel is restricted to authorized personnel only. All actions are logged and audited. IP-based access restrictions are enforced.
+            </div>
+            <div style="display:flex;flex-direction:column;gap:0;margin-bottom:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border)">
+                <div><div style="font-size:.82rem;font-weight:500">Email Alerts on Login</div><div style="font-size:.7rem;color:var(--muted)">Notify on every admin login</div></div>
+                <label class="tog"><input type="checkbox" checked/><span class="tog-sl"></span></label>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0">
+                <div><div style="font-size:.82rem;font-weight:500">IP Whitelist</div><div style="font-size:.7rem;color:var(--muted)">Restrict access to approved IPs only</div></div>
+                <label class="tog"><input type="checkbox"/><span class="tog-sl"></span></label>
+              </div>
+            </div>
+            <button class="save-btn" onclick="toast('🔐','Security settings updated')">Update Security</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ WALLET MANAGER ═══════ -->
+    <div class="pv" id="pv-wallets">
+
+      <!-- Stats strip -->
+      <div class="wm-stats">
+        <div class="sc c1"><div class="sc-icon">👛</div><div class="sc-num" id="wm-total-count">0</div><div class="sc-lbl">Total Wallets</div></div>
+        <div class="sc c3"><div class="sc-icon">✅</div><div class="sc-num" id="wm-active-count">0</div><div class="sc-lbl">Active Wallets</div></div>
+        <div class="sc c6"><div class="sc-icon">⏸️</div><div class="sc-num" id="wm-inactive-count">0</div><div class="sc-lbl">Inactive Wallets</div></div>
+        <div class="sc c2"><div class="sc-icon">🔗</div><div class="sc-num" id="wm-network-count">0</div><div class="sc-lbl">Networks Supported</div></div>
+      </div>
+
+      <!-- Add Wallet Form -->
+      <div class="aw-panel">
+        <div class="aw-title">➕ Add New Wallet Address</div>
+        <div class="aw-form">
+          <div>
+            <div class="aw-lbl">Coin / Token</div>
+            <select id="aw-coin">
+              <option value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="USDT-TRC20">Tether USDT (TRC-20)</option>
+              <option value="USDT-ERC20">Tether USDT (ERC-20)</option>
+              <option value="BNB">BNB Smart Chain</option>
+              <option value="SOL">Solana (SOL)</option>
+              <option value="XRP">Ripple (XRP)</option>
+              <option value="LTC">Litecoin (LTC)</option>
+              <option value="DOGE">Dogecoin (DOGE)</option>
+              <option value="TRX">Tron (TRX)</option>
+              <option value="ADA">Cardano (ADA)</option>
+              <option value="MATIC">Polygon (MATIC)</option>
+              <option value="AVAX">Avalanche (AVAX)</option>
+              <option value="DOT">Polkadot (DOT)</option>
+              <option value="CUSTOM">Custom / Other</option>
+            </select>
+          </div>
+          <div>
+            <div class="aw-lbl">Label / Nickname</div>
+            <input type="text" id="aw-label" placeholder="e.g. Main BTC Wallet"/>
+          </div>
+          <div>
+            <div class="aw-lbl">Wallet Address</div>
+            <input type="text" id="aw-address" placeholder="Paste full wallet address here..."/>
+          </div>
+          <button class="aw-add-btn" onclick="addWallet()">+ Add Wallet</button>
+        </div>
+        <div style="margin-top:12px;font-size:.72rem;color:var(--muted);line-height:1.7">
+          ⚠️ <strong style="color:var(--text)">Important:</strong> These are the deposit addresses shown to users on their dashboard. Always double-check before saving. Changes take effect immediately for all users.
+        </div>
+      </div>
+
+      <!-- Wallet Cards Grid -->
+      <div class="ph" style="margin-bottom:14px;padding:0;background:transparent;border:none;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div style="font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700">Your Wallet Addresses</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" placeholder="🔍  Search wallets..." id="wm-search" oninput="filterWallets(this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.78rem;outline:none;min-width:200px"/>
+          <select id="wm-filter-coin" onchange="filterWallets()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.78rem;outline:none;cursor:pointer">
+            <option value="">All Coins</option>
+          </select>
+          <button class="act-btn" onclick="exportWallets()">Export JSON</button>
+          <button class="act-btn" onclick="clearAllWallets()">Reset All</button>
+        </div>
+      </div>
+
+      <div class="wm-grid" id="wmGrid">
+        <!-- rendered by JS -->
+      </div>
+
+      <div id="wmEmpty" style="display:none;text-align:center;padding:48px 20px;color:var(--muted)">
+        <div style="font-size:3rem;margin-bottom:12px">👛</div>
+        <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px">No wallets added yet</div>
+        <div style="font-size:.82rem">Use the form above to add your first wallet address.</div>
+      </div>
+
+    </div><!-- /wallets -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ════ ADD USER MODAL ════ -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('addUserModal')">✕</button>
+    <div class="modal-title">Add New User</div>
+    <div class="modal-sub">Create a user account manually. A welcome email will be sent automatically.</div>
+    <div class="form-grid" style="margin-bottom:12px">
+      <div class="fg2"><label>First Name</label><input type="text" placeholder="John"/></div>
+      <div class="fg2"><label>Last Name</label><input type="text" placeholder="Doe"/></div>
+    </div>
+    <div class="fg2" style="margin-bottom:12px"><label>Email</label><input type="email" placeholder="john@example.com"/></div>
+    <div class="form-grid" style="margin-bottom:12px">
+      <div class="fg2"><label>Plan</label>
+        <select style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.82rem;outline:none">
+          <option>None</option><option>Starter</option><option>Silver</option><option>Gold</option><option>Platinum</option><option>Diamond</option>
+        </select>
+      </div>
+      <div class="fg2"><label>Initial Balance (USD)</label><input type="number" placeholder="0.00"/></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="save-btn" onclick="closeModal('addUserModal');toast('✅','User account created and welcome email sent!')">Create User</button>
+      <button class="cancel-btn" onclick="closeModal('addUserModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ USER DETAIL MODAL ════ -->
+<div class="modal-overlay" id="userDetailModal">
+  <div class="modal-box" style="max-width:520px">
+    <button class="modal-close" onclick="closeModal('userDetailModal')">✕</button>
+    <div class="modal-title" id="udTitle">User Details</div>
+    <div id="udBody"></div>
+  </div>
+</div>
+
+<!-- ════ TOAST ════ -->
+<div class="toast" id="toastEl">
+  <span class="toast-icon" id="toastIcon">✅</span>
+  <div class="toast-msg" id="toastMsg">Done</div>
+  <button class="toast-close" onclick="hideToast()">✕</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ══════════════ AUTH ══════════════
+const ADMIN_EMAIL='admin@thrivemine.com', ADMIN_PW='Admin@2026';
+const SURL='https://ohlyburyplamumonbqsn.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9obHlidXJ5cGxhbXVtb25icXNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NjQxNjEsImV4cCI6MjA5NjQ0MDE2MX0.IYDqaymyREpRgXmNM38sPHe6jH0DuIYVk84Yrk1kSAg';
+
+function doLogin(){
+  const em=document.getElementById('li-em').value.trim();
+  const pw=document.getElementById('li-pw').value;
+  const err=document.getElementById('loginErr');
+  if(em===ADMIN_EMAIL && pw===ADMIN_PW){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('topDate').textContent=new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+    initAll();
+  }else{
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',3500);
+  }
+}
+document.getElementById('li-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function doLogout(){document.getElementById('app').style.display='none';document.getElementById('loginScreen').style.display='flex';}
+function togglePw(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🙈';}
+
+// ══════════════ NAVIGATION ══════════════
+const pTitles={dashboard:'Dashboard',analytics:'Analytics',deposits:'Manage Deposits',withdrawals:'Manage Withdrawals',plans:'Investment Plans',users:'User Management',kyc:'KYC Verification',email:'Email Notifications',activity:'Activity Log',wallets:'Wallet Manager',settings:'Admin Settings'};
+function showPage(id,el){
+  document.querySelectorAll('.pv').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('pv-'+id);
+  if(pg)pg.classList.add('active');
+  document.getElementById('pageTitle').textContent=pTitles[id]||id;
+  if(el){document.querySelectorAll('.sb-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
+  if(window.innerWidth<=900)document.getElementById('sidebar').classList.remove('open');
+}
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+// modal listeners attached in initAll
+
+// ══════════════ TOAST ══════════════
+let tTimer;
+function toast(icon,msg){
+  document.getElementById('toastIcon').textContent=icon;
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastEl').classList.add('show');
+  clearTimeout(tTimer);tTimer=setTimeout(hideToast,4200);
+}
+function hideToast(){document.getElementById('toastEl').classList.remove('show');}
+
+// ══════════════ DATA ══════════════
+let users = []; // populated live from Supabase
+
+async function loadRealUsers(){
+  const tbody = document.getElementById('userTbl');
+  if(tbody) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Loading…</td></tr>';
+
+  try {
+    const res = await fetch(`${SURL}/rest/v1/rpc/get_all_profiles_admin`, {
+      method: 'POST',
+      headers: {
+        'apikey': SKEY,
+        'Authorization': 'Bearer ' + SKEY,
+        'Content-Type': 'application/json'
+      },
+      body: '{}'
+    });
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.error) {
+      if(tbody) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--red)">⚠️ Could not load users. Make sure you ran the admin SQL setup in your Supabase dashboard.</td></tr>';
+      return;
+    }
+
+    users = data.map(p => ({
+      id:       p.id,
+      name:     p.full_name || '—',
+      username: p.username  || '—',
+      email:    p.email     || '—',
+      phone:    p.phone     || '—',
+      balance:  '$' + parseFloat(p.wallet_balance || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+      invested: '$' + parseFloat(p.total_invested || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}),
+      status:   p.kyc_status === 'verified' ? 'Active' : p.kyc_status === 'suspended' ? 'Suspended' : 'Pending KYC',
+      kyc:      p.kyc_status || 'unverified',
+      joined:   p.created_at ? new Date(p.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—',
+    }));
+
+    // update stat cards
+    const totalEl = document.querySelector('#pv-users .sc.c1 .sc-num');
+    const kycEl   = document.querySelector('#pv-users .sc.c3 .sc-num');
+    const pendEl  = document.querySelector('#pv-users .sc.c6 .sc-num');
+    const suspEl  = document.querySelector('#pv-users .sc.c4 .sc-num');
+    if(totalEl) totalEl.textContent = users.length;
+    if(kycEl)   kycEl.textContent   = users.filter(u=>u.kyc==='verified').length;
+    if(pendEl)  pendEl.textContent  = users.filter(u=>u.kyc==='unverified').length;
+    if(suspEl)  suspEl.textContent  = users.filter(u=>u.status==='Suspended').length;
+
+    renderUsers();
+    toast('✅', `${users.length} user(s) loaded`);
+  } catch(e) {
+    if(tbody) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--red)">⚠️ Network error loading users.</td></tr>';
+  }
+}
+const deposits=[
+  {id:'D001',user:'Sarah Johnson',amount:'$52,000',coin:'BTC',status:'Approved',date:'May 24, 2026',hash:'3a4f2b...7d8c'},
+  {id:'D002',user:'Michael Chen',amount:'$120,000',coin:'USDT',status:'Pending',date:'May 27, 2026',hash:'9e1c4d...2a7f'},
+  {id:'D003',user:'Aisha Patel',amount:'$250,000',coin:'ETH',status:'Pending',date:'May 27, 2026',hash:'b5f8a1...3c9e'},
+  {id:'D004',user:'Emma Williams',amount:'$3,000',coin:'BTC',status:'Pending',date:'May 28, 2026',hash:'7d2e6f...1b4a'},
+  {id:'D005',user:'Yuki Tanaka',amount:'$80,000',coin:'USDT',status:'Approved',date:'May 22, 2026',hash:'4c9b3e...8f2d'},
+  {id:'D006',user:'Carlos Rivera',amount:'$15,000',coin:'ETH',status:'Pending',date:'May 28, 2026',hash:'2a7c5b...6e1f'},
+  {id:'D007',user:'Fatima Al-Rashid',amount:'$22,000',coin:'BTC',status:'Pending',date:'May 29, 2026',hash:'6f3a8d...4c2b'},
+  {id:'D008',user:'James O\'Brien',amount:'$500',coin:'USDT',status:'Rejected',date:'May 20, 2026',hash:'1b9e4f...7a3c'},
+];
+const withdrawals=[
+  {id:'W001',user:'Sarah Johnson',amount:'$5,000',coin:'USDT',status:'Processing',wallet:'TQn9Y2...LSE',date:'May 20, 2026'},
+  {id:'W002',user:'Michael Chen',amount:'$50,000',coin:'BTC',status:'Pending',wallet:'bc1q...0wlh',date:'May 27, 2026'},
+  {id:'W003',user:'Aisha Patel',amount:'$80,000',coin:'ETH',status:'Pending',wallet:'0x742d...1e7',date:'May 28, 2026'},
+  {id:'W004',user:'Yuki Tanaka',amount:'$7,500',coin:'USDT',status:'Pending',wallet:'TRn8X3...MQP',date:'May 29, 2026'},
+  {id:'W005',user:'Emma Williams',amount:'$1,200',coin:'BTC',status:'Completed',wallet:'bc1p...9fxa',date:'May 18, 2026'},
+];
+const kycData=[
+  {user:'Carlos Rivera',doc:'Passport',country:'Mexico',date:'May 25, 2026',status:'Pending'},
+  {user:'David Kim',doc:'National ID',country:'South Korea',date:'May 26, 2026',status:'Pending'},
+  {user:'Priya Sharma',doc:'Driver\'s License',country:'India',date:'May 27, 2026',status:'Pending'},
+  {user:'Louis Martin',doc:'Passport',country:'France',date:'May 15, 2026',status:'Approved'},
+  {user:'Anna Kowalski',doc:'National ID',country:'Poland',date:'May 10, 2026',status:'Rejected'},
+];
+const actLog=[
+  {time:'09:12 AM',user:'admin@thrivemine.com',event:'Deposit Approved',ip:'192.168.1.1',detail:'$52,000 BTC for Sarah Johnson'},
+  {time:'09:08 AM',user:'sarah.j@email.com',event:'Login',ip:'98.34.12.7',detail:'Web browser, Chrome 124'},
+  {time:'08:55 AM',user:'aisha.p@email.com',event:'Withdrawal Requested',ip:'185.44.22.1',detail:'$80,000 ETH'},
+  {time:'08:40 AM',user:'m.chen@email.com',event:'Deposit Submitted',ip:'203.12.9.44',detail:'$120,000 USDT'},
+  {time:'08:30 AM',user:'admin@thrivemine.com',event:'Email Sent',ip:'192.168.1.1',detail:'Welcome email to 1,204 new users'},
+  {time:'08:15 AM',user:'admin@thrivemine.com',event:'Admin Login',ip:'192.168.1.1',detail:'Successful 2FA login'},
+  {time:'07:50 AM',user:'system',event:'Daily Returns Credited',ip:'—',detail:'12,847 investor accounts updated'},
+  {time:'07:00 AM',user:'system',event:'Daily Backup',ip:'—',detail:'Database backup completed successfully'},
+];
+const emailHist=[
+  {subj:'Daily Returns Credited — May 29',to:'All Active Investors',date:'May 29, 2026',open:'72%',status:'Delivered'},
+  {subj:'Welcome to ThriveMine',to:'New Users (1,204)',date:'May 29, 2026',open:'84%',status:'Delivered'},
+  {subj:'KYC Reminder — Complete Verification',to:'Unverified (9,843)',date:'May 28, 2026',open:'61%',status:'Delivered'},
+  {subj:'Withdrawal Processed',to:'5 Users',date:'May 27, 2026',open:'91%',status:'Delivered'},
+  {subj:'Gold Plan — New Slots Available',to:'Silver Plan Users',date:'May 25, 2026',open:'55%',status:'Delivered'},
+];
+const emailTpls={
+  welcome:{subj:'Welcome to ThriveMine — Start Your Investment Journey',body:'Dear [User],\n\nWelcome to ThriveMine! Your account has been created successfully.\n\nWe\'re thrilled to have you on board. You can now log in, explore our investment plans, and start growing your wealth.\n\nIf you have any questions, our support team is available 24/7.\n\nBest regards,\nThe ThriveMine Team'},
+  deposit:{subj:'Your Deposit Has Been Received',body:'Dear [User],\n\nWe have received your deposit of [AMOUNT] in [COIN].\n\nYour funds will be credited to your account and applied to your chosen investment plan within 24 hours of blockchain confirmation.\n\nTransaction Hash: [TX_HASH]\n\nThank you for investing with ThriveMine.'},
+  withdraw:{subj:'Your Withdrawal Request is Being Processed',body:'Dear [User],\n\nYour withdrawal request of [AMOUNT] has been received and is currently being processed.\n\nEstimated completion: 24–48 business hours.\nDestination Wallet: [WALLET]\n\nYou will receive a confirmation email once the transaction is complete.'},
+  returns:{subj:'Your Daily Returns Have Been Credited',body:'Dear [User],\n\nGreat news! Your daily investment returns have been credited to your account.\n\nAmount Credited: [AMOUNT]\nPlan: [PLAN]\nDate: [DATE]\n\nYour portfolio continues to grow. Log in to view your updated balance.'},
+  kyc:{subj:'Action Required: Complete Your Identity Verification',body:'Dear [User],\n\nTo unlock full account features and increase your withdrawal limits, please complete your KYC (Know Your Customer) verification.\n\nRequired documents:\n• Government-issued photo ID\n• Proof of address (utility bill or bank statement)\n\nClick below to begin verification. It takes less than 5 minutes.'},
+  custom:{subj:'',body:''},
+};
+const plans=[
+  {name:'Starter',roi:'32.5',cycle:'14 days',min:300,max:10000,active:3842,color:'#6EE7B7',investors:8210},
+  {name:'Silver',roi:'54',cycle:'30 days',min:10000,max:50000,active:2640,color:'#C0C0C0',investors:4890},
+  {name:'Gold',roi:'78',cycle:'30 days',min:50000,max:250000,active:4122,color:'#F5C542',investors:6730},
+  {name:'Platinum',roi:'98.5',cycle:'60 days',min:250000,max:1000000,active:1580,color:'#E5E4E2',investors:2140},
+  {name:'Diamond',roi:'150',cycle:'180 days',min:1000000,max:99999999,active:663,color:'#00D4FF',investors:451},
+];
+
+// ══════════════ TABLE RENDERERS ══════════════
+function statusBadge(s){
+  const m={Active:'b-green',Approved:'b-green',Completed:'b-green',Verified:'b-green',Pending:'b-amber','Pending KYC':'b-amber',Processing:'b-cyan',Rejected:'b-red','Pending Review':'b-amber',Suspended:'b-red'};
+  return `<span class="badge ${m[s]||'b-gray'}">${s}</span>`;
+}
+function planBadge(p){
+  const m={Starter:'b-green',Silver:'b-gray',Gold:'b-gold',Platinum:'b-gray',Diamond:'b-cyan',None:'b-gray'};
+  return `<span class="badge ${m[p]||'b-gray'}">${p}</span>`;
+}
+
+function renderDeposits(){
+  document.getElementById('depTbl').innerHTML=deposits.map(d=>`
+    <tr>
+      <td><input type="checkbox" class="rowCheck"/></td>
+      <td><div style="font-weight:500;font-size:.82rem">${d.user}</div></td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--green)">${d.amount}</td>
+      <td>${d.coin}</td>
+      <td>${statusBadge(d.status)}</td>
+      <td style="color:var(--muted)">${d.date}</td>
+      <td style="font-family:monospace;font-size:.72rem;color:var(--muted)">${d.hash}</td>
+      <td><div class="btn-row">
+        ${d.status==='Pending' ? '<button class="act-btn approve" onclick="approveRow(this,\'deposit\')">Approve</button><button class="act-btn reject" onclick="rejectRow(this)">Reject</button>' : ''}
+        <button class="act-btn view" onclick="toast('🔍','Transaction ${d.id} details loaded')">View</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderWithdrawals(){
+  document.getElementById('withTbl').innerHTML=withdrawals.map(w=>`
+    <tr>
+      <td><input type="checkbox" class="rowCheck"/></td>
+      <td><div style="font-weight:500;font-size:.82rem">${w.user}</div></td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--red)">${w.amount}</td>
+      <td>${w.coin}</td>
+      <td>${statusBadge(w.status)}</td>
+      <td style="font-family:monospace;font-size:.72rem;color:var(--muted)">${w.wallet}</td>
+      <td style="color:var(--muted)">${w.date}</td>
+      <td><div class="btn-row">
+        ${(w.status==='Pending'||w.status==='Processing') ? '<button class="act-btn approve" onclick="approveRow(this,\'withdrawal\')">Process</button><button class="act-btn reject" onclick="rejectRow(this)">Reject</button>' : ''}
+        <button class="act-btn view" onclick="toast('🔍','Withdrawal ${w.id} details loaded')">View</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderUsers(){
+  const tbody = document.getElementById('userTbl');
+  if(!tbody) return;
+  if(!users.length){
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">No users found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=users.map(u=>{
+    var initials=(u.name||'?').split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    var isSusp=u.status==='Suspended';
+    var kycClass=u.kyc==='verified'?'b-green':u.kyc==='suspended'?'b-red':'b-amber';
+    return '<tr>'
+      +'<td><div style="display:flex;align-items:center;gap:9px">'
+      +'<div class="ua" style="background:linear-gradient(135deg,#F5C542,#E8A000);color:#0A0600">'+initials+'</div>'
+      +'<div><div style="font-size:.82rem;font-weight:500">'+u.name+'</div>'
+      +'<div style="font-size:.65rem;color:var(--muted);font-family:monospace">'+u.id.slice(0,8)+'…</div></div>'
+      +'</div></td>'
+      +'<td style="color:var(--cyan);font-size:.78rem">'+u.email+'</td>'
+      +'<td style="color:var(--text);font-size:.78rem">'+u.phone+'</td>'
+      +'<td style="color:var(--muted);font-size:.75rem">'+u.username+'</td>'
+      +'<td style="font-family:Syne,sans-serif;font-weight:600;color:var(--gold)">'+u.balance+'</td>'
+      +'<td><span class="badge '+kycClass+'">'+u.kyc+'</span></td>'
+      +'<td style="color:var(--muted);font-size:.75rem">'+u.joined+'</td>'
+      +'<td><div class="btn-row">'
+      +'<button class="act-btn send" onclick="toast(\'✉️\',\''+u.email+'\')">📋 Copy Email</button>'
+      +'<button class="act-btn view" onclick="copyToClipboard(\''+u.phone+'\',\'Phone\')">📋 Copy Phone</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+}
+
+function copyToClipboard(text, label){
+  if(!text||text==='—'){ toast('⚠️', label+' not provided'); return; }
+  navigator.clipboard.writeText(text).then(()=>toast('📋', label+' copied: '+text)).catch(()=>toast('⚠️','Copy failed'));
+}
+
+function renderKYC(){
+  document.getElementById('kycTbl').innerHTML=kycData.map(k=>`
+    <tr>
+      <td><div style="font-size:.82rem;font-weight:500">${k.user}</div></td>
+      <td>${k.doc}</td>
+      <td>${k.country}</td>
+      <td style="color:var(--muted)">${k.date}</td>
+      <td>${statusBadge(k.status)}</td>
+      <td><div class="btn-row">
+        ${k.status==='Pending' ? '<button class="act-btn approve" onclick="approveRow(this,\'kyc\')">Approve</button><button class="act-btn reject" onclick="rejectRow(this)">Reject</button>' : ''}
+        <button class="act-btn view" onclick="toast('📄','Documents loaded for ${k.user}')">View Docs</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderEmailHist(){
+  document.getElementById('emailHistTbl').innerHTML=emailHist.map(e=>`
+    <tr>
+      <td style="font-size:.78rem;font-weight:500;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.subj}</td>
+      <td style="font-size:.72rem;color:var(--muted)">${e.to}</td>
+      <td style="font-size:.72rem;color:var(--muted)">${e.date}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:600;color:var(--green)">${e.open}</td>
+      <td>${statusBadge(e.status)}</td>
+    </tr>`).join('');
+}
+
+function renderActivity(){
+  document.getElementById('actTbl').innerHTML=actLog.map(a=>`
+    <tr>
+      <td style="font-size:.72rem;color:var(--muted);font-family:monospace">${a.time}</td>
+      <td style="font-size:.75rem">${a.user}</td>
+      <td style="font-size:.78rem;font-weight:500">${a.event}</td>
+      <td style="font-family:monospace;font-size:.7rem;color:var(--muted)">${a.ip}</td>
+      <td style="font-size:.75rem;color:var(--muted);max-width:180px">${a.detail}</td>
+    </tr>`).join('');
+}
+
+function renderPendingTable(){
+  const pending=[...deposits,...withdrawals].filter(r=>r.status==='Pending').slice(0,6);
+  document.getElementById('pendingTbl').innerHTML=pending.map(r=>{
+    const typeBadge = r.amount ? '<span class="badge b-green">Deposit</span>' : '<span class="badge b-cyan">Withdrawal</span>';
+    return '<tr>'
+      +'<td style="font-size:.78rem">'+r.user+'</td>'
+      +'<td>'+typeBadge+'</td>'
+      +'<td style="font-family:Syne,sans-serif;font-weight:700">'+(r.amount||r.amount||'—')+'</td>'
+      +'<td style="color:var(--muted);font-size:.72rem">'+(r.date||'—')+'</td>'
+      +'<td><div class="btn-row">'
+      +'<button class="act-btn approve" onclick="approveRow(this,'quick')">✓</button>'
+      +'<button class="act-btn reject" onclick="rejectRow(this)">✗</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+}
+
+function renderLiveFeed(){
+  const feed=[
+    {color:'var(--green)',txt:'<strong>Sarah Johnson</strong> deposited $52,000 BTC',time:'2m ago'},
+    {color:'var(--amber)',txt:'<strong>Carlos Rivera</strong> submitted KYC documents',time:'8m ago'},
+    {color:'var(--cyan)',txt:'<strong>Aisha Patel</strong> requested $80K ETH withdrawal',time:'14m ago'},
+    {color:'var(--gold)',txt:'<strong>1,204 new users</strong> registered today',time:'1h ago'},
+    {color:'var(--purple)',txt:'<strong>12,847 investors</strong> received daily returns',time:'2h ago'},
+    {color:'var(--red)',txt:'<strong>James O'Brien</strong> account suspended',time:'3h ago'},
+  ];
+  document.getElementById('liveFeed').innerHTML=feed.map(f=>`
+    <div class="act-item">
+      <div class="act-dot" style="background:${f.color}"></div>
+      <div class="act-text">${f.txt}</div>
+      <div class="act-time">${f.time}</div>
+    </div>`).join('');
+}
+
+function renderPlanCards(){
+  document.getElementById('planCards').innerHTML=plans.map((p,i)=>`
+    <div class="plan-admin-card">
+      <div class="pac-header">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">${p.name} Plan</div>
+          <div class="pac-roi" style="color:${p.color}">${p.roi}<span style="font-size:1rem;color:var(--muted)">%</span></div>
+        </div>
+        <button class="act-btn edit" onclick="editPlan(${i})">Edit</button>
+      </div>
+      <div class="pac-detail">${p.cycle} · $${p.min.toLocaleString()} – ${p.max>1000000?'$1M+':'$'+p.max.toLocaleString()}</div>
+      <div class="pac-stat"><span>Active Plans</span><span>${p.active.toLocaleString()}</span></div>
+      <div class="pac-stat"><span>Total Investors</span><span>${p.investors.toLocaleString()}</span></div>
+      <div class="pac-prog"><div class="pac-prog-fill" style="width:${Math.round(p.active/plans.reduce((a,b)=>a+b.active,0)*100)}%;background:${p.color}"></div></div>
+    </div>`).join('');
+  document.getElementById('planEditTabs').innerHTML=plans.map((p,i)=>`
+    <button class="act-btn ${i===0?'view':''}" id="petab-${i}" onclick="editPlan(${i})">${p.name}</button>`).join('');
+  editPlan(0);
+}
+
+function editPlan(idx){
+  const p=plans[idx];
+  document.querySelectorAll('[id^=petab-]').forEach((b,i)=>{
+    b.style.borderColor=i===idx?'rgba(245,197,66,.35)':'';
+    b.style.color=i===idx?'var(--gold)':'';
+  });
+  document.getElementById('planEditForm').innerHTML=`
+    <div class="form-grid" style="margin-bottom:14px">
+      <div class="fg2"><label>Plan Name</label><input type="text" value="${p.name} Plan"/></div>
+      <div class="fg2"><label>Total ROI (%)</label><input type="number" value="${p.roi}" step="0.1"/></div>
+      <div class="fg2"><label>Cycle Duration</label><input type="text" value="${p.cycle}"/></div>
+      <div class="fg2"><label>Daily Return (%)</label><input type="number" value="${(parseFloat(p.roi)/parseInt(p.cycle)).toFixed(2)}" step="0.01" readonly style="color:var(--gold)"/></div>
+      <div class="fg2"><label>Min Investment (USD)</label><input type="number" value="${p.min}"/></div>
+      <div class="fg2"><label>Max Investment (USD)</label><input type="number" value="${p.max>1000000?'':p.max}"/></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="save-btn" onclick="toast('✅','${p.name} Plan updated!')">Save Plan</button>
+      <button class="cancel-btn" onclick="toast('⏸️','${p.name} Plan paused')">Pause Plan</button>
+    </div>`;
+}
+
+function filterTable(inp,tblId){
+  const q=inp.value.toLowerCase();
+  document.querySelectorAll(`#${tblId} tr`).forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'});
+}
+function filterTableSel(sel,tblId,colIdx){
+  const val=sel.value.toLowerCase();
+  document.querySelectorAll(`#${tblId} tr`).forEach(r=>{
+    if(!val){r.style.display='';return;}
+    const cell=r.cells[colIdx];
+    r.style.display=cell&&cell.textContent.toLowerCase().includes(val)?'':'none';
+  });
+}
+function checkAll(tblId,master){
+  document.querySelectorAll(`#${tblId} .rowCheck`).forEach(c=>c.checked=master.checked);
+}
+function bulkApprove(type){
+  const tbl=type==='dep'?'depTbl':'withTbl';
+  const checked=document.querySelectorAll(`#${tbl} .rowCheck:checked`).length;
+  if(!checked){toast('⚠️','Select at least one record first.');return;}
+  toast('✅',`${checked} ${type==='dep'?'deposit':'withdrawal'}(s) approved!`);
+}
+function approveRow(btn,type){
+  btn.closest('tr').cells[4].innerHTML='<span class="badge b-green">Approved</span>';
+  btn.closest('.btn-row').querySelectorAll('.approve,.reject').forEach(b=>b.remove());
+  toast('✅',`${type.charAt(0).toUpperCase()+type.slice(1)} approved and user notified!`);
+}
+function rejectRow(btn){
+  btn.closest('tr').cells[4].innerHTML='<span class="badge b-red">Rejected</span>';
+  btn.closest('.btn-row').querySelectorAll('.approve,.reject').forEach(b=>b.remove());
+  toast('❌','Request rejected. User notified via email.');
+}
+function viewUser(id){
+  var u=users.find(function(x){return x.id===id;});
+  if(!u)return;
+  document.getElementById('udTitle').textContent=u.name;
+  var rows=[['Plan',u.plan],['Balance',u.balance],['Country',u.country],['Joined',u.joined]];
+  var rowsHtml=rows.map(function(r){
+    return '<div style="background:var(--surface2);border-radius:8px;padding:12px">'
+      +'<div style="font-size:.65rem;color:var(--muted);font-family:Syne,sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">'+r[0]+'</div>'
+      +'<div style="font-size:.82rem;font-weight:500">'+r[1]+'</div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('udBody').innerHTML=
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">'
+    +'<div class="ua" style="width:48px;height:48px;font-size:.9rem;background:linear-gradient(135deg,#F5C542,#E8A000);color:#0A0600">'+u.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2)+'</div>'
+    +'<div><div style="font-weight:500;font-size:.95rem">'+u.name+'</div><div style="font-size:.75rem;color:var(--muted)">'+u.email+'</div></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">'+rowsHtml+'</div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+    +'<button class="save-btn" onclick="toast('✉️','Email sent to '+u.name+'');closeModal('userDetailModal')">Send Email</button>'
+    +'<button class="cancel-btn" onclick="closeModal('userDetailModal')">Close</button>'
+    +'</div>';
+  openModal('userDetailModal');
+}
+
+function setTpl(id){
+  document.querySelectorAll('.tpl-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('tpl-'+id).classList.add('sel');
+  const t=emailTpls[id];
+  document.getElementById('emailSubj').value=t.subj;
+  document.getElementById('emailBody').value=t.body;
+}
+function sendEmail(){
+  const subj=document.getElementById('emailSubj').value.trim();
+  const body=document.getElementById('emailBody').value.trim();
+  const to=document.getElementById('emailTo').value;
+  if(!subj||!body){toast('⚠️','Subject and message are required.');return;}
+  toast('✅',`Email "${subj.slice(0,40)}..." queued for ${to}`);
+}
+
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const gridC='rgba(255,255,255,0.06)';
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11}}},y:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11}}}}};
+
+function initCharts(){
+  new Chart(document.getElementById('revChart'),{type:'bar',data:{labels:MONTHS,datasets:[{label:'Revenue ($M)',data:[1.2,1.5,1.8,2.1,2.84,0,0,0,0,0,0,0].map((v,i)=>i<5?v:null),backgroundColor:'rgba(245,197,66,0.7)',borderColor:'#F5C542',borderWidth:1,borderRadius:4}]},options:{...baseOpts,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11}}},y:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11},callback:v=>'$'+v+'M'}}}}});
+  new Chart(document.getElementById('growthChart'),{type:'line',data:{labels:MONTHS.slice(0,6),datasets:[{label:'Users',data:[82000,84500,87200,90100,93400,98421],borderColor:'#00D4FF',backgroundColor:'rgba(0,212,255,0.08)',tension:0.4,pointRadius:3,pointBackgroundColor:'#00D4FF',fill:true}]},options:{...baseOpts,scales:{x:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11}}},y:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11},callback:v=>(v/1000).toFixed(0)+'K'}}}}});
+  new Chart(document.getElementById('aumChart'),{type:'line',data:{labels:MONTHS.slice(0,6),datasets:[{label:'AUM',data:[118,124,130,136,143,147],borderColor:'#F5C542',backgroundColor:'rgba(245,197,66,0.06)',tension:0.4,fill:true,pointRadius:3,pointBackgroundColor:'#F5C542'},{label:'Deposits',data:[1.8,2.1,2.2,2.5,2.84,0],borderColor:'#22c55e',backgroundColor:'transparent',tension:0.4,borderDash:[5,3],pointRadius:3,pointBackgroundColor:'#22c55e'}]},options:{...baseOpts,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11}}},y:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:11},callback:v=>'$'+v+'M'}}}}});
+  const planColors=plans.map(p=>p.color);
+  new Chart(document.getElementById('planPieChart'),{type:'pie',data:{labels:plans.map(p=>p.name),datasets:[{data:plans.map(p=>p.investors),backgroundColor:planColors.map(c=>c+'BB'),borderColor:planColors,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+  const total=plans.reduce((a,p)=>a+p.investors,0);
+  document.getElementById('planLegend').innerHTML=plans.map(p=>`<div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:${p.color};flex-shrink:0"></div><div style="font-size:.75rem;flex:1">${p.name}</div><div style="font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;color:${p.color}">${p.investors.toLocaleString()}</div><div style="font-size:.68rem;color:var(--muted)">${Math.round(p.investors/total*100)}%</div></div>`).join('');
+  new Chart(document.getElementById('countryChart'),{type:'bar',data:{labels:['USA','Singapore','UAE','UK','Japan','Germany','Australia','Nigeria'],datasets:[{label:'Volume ($M)',data:[42,28,24,19,16,13,11,8],backgroundColor:'rgba(167,139,250,0.7)',borderColor:'#A78BFA',borderWidth:1,borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:gridC},ticks:{color:'#7A8899',font:{size:10},callback:v=>'$'+v+'M'}},y:{grid:{color:'transparent'},ticks:{color:'#7A8899',font:{size:10}}}}}});
+  const mD={labels:['USDT TRC-20','Bitcoin','Ethereum','USDT ERC-20'],data:[44,31,18,7],colors:['#26A17B','#F7931A','#627EEA','#A0AEC0']};
+  new Chart(document.getElementById('methodChart'),{type:'doughnut',data:{labels:mD.labels,datasets:[{data:mD.data,backgroundColor:mD.colors.map(c=>c+'CC'),borderColor:mD.colors,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}});
+  document.getElementById('methodLegend').innerHTML=mD.labels.map((l,i)=>`<div style="display:flex;align-items:center;gap:7px"><div style="width:9px;height:9px;border-radius:2px;background:${mD.colors[i]};flex-shrink:0"></div><div style="font-size:.72rem;flex:1">${l}</div><div style="font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700">${mD.data[i]}%</div></div>`).join('');
+}
+
+// ══════════════ WALLET MANAGER ══════════════
+const COIN_META = {
+  'BTC':       {name:'Bitcoin',       symbol:'BTC', color:'#F7931A', bg:'rgba(247,147,26,0.15)',  icon:'₿',  net:'Bitcoin Network'},
+  'ETH':       {name:'Ethereum',      symbol:'ETH', color:'#627EEA', bg:'rgba(98,126,234,0.15)',  icon:'Ξ',  net:'ERC-20 Network'},
+  'USDT-TRC20':{name:'Tether USDT',   symbol:'USDT',color:'#26A17B', bg:'rgba(38,161,123,0.15)', icon:'₮',  net:'TRC-20 (Tron)'},
+  'USDT-ERC20':{name:'Tether USDT',   symbol:'USDT',color:'#26A17B', bg:'rgba(38,161,123,0.15)', icon:'₮',  net:'ERC-20 (Ethereum)'},
+  'BNB':       {name:'BNB',           symbol:'BNB', color:'#F3BA2F', bg:'rgba(243,186,47,0.15)',  icon:'B',  net:'BSC / BEP-20'},
+  'SOL':       {name:'Solana',        symbol:'SOL', color:'#9945FF', bg:'rgba(153,69,255,0.15)',  icon:'◎',  net:'Solana Network'},
+  'XRP':       {name:'Ripple',        symbol:'XRP', color:'#00AAE4', bg:'rgba(0,170,228,0.15)',   icon:'✕',  net:'XRP Ledger'},
+  'LTC':       {name:'Litecoin',      symbol:'LTC', color:'#BFBBBB', bg:'rgba(191,187,187,0.15)',icon:'Ł',  net:'Litecoin Network'},
+  'DOGE':      {name:'Dogecoin',      symbol:'DOGE',color:'#C2A633', bg:'rgba(194,166,51,0.15)', icon:'Ð',  net:'Dogecoin Network'},
+  'TRX':       {name:'Tron',          symbol:'TRX', color:'#EF0027', bg:'rgba(239,0,39,0.12)',    icon:'T',  net:'Tron Network'},
+  'ADA':       {name:'Cardano',       symbol:'ADA', color:'#0033AD', bg:'rgba(0,51,173,0.15)',    icon:'₳',  net:'Cardano Network'},
+  'MATIC':     {name:'Polygon',       symbol:'MATIC',color:'#8247E5',bg:'rgba(130,71,229,0.15)', icon:'⬡',  net:'Polygon Network'},
+  'AVAX':      {name:'Avalanche',     symbol:'AVAX',color:'#E84142', bg:'rgba(232,65,66,0.15)',   icon:'A',  net:'Avalanche C-Chain'},
+  'DOT':       {name:'Polkadot',      symbol:'DOT', color:'#E6007A', bg:'rgba(230,0,122,0.15)',   icon:'●',  net:'Polkadot Network'},
+  'CUSTOM':    {name:'Custom Token',  symbol:'???', color:'#7A8899', bg:'rgba(122,136,153,0.15)', icon:'◆',  net:'Custom Network'},
+};
+
+// Load wallets from localStorage, seed with defaults if empty
+function loadWallets() {
+  try {
+    const raw = localStorage.getItem('tm_admin_wallets');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // Default seed wallets
+  return [
+    {id:'w1', coin:'BTC',       label:'Main BTC Wallet',       address:'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', active:true,  created:'May 27, 2026'},
+    {id:'w2', coin:'ETH',       label:'Main ETH Wallet',       address:'0x742d35Cc6634C0532925a3b8D4C9C6f4d9c2B1e7', active:true,  created:'May 27, 2026'},
+    {id:'w3', coin:'USDT-TRC20',label:'USDT TRC-20 Wallet',    address:'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE',         active:true,  created:'May 27, 2026'},
+  ];
+}
+
+function saveWallets(wallets) {
+  localStorage.setItem('tm_admin_wallets', JSON.stringify(wallets));
+  // Also sync to a key that dashboard.html can read
+  localStorage.setItem('tm_wallets_public', JSON.stringify(
+    wallets.filter(w => w.active).map(w => ({coin: w.coin, label: w.label, address: w.address}))
+  ));
+}
+
+function updateWmStats(wallets) {
+  document.getElementById('wm-total-count').textContent    = wallets.length;
+  document.getElementById('wm-active-count').textContent   = wallets.filter(w=>w.active).length;
+  document.getElementById('wm-inactive-count').textContent = wallets.filter(w=>!w.active).length;
+  const nets = new Set(wallets.map(w=>w.coin));
+  document.getElementById('wm-network-count').textContent  = nets.size;
+  // Update coin filter dropdown
+  const sel = document.getElementById('wm-filter-coin');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">All Coins</option>';
+  [...nets].forEach(c => {
+    const m = COIN_META[c]||COIN_META.CUSTOM;
+    const o = document.createElement('option');
+    o.value = c; o.textContent = m.symbol + ' — ' + m.name;
+    sel.appendChild(o);
+  });
+  sel.value = cur;
+}
+
+function renderWallets(filter='', coinFilter='') {
+  const wallets = loadWallets();
+  updateWmStats(wallets);
+  const q = filter.toLowerCase();
+  const filtered = wallets.filter(w => {
+    const m = COIN_META[w.coin]||COIN_META.CUSTOM;
+    const match = !q || w.address.toLowerCase().includes(q) || w.label.toLowerCase().includes(q) || m.name.toLowerCase().includes(q) || m.symbol.toLowerCase().includes(q);
+    const coinMatch = !coinFilter || w.coin === coinFilter;
+    return match && coinMatch;
+  });
+
+  const grid = document.getElementById('wmGrid');
+  const empty = document.getElementById('wmEmpty');
+
+  if (!filtered.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(w => {
+    const m = COIN_META[w.coin] || COIN_META.CUSTOM;
+    const short = w.address.length > 20 ? w.address.slice(0,14)+'...'+w.address.slice(-8) : w.address;
+    return `
+    <div class="wm-card ${w.active?'':'inactive'}" id="wmc-${w.id}">
+      <div class="wm-card-top">
+        <div class="wm-coin-pill" style="background:${m.bg};color:${m.color}">${m.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div class="wm-coin-name">${m.name} <span style="font-size:.65rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:300">${m.symbol}</span></div>
+          <div class="wm-coin-net">${w.label}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <label class="tog" title="${w.active?'Active — click to deactivate':'Inactive — click to activate'}">
+            <input type="checkbox" ${w.active?'checked':''} onchange="toggleWallet('${w.id}',this.checked)"/>
+            <span class="tog-sl"></span>
+          </label>
+        </div>
+      </div>
+      <div class="wm-card-body">
+        <div class="wm-addr-label">Deposit Address (${m.net})</div>
+        <div class="wm-addr-bar">
+          <div class="wm-addr-text" title="${w.address}">${w.address}</div>
+          <button class="wm-addr-copy" onclick="copyWalletAddr('${w.address}','${m.symbol}')" title="Copy address">📋</button>
+        </div>
+        <div style="font-size:.68rem;color:var(--muted)">Added: ${w.created}</div>
+      </div>
+      <div class="wm-edit-row" id="wme-${w.id}">
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase">Edit Wallet Address</div>
+        <input type="text" id="wme-addr-${w.id}" value="${w.address}" placeholder="New wallet address..."/>
+        <div style="margin-bottom:10px">
+          <div style="font-size:.7rem;color:var(--muted);margin-bottom:6px;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.06em;text-transform:uppercase">Label / Nickname</div>
+          <input type="text" id="wme-lbl-${w.id}" value="${w.label}" placeholder="Wallet label..."/>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="save-btn" style="padding:8px 18px;font-size:.75rem;" onclick="saveWalletEdit('${w.id}')">Save Changes</button>
+          <button class="cancel-btn" style="padding:8px 14px;font-size:.75rem;" onclick="toggleEditRow('${w.id}')">Cancel</button>
+        </div>
+      </div>
+      <div class="wm-card-footer">
+        <div class="wm-status">
+          <div class="wm-status-dot" style="background:${w.active?'var(--green)':'var(--muted)'}"></div>
+          <span style="color:${w.active?'var(--green)':'var(--muted)'}">${w.active?'Active — shown to users':'Inactive — hidden from users'}</span>
+        </div>
+        <div class="wm-actions">
+          <button class="act-btn edit" onclick="toggleEditRow('${w.id}')">Edit</button>
+          <button class="act-btn del" onclick="deleteWallet('${w.id}','${m.symbol}','${w.label}')">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addWallet() {
+  const coin    = document.getElementById('aw-coin').value;
+  const label   = document.getElementById('aw-label').value.trim();
+  const address = document.getElementById('aw-address').value.trim();
+  if (!address) { toast('⚠️', 'Please enter a wallet address.'); return; }
+  if (!label)   { toast('⚠️', 'Please enter a label for this wallet.'); return; }
+
+  const wallets = loadWallets();
+  const m = COIN_META[coin]||COIN_META.CUSTOM;
+
+  // Duplicate address check
+  if (wallets.some(w => w.address === address)) {
+    toast('⚠️', 'This wallet address already exists.'); return;
+  }
+
+  const newWallet = {
+    id: 'w' + Date.now(),
+    coin, label, address,
+    active: true,
+    created: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  };
+  wallets.unshift(newWallet);
+  saveWallets(wallets);
+  renderWallets();
+
+  // Reset form
+  document.getElementById('aw-label').value   = '';
+  document.getElementById('aw-address').value = '';
+  toast('✅', `${m.symbol} wallet "${label}" added and now visible to users!`);
+}
+
+function deleteWallet(id, symbol, label) {
+  if (!confirm(`Delete ${symbol} wallet "${label}"?\n\nUsers will no longer see this deposit address.`)) return;
+  const wallets = loadWallets().filter(w => w.id !== id);
+  saveWallets(wallets);
+  renderWallets();
+  toast('🗑️', `${symbol} wallet "${label}" deleted.`);
+}
+
+function toggleWallet(id, active) {
+  const wallets = loadWallets();
+  const w = wallets.find(x => x.id === id);
+  if (w) { w.active = active; saveWallets(wallets); renderWallets(); }
+  const m = COIN_META[w?.coin]||COIN_META.CUSTOM;
+  toast(active?'✅':'⏸️', `${m.symbol} wallet ${active?'activated — now visible to users':'deactivated — hidden from users'}.`);
+}
+
+function toggleEditRow(id) {
+  const row = document.getElementById('wme-' + id);
+  if (row) row.classList.toggle('open');
+}
+
+function saveWalletEdit(id) {
+  const newAddr = document.getElementById('wme-addr-' + id).value.trim();
+  const newLbl  = document.getElementById('wme-lbl-'  + id).value.trim();
+  if (!newAddr) { toast('⚠️', 'Address cannot be empty.'); return; }
+  if (!newLbl)  { toast('⚠️', 'Label cannot be empty.'); return; }
+  const wallets = loadWallets();
+  const w = wallets.find(x => x.id === id);
+  if (w) {
+    w.address = newAddr;
+    w.label   = newLbl;
+    saveWallets(wallets);
+    renderWallets();
+    const m = COIN_META[w.coin]||COIN_META.CUSTOM;
+    toast('✅', `${m.symbol} wallet updated successfully! Users will see the new address.`);
+  }
+}
+
+function copyWalletAddr(addr, symbol) {
+  navigator.clipboard.writeText(addr).catch(()=>{});
+  toast('📋', `${symbol} address copied to clipboard!`);
+}
+
+function filterWallets(val) {
+  const q   = (val !== undefined ? val : document.getElementById('wm-search').value);
+  const coin = document.getElementById('wm-filter-coin').value;
+  renderWallets(q, coin);
+}
+
+function exportWallets() {
+  const wallets = loadWallets();
+  const blob = new Blob([JSON.stringify(wallets, null, 2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'thrivemine_wallets.json';
+  a.click(); URL.revokeObjectURL(url);
+  toast('📤', 'Wallet list exported as JSON.');
+}
+
+function clearAllWallets() {
+  if (!confirm('Reset ALL wallet addresses to defaults?\n\nThis will remove any custom wallets you have added.')) return;
+  localStorage.removeItem('tm_admin_wallets');
+  localStorage.removeItem('tm_wallets_public');
+  renderWallets();
+  toast('🔄', 'Wallets reset to defaults.');
+}
+
+// ══════════════ END WALLET MANAGER ══════════════
+
+function initAll(){
+  // attach modal overlay close listeners now that #app is visible
+  document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id);}));
+  renderDeposits();renderWithdrawals();renderKYC();
+  renderEmailHist();renderActivity();renderPendingTable();renderLiveFeed();
+  renderPlanCards();setTpl('welcome');renderWallets();
+  setTimeout(initCharts,100);
+  loadRealUsers(); // load real registered users from Supabase
+}
+
+
+
+
+if(window.innerWidth<=900){
+  document.getElementById('sidebarToggle').style.display='inline-flex';
+}
+</script>
+</body>
+</html>
