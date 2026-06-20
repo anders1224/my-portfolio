@@ -1967,7 +1967,7 @@ window.smartsupp||(function(d) {
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
     <li><a href="#" onclick="openAboutModal();return false;">About Us</a></li>
-    <li><a href="#investment-plans">Investment Plans</a></li>
+    <li><a href="#" onclick="openPlansModal();return false;">Investment Plans</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#how">Knowledge Hub</a></li>
     <li><a href="#cta">Contact</a></li>
@@ -2093,7 +2093,7 @@ window.smartsupp||(function(d) {
   <a href="#" class="mob-nav-link" onclick="toggleMenu();openAboutModal();return false;">About Us</a>
 
   <!-- Investment Plans — direct link -->
-  <a href="#investment-plans" class="mob-nav-link" onclick="toggleMenu()">Investment Plans</a>
+  <a href="#" class="mob-nav-link" onclick="toggleMenu();openPlansModal();return false;">Investment Plans</a>
 
   <!-- Services -->
   <a href="#services" class="mob-nav-link" onclick="toggleMenu()">Services</a>
@@ -2493,9 +2493,10 @@ window.smartsupp||(function(d) {
       <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,.3);">Loading plans…</div>
     </div>
 
-    <p style="text-align:center;margin-top:32px;font-size:.88rem;color:rgba(255,255,255,.78);letter-spacing:.03em;line-height:1.7;max-width:720px;margin-left:auto;margin-right:auto;">
-      All returns are generated through blockchain mining and trading operations. Built with a focus on security, transparency and long-term sustainability. Invest responsibly.
-    </p>
+    <div style="text-align:center;margin-top:32px;">
+      <button onclick="openPlansModal()" style="background:#ff7700;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 52px;border-radius:6px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(255,119,0,.4);">View All Plans →</button>
+      <p style="margin-top:16px;font-size:.82rem;color:rgba(255,255,255,.4);">More plans available — Silver, Gold, Platinum, Diamond & Ultra</p>
+    </div>
   </div>
 </section>
 <script>
@@ -2508,10 +2509,10 @@ window.smartsupp||(function(d) {
     });
     const plans = await res.json();
     if(!plans||!plans.length) return;
+    window._allPlans = plans; // store all plans globally for modal use
     const fmt = n => '$'+parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-    let html = '';
-    plans.forEach(p => {
-      html += `
+    window._buildPlanHTML = function(planList) {
+      return planList.map(p => `
         <div class="iplan-card" style="border-color:${p.color}33;--iplan-c:${p.color}">
           <div class="iplan-top-bar" style="background:${p.color}"></div>
           <div class="iplan-name" style="color:${p.color}">${p.name}</div>
@@ -2533,9 +2534,10 @@ window.smartsupp||(function(d) {
             <li class="iplan-ref">🎁 15% Referral Bonus on every invite</li>
           </ul>
           <a href="#" class="iplan-btn" style="background:${p.color};color:#000;">Start Now →</a>
-        </div>`;
-    });
-    document.getElementById('iplanContainer').innerHTML = html;
+        </div>`).join('');
+    };
+    // Frontend: show ONLY the Starter plan (first plan)
+    document.getElementById('iplanContainer').innerHTML = window._buildPlanHTML(plans.slice(0, 1));
   } catch(e) { console.warn('Could not load plans:', e); }
 })();
 </script>
@@ -4089,6 +4091,67 @@ document.getElementById('realEstateModal').addEventListener('click', function(e)
   </div>
 </div>
 
+<!-- ══════════ INVESTMENT PLANS MODAL ══════════ -->
+<div id="plansModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="background:#080c1e;border:1px solid rgba(255,119,0,.25);border-radius:20px;max-width:1050px;width:100%;margin:auto;padding:44px 40px;position:relative;animation:fadeUp .3s ease;">
+
+    <!-- Close -->
+    <button onclick="closePlansModal()" style="position:absolute;top:18px;right:22px;background:none;border:none;color:rgba(255,255,255,.5);font-size:1.6rem;cursor:pointer;line-height:1;">×</button>
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:#ff7700;margin-bottom:8px;">Earn Daily Returns</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;margin-bottom:10px;">Investment Plans</h2>
+      <p style="color:rgba(255,255,255,.45);font-size:.88rem;max-width:580px;margin:0 auto;">All plans include a <strong style="color:#ff7700;">15% referral bonus</strong> on every invite. Returns paid directly to your wallet — transparent, automated and secured on ThriveMine blockchain.</p>
+    </div>
+
+    <!-- All plans grid -->
+    <div id="modalPlanGrid" class="iplan-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:32px;color:rgba(255,255,255,.3);font-size:.88rem;">Loading plans…</div>
+    </div>
+
+    <p style="text-align:center;margin-top:28px;font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.7;">
+      All returns are generated through blockchain mining and trading operations. Built with a focus on security, transparency and long-term sustainability.
+    </p>
+
+    <!-- CTA -->
+    <div style="text-align:center;margin-top:20px;">
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="closePlansModal();openLoginModal();" style="background:transparent;color:#ff7700;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:13px 40px;border-radius:6px;border:2px solid #ff7700;cursor:pointer;">Login</button>
+        <button onclick="closePlansModal();openRegisterModal();" style="background:#ff7700;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:.2em;text-transform:uppercase;padding:14px 40px;border-radius:6px;border:none;cursor:pointer;box-shadow:0 0 24px rgba(255,119,0,.45);">Create Account</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  #plansModal { overflow-y:auto !important; }
+  @media(max-width:700px){
+    #plansModal > div { padding:22px 16px !important; }
+  }
+</style>
+
+<script>
+function openPlansModal(){
+  const m = document.getElementById('plansModal');
+  const target = document.getElementById('modalPlanGrid');
+  if (window._allPlans && window._buildPlanHTML) {
+    target.innerHTML = window._buildPlanHTML(window._allPlans);
+  }
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closePlansModal(){
+  const m = document.getElementById('plansModal');
+  m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('plansModal').addEventListener('click', function(e){
+  if(e.target === this) closePlansModal();
+});
+</script>
+
 <!-- ══════════ ABOUT US MODAL ══════════ -->
 <div id="aboutModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
   <div style="background:#080c1e;border:1px solid rgba(255,119,0,.25);border-radius:20px;max-width:860px;width:100%;margin:auto;padding:44px 40px;position:relative;animation:fadeUp .3s ease;">
@@ -4583,10 +4646,9 @@ document.getElementById('financialModal').addEventListener('click', function(e){
 <script>
 function openGoldModal(){
   const m = document.getElementById('goldModal');
-  const source = document.getElementById('iplanContainer');
   const target = document.getElementById('goldPlanGrid');
-  if (source && source.innerHTML.trim() && !source.innerHTML.includes('Loading plans')) {
-    target.innerHTML = source.innerHTML;
+  if (window._allPlans && window._buildPlanHTML) {
+    target.innerHTML = window._buildPlanHTML(window._allPlans);
   }
   m.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -4801,11 +4863,9 @@ document.getElementById('oilModal').addEventListener('click', function(e){
 <script>
 function openCryptoModal(){
   const m = document.getElementById('cryptoModal');
-  // Clone plans from the main page into the modal grid
-  const source = document.getElementById('iplanContainer');
   const target = document.getElementById('cryptoPlanGrid');
-  if (source && source.innerHTML.trim() && !source.innerHTML.includes('Loading plans')) {
-    target.innerHTML = source.innerHTML;
+  if (window._allPlans && window._buildPlanHTML) {
+    target.innerHTML = window._buildPlanHTML(window._allPlans);
   }
   m.style.display = 'flex';
   document.body.style.overflow = 'hidden';
