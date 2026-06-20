@@ -2477,6 +2477,80 @@ window.smartsupp||(function(d) {
 </section>
 
 
+<!-- ══════════ BITCOIN LIVE TRADING CHART ══════════ -->
+<section id="chart-section">
+  <div class="container">
+
+    <!-- Header row -->
+    <div class="chart-hdr">
+      <div class="chart-hdr-left">
+        <div class="sec-tag">Live Market Data</div>
+        <div class="chart-hdr-title">
+          Bitcoin Live Chart
+          <span class="chart-live-dot"></span>
+          <span class="chart-live-label">Live</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coin selector pills -->
+    <div class="coin-pills">
+      <div class="coin-pill active" id="pill-BTC" onclick="switchChart('BINANCE%3ABTCUSDT','BTC')">
+        <span class="coin-pill-sym">BTC</span>
+        <span class="coin-pill-price" id="price-BTC">—</span>
+        <span class="coin-pill-chg up" id="chg-BTC">—</span>
+      </div>
+      <div class="coin-pill" id="pill-ETH" onclick="switchChart('BINANCE%3AETHUSDT','ETH')">
+        <span class="coin-pill-sym">ETH</span>
+        <span class="coin-pill-price" id="price-ETH">—</span>
+        <span class="coin-pill-chg up" id="chg-ETH">—</span>
+      </div>
+      <div class="coin-pill" id="pill-LTC" onclick="switchChart('BINANCE%3ALTCUSDT','LTC')">
+        <span class="coin-pill-sym">LTC</span>
+        <span class="coin-pill-price" id="price-LTC">—</span>
+        <span class="coin-pill-chg up" id="chg-LTC">—</span>
+      </div>
+      <div class="coin-pill" id="pill-DOGE" onclick="switchChart('BINANCE%3ADOGEUSDT','DOGE')">
+        <span class="coin-pill-sym">DOGE</span>
+        <span class="coin-pill-price" id="price-DOGE">—</span>
+        <span class="coin-pill-chg up" id="chg-DOGE">—</span>
+      </div>
+    </div>
+
+    <!-- TradingView chart iframe -->
+    <div class="chart-frame">
+      <iframe
+        id="tv-chart"
+        src="https://s.tradingview.com/widgetembed/?frameElementId=tv-chart&symbol=BINANCE%3ABTCUSDT&interval=60&hidesidetoolbar=0&hidetoptoolbar=0&symboledit=1&saveimage=0&toolbarbg=0b0b0b&theme=dark&style=1&timezone=Etc%2FUTC&withdateranges=1&showpopupbutton=0&locale=en&hide_side_toolbar=0&allow_symbol_change=1"
+        allowtransparency="true"
+        scrolling="no"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="chart-stats">
+      <div class="cstat">
+        <span class="cstat-v green" id="stat-price">—</span>
+        <span class="cstat-l">BTC Price (USD)</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-change">—</span>
+        <span class="cstat-l">24h Change</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-high">—</span>
+        <span class="cstat-l">24h High</span>
+      </div>
+      <div class="cstat">
+        <span class="cstat-v" id="stat-low">—</span>
+        <span class="cstat-l">24h Low</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ══════════ INVESTMENT PLANS ══════════ -->
 <section id="investment-plans" style="background:#04081a;padding:110px 0;border-top:1px solid rgba(255,255,255,.04);">
   <div class="container">
@@ -3681,7 +3755,7 @@ if (typeof document.addEventListener === 'function') {
 })()
 </script>
 <section id="user-dashboard" aria-hidden="true" style="display:none; padding:3rem; background:#05091a; color:#fff; border-top:1px solid rgba(255,255,255,.08);">
-  <div style="max-width:900px; margin:0 auto;">
+c  <div style="max-width:900px; margin:0 auto;">
     <h2 style="font-size:2rem; margin-bottom:0.75rem;">Welcome to your dashboard</h2>
     <p style="font-size:1rem; color:#c8c8c8; margin-bottom:1rem;">Logged in as <strong id="dashboard-user-email">Member</strong>.</p>
     <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center; margin-bottom:1.25rem;">
