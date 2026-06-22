@@ -1970,7 +1970,7 @@ window.smartsupp||(function(d) {
     <li><a href="#" onclick="openPlansModal();return false;">Investment Plans</a></li>
     <li><a href="#services">Services</a></li>
     <li><a href="#how">Knowledge Hub</a></li>
-    <li><a href="#cta">Contact</a></li>
+    <li><a href="#" onclick="openContactModal();return false;">Contact</a></li>
   </ul>
   <div class="nav-actions">
     <!-- Translator -->
@@ -2077,6 +2077,76 @@ window.smartsupp||(function(d) {
 <!-- keep old modal shell so existing JS references don't break -->
 <div id="auth-modal" style="display:none;"></div>
 
+<!-- ══════════ CONTACT MODAL ══════════ -->
+<div id="contact-modal" class="auth-modal" aria-hidden="true" onclick="if(event.target===this)closeContactModal()">
+  <div class="auth-panel" role="dialog" aria-modal="true" style="max-width:560px;border-radius:24px;padding:36px 32px;">
+    <button class="auth-close" onclick="closeContactModal()">×</button>
+
+    <!-- Header -->
+    <div style="margin-bottom:28px;">
+      <div style="font-size:1.6rem;margin-bottom:10px;">✉️</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.8rem;font-weight:700;letter-spacing:-.01em;color:#fff;margin-bottom:6px;">Send Us a Message</h2>
+      <p style="color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.6;">Fill the form below and we'll get back to you within 1 hour.</p>
+    </div>
+
+    <!-- Form -->
+    <form id="contact-form" onsubmit="submitContactModal(event)" style="display:flex;flex-direction:column;gap:16px;">
+
+      <div class="field">
+        <label style="font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);">Full Name</label>
+        <input id="cm-name" type="text" required placeholder="John Doe"
+          style="width:100%;padding:14px 16px;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:.95rem;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'" />
+      </div>
+
+      <div class="field">
+        <label style="font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);">Email Address</label>
+        <input id="cm-email" type="email" required placeholder="you@example.com"
+          style="width:100%;padding:14px 16px;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:.95rem;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'" />
+      </div>
+
+      <div class="field">
+        <label style="font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);">Subject</label>
+        <select id="cm-subject" required
+          style="width:100%;padding:14px 16px;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:12px;color:rgba(255,255,255,.7);font-size:.95rem;outline:none;cursor:pointer;transition:border-color .2s;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%23ff7700%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 16px center;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+          <option value="" disabled selected style="color:#666;">Select a topic...</option>
+          <option value="Investment">Investment Enquiry</option>
+          <option value="Withdrawal">Withdrawal Help</option>
+          <option value="Account">Account Issue</option>
+          <option value="KYC">KYC Verification</option>
+          <option value="Plans">Investment Plans</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label style="font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);">Message</label>
+        <textarea id="cm-message" required placeholder="Tell us how we can help you..." rows="4"
+          style="width:100%;padding:14px 16px;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;font-size:.95rem;outline:none;resize:vertical;min-height:110px;line-height:1.6;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'"></textarea>
+      </div>
+
+      <button type="submit" id="cm-submit-btn"
+        style="width:100%;padding:15px;background:var(--green);color:#000;border:none;border-radius:12px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;box-shadow:var(--glow-sm);transition:box-shadow .3s,transform .2s;margin-top:4px;">
+        <span id="cm-btn-text">SEND MESSAGE →</span>
+      </button>
+
+      <div id="cm-msg" style="font-size:.88rem;min-height:20px;text-align:center;"></div>
+    </form>
+
+    <!-- Success state -->
+    <div id="cm-success" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:20px 0;gap:14px;">
+      <div style="font-size:3rem;">✅</div>
+      <div style="font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:#fff;">Message Sent!</div>
+      <p style="color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.7;">Thank you for reaching out. Our support team will get back to you within 1 hour.</p>
+      <button onclick="closeContactModal()" style="margin-top:8px;padding:12px 32px;background:var(--green);color:#000;border:none;border-radius:10px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Close</button>
+    </div>
+
+  </div>
+</div>
+
 <!-- ═════════════════ MOBILE MENU (matches screenshot exactly) ═════════════════ -->
 <div id="mobile-menu">
 
@@ -2102,7 +2172,7 @@ window.smartsupp||(function(d) {
   <a href="#how" class="mob-nav-link" onclick="toggleMenu()">Knowledge Hub</a>
 
   <!-- Contact -->
-  <a href="#contact" class="mob-nav-link" onclick="toggleMenu()">Contact</a>
+  <a href="#" class="mob-nav-link" onclick="toggleMenu();openContactModal();return false;">Contact</a>
   <a href="/dashboard/index.html" id="mob-dashboard" class="mob-dashboard" style="display:none!important;" onclick="toggleMenu()">Dashboard</a>
 
   <!-- Bottom: language + buttons -->
@@ -3487,6 +3557,42 @@ function submitContactForm(e){
   setTimeout(()=>{
     form.style.display = 'none'
     succ.style.display = 'flex'
+  }, 1200)
+}
+
+function openContactModal(){
+  const modal = document.getElementById('contact-modal')
+  modal.classList.add('open')
+  modal.setAttribute('aria-hidden','false')
+  document.body.style.overflow = 'hidden'
+}
+function closeContactModal(){
+  const modal = document.getElementById('contact-modal')
+  modal.classList.remove('open')
+  modal.setAttribute('aria-hidden','true')
+  document.body.style.overflow = ''
+  // reset form for next open
+  setTimeout(()=>{
+    document.getElementById('contact-form').style.display = 'flex'
+    document.getElementById('contact-form').reset()
+    document.getElementById('cm-success').style.display = 'none'
+    document.getElementById('cm-msg').textContent = ''
+    const btn = document.getElementById('cm-submit-btn')
+    btn.disabled = false
+    document.getElementById('cm-btn-text').textContent = 'SEND MESSAGE →'
+  }, 300)
+}
+function submitContactModal(e){
+  e.preventDefault()
+  const btn  = document.getElementById('cm-submit-btn')
+  const txt  = document.getElementById('cm-btn-text')
+  const msg  = document.getElementById('cm-msg')
+  btn.disabled = true
+  txt.textContent = 'Sending…'
+  msg.textContent = ''
+  setTimeout(()=>{
+    document.getElementById('contact-form').style.display = 'none'
+    document.getElementById('cm-success').style.display = 'flex'
   }, 1200)
 }
 
