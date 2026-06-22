@@ -391,17 +391,18 @@
        TRANSLATOR (Google Translate)
     ═══════════════════════════════════════ */
 
-    /* Hide Google's default ugly banner & top bar */
+    /* Hide Google's default ugly banner & top bar — target only Google elements */
     body { top: 0 !important; }
-    .goog-te-banner-frame { display:none !important; }
-    .skiptranslate:not(#smartsupp-widget-container):not(#chat-application):not([id^="smartsupp"]) { display:none !important; }
+    .goog-te-banner-frame,
+    .goog-te-balloon-frame,
+    #goog-gt-tt,
+    .goog-tooltip,
+    .goog-tooltip:hover,
+    .goog-text-highlight { display:none !important; box-shadow:none !important; }
+    /* Hide only the translate gadget wrapper inside our hidden div, not site-wide */
+    #google_translate_element .skiptranslate { display:none !important; }
     .goog-te-gadget { font-size:0 !important; }
     .goog-te-gadget .goog-te-combo { font-size:.78rem !important; }
-    /* Always keep Smartsupp visible */
-    #smartsupp-widget-container,
-    #chat-application,
-    #smartsupp-widget-container *,
-    #chat-application * { display:revert !important; visibility:visible !important; opacity:1 !important; }
 
     /* Custom translate button in navbar */
     .translate-wrap {
