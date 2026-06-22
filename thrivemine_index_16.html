@@ -2091,14 +2091,23 @@ window.smartsupp._ = window.smartsupp._ || [];
 /* Country dropdown */
 .cc-dropdown{
   display:none;position:absolute;z-index:600;
-  background:#0d1228;border:1px solid rgba(255,119,0,.2);
-  border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.8);
-  width:280px;overflow:hidden;
+  background:#0d1228;border:1px solid rgba(255,119,0,.3);
+  border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.9);
+  width:min(320px,calc(100vw - 40px));overflow:hidden;
+  top:calc(100% + 6px);left:0;
 }
 .cc-dropdown.open{display:block;animation:fadeUp .18s ease}
-.cc-search{width:100%;padding:10px 14px;background:#0a0f1f;border:none;border-bottom:1px solid rgba(255,255,255,.07);color:#fff;font-size:.85rem;outline:none;}
-.cc-search::placeholder{color:rgba(255,255,255,.3)}
-.cc-list{max-height:220px;overflow-y:auto;}
+.cc-search-wrap{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;
+  background:#111827;
+  border-bottom:1px solid rgba(255,119,0,.15);
+}
+.cc-search-wrap .cc-search-icon{font-size:.95rem;opacity:.6;flex-shrink:0;}
+.cc-search{flex:1;background:transparent;border:none;color:#fff;font-size:.88rem;outline:none;}
+.cc-search::placeholder{color:rgba(255,255,255,.6);font-size:.85rem;}
+.cc-no-result{padding:14px;text-align:center;color:rgba(255,255,255,.4);font-size:.82rem;}
+.cc-list{max-height:240px;overflow-y:auto;}
 .cc-list::-webkit-scrollbar{width:3px}
 .cc-list::-webkit-scrollbar-thumb{background:rgba(255,119,0,.3);border-radius:2px}
 .cc-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:.85rem;color:rgba(255,255,255,.8);transition:background .15s;}
@@ -2171,7 +2180,10 @@ window.smartsupp._ = window.smartsupp._ || [];
             <input id="reg-phone" type="tel" placeholder="234 567 8900" />
           </div>
           <div class="cc-dropdown" id="cc-dropdown">
-            <input class="cc-search" type="text" placeholder="Search country..." oninput="filterCC(this.value)" />
+            <div class="cc-search-wrap">
+              <span class="cc-search-icon">🔍</span>
+              <input class="cc-search" id="cc-search-input" type="text" placeholder="Type country name e.g. Nigeria..." oninput="filterCC(this.value)" autocomplete="off" />
+            </div>
             <div class="cc-list" id="cc-list"></div>
           </div>
         </div>
@@ -2305,7 +2317,12 @@ function renderCC(list){
   ).join('');
 }
 function filterCC(q){
-  renderCC(CC_LIST.filter(c=>c.n.toLowerCase().includes(q.toLowerCase())||c.c.includes(q)));
+  const results=CC_LIST.filter(c=>c.n.toLowerCase().includes(q.toLowerCase())||c.c.includes(q));
+  if(results.length===0){
+    document.getElementById('cc-list').innerHTML='<div class="cc-no-result">No country found for "'+q+'"</div>';
+  } else {
+    renderCC(results);
+  }
 }
 function selectCC(flag,code){
   document.getElementById('cc-flag').textContent=flag;
@@ -2317,9 +2334,11 @@ function toggleCCDropdown(){
   const dd=document.getElementById('cc-dropdown');
   dd.classList.toggle('open');
   if(dd.classList.contains('open')){
-    dd.querySelector('.cc-search').value='';
+    const inp=document.getElementById('cc-search-input');
+    inp.value='';
     renderCC(CC_LIST);
-    setTimeout(()=>dd.querySelector('.cc-search').focus(),50);
+    // Only auto-focus on desktop so mobile keyboard doesn't cover the list
+    if(window.innerWidth>680) setTimeout(()=>inp.focus(),80);
   }
 }
 // Close dropdown when clicking outside
