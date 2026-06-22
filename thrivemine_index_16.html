@@ -2830,6 +2830,117 @@ document.getElementById('register-form').addEventListener('submit',function(){
 </section>
 
 
+<!-- ══════════ MARKET OVERVIEW WIDGET ══════════ -->
+<section id="market-overview-section" style="padding:60px 0 0;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:32px;">
+      <p style="font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:10px;">LIVE MARKETS</p>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;">Global Market <span style="color:var(--orange);">Overview</span></h2>
+      <p style="color:rgba(255,255,255,.5);font-size:.9rem;margin-top:8px;">Real-time indices, commodities, bonds &amp; forex</p>
+    </div>
+
+    <!-- Market Overview (Indices / Commodities / Bonds / Forex chart + list) -->
+    <div style="border:1px solid rgba(255,119,0,.15);border-radius:16px;overflow:hidden;margin-bottom:28px;">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+        {
+          "colorTheme": "dark",
+          "dateRange": "12M",
+          "showChart": true,
+          "locale": "en",
+          "isTransparent": true,
+          "showSymbolLogo": true,
+          "showFloatingTooltip": false,
+          "width": "100%",
+          "height": "660",
+          "plotLineColorGrowing": "rgba(57,255,20,1)",
+          "plotLineColorFalling": "rgba(255,80,80,1)",
+          "gridLineColor": "rgba(255,255,255,0.04)",
+          "scaleFontColor": "rgba(255,255,255,0.45)",
+          "belowLineFillColorGrowing": "rgba(57,255,20,0.08)",
+          "belowLineFillColorFalling": "rgba(255,80,80,0.08)",
+          "belowLineFillColorGrowingBottom": "rgba(57,255,20,0)",
+          "belowLineFillColorFallingBottom": "rgba(255,80,80,0)",
+          "symbolActiveColor": "rgba(255,119,0,0.12)",
+          "tabs": [
+            {
+              "title": "Indices",
+              "symbols": [
+                {"s": "FOREXCOM:SPXUSD", "d": "S&P 500"},
+                {"s": "FOREXCOM:NSXUSD", "d": "Nasdaq 100"},
+                {"s": "FOREXCOM:DJI",    "d": "Dow Jones 30"},
+                {"s": "INDEX:NKY",       "d": "Nikkei 225"},
+                {"s": "INDEX:DEU40",     "d": "DAX Index"},
+                {"s": "FOREXCOM:UKXGBP","d": "FTSE 100"}
+              ],
+              "originalTitle": "Indices"
+            },
+            {
+              "title": "Commodities",
+              "symbols": [
+                {"s": "COMEX:GC1!",  "d": "Gold"},
+                {"s": "NYMEX:CL1!",  "d": "WTI Crude Oil"},
+                {"s": "NYMEX:NG1!",  "d": "Natural Gas"},
+                {"s": "COMEX:SI1!",  "d": "Silver"},
+                {"s": "CBOT:ZC1!",   "d": "Corn"},
+                {"s": "CBOT:ZW1!",   "d": "Wheat"}
+              ],
+              "originalTitle": "Commodities"
+            },
+            {
+              "title": "Bonds",
+              "symbols": [
+                {"s": "CBOT:ZB1!",     "d": "T-Bond"},
+                {"s": "CBOT:UB1!",     "d": "Ultra T-Bond"},
+                {"s": "EUREX:FGBL1!",  "d": "Euro Bund"},
+                {"s": "EUREX:FBTP1!",  "d": "Euro BTP"},
+                {"s": "EUREX:FGBM1!",  "d": "Euro BOBL"}
+              ],
+              "originalTitle": "Bonds"
+            },
+            {
+              "title": "Forex",
+              "symbols": [
+                {"s": "FX:EURUSD", "d": "EUR / USD"},
+                {"s": "FX:GBPUSD", "d": "GBP / USD"},
+                {"s": "FX:USDJPY", "d": "USD / JPY"},
+                {"s": "FX:USDCHF", "d": "USD / CHF"},
+                {"s": "FX:AUDUSD", "d": "AUD / USD"},
+                {"s": "FX:USDCAD", "d": "USD / CAD"}
+              ],
+              "originalTitle": "Forex"
+            }
+          ]
+        }
+        </script>
+      </div>
+    </div>
+
+    <!-- Forex Cross Rates table -->
+    <div style="border:1px solid rgba(255,119,0,.15);border-radius:16px;overflow:hidden;margin-bottom:28px;">
+      <div style="padding:16px 20px;border-bottom:1px solid rgba(255,119,0,.1);background:rgba(255,119,0,.04);">
+        <span style="font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);">Forex Cross Rates — Live</span>
+      </div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-forex-cross-rates.js" async>
+        {
+          "width": "100%",
+          "height": 420,
+          "currencies": ["EUR","USD","JPY","GBP","CHF","AUD","CAD","NZD","CNY"],
+          "isTransparent": true,
+          "colorTheme": "dark",
+          "locale": "en",
+          "backgroundColor": "rgba(4,8,26,0)"
+        }
+        </script>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ══════════ BITCOIN LIVE TRADING CHART ══════════ -->
 <section id="chart-section">
   <div class="container">
