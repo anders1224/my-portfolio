@@ -79,7 +79,7 @@
     <!-- Welcome -->
     <div class="welcome-bar">
       <div>
-        <h2>Welcome back, ${user.full_name?.split(' ')[0] || 'Investor'}! 👋</h2>
+        <h2>Welcome back, ${user.username || user.full_name?.split(' ')[0] || 'Investor'}! 👋</h2>
         <p>Here's a summary of your account activity.</p>
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
