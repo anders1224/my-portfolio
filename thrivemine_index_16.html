@@ -2027,52 +2027,248 @@ window.smartsupp||(function(d) {
 </div>
 
 <!-- ── REGISTER MODAL ── -->
+<style>
+/* ── REGISTER MODAL DESKTOP UPGRADE ── */
+#register-modal .reg-panel{
+  width:min(820px,calc(100% - 32px));
+  background:#04081a;
+  border:1px solid rgba(255,119,0,.2);
+  border-radius:24px;
+  box-shadow:0 0 80px rgba(0,0,0,.7);
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr 1.65fr;
+  overflow:hidden;
+}
+@media(max-width:680px){
+  #register-modal .reg-panel{grid-template-columns:1fr}
+  #register-modal .reg-left{display:none}
+}
+#register-modal .reg-left{
+  background:linear-gradient(160deg,rgba(255,119,0,.18) 0%,rgba(255,119,0,.04) 60%,transparent 100%);
+  border-right:1px solid rgba(255,119,0,.12);
+  padding:40px 28px;
+  display:flex;flex-direction:column;justify-content:center;gap:24px;
+}
+#register-modal .reg-right{padding:36px 32px;overflow-y:auto;max-height:90vh;}
+@media(max-width:680px){#register-modal .reg-right{padding:28px 20px}}
+.reg-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:400px){.reg-form-grid{grid-template-columns:1fr}}
+.reg-field{display:flex;flex-direction:column;gap:6px;}
+.reg-field label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+.reg-field input{
+  width:100%;padding:12px 14px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);border-radius:10px;
+  color:#fff;font-size:.92rem;outline:none;transition:border-color .2s;
+}
+.reg-field input:focus{border-color:rgba(255,119,0,.55)}
+.reg-field input::placeholder{color:rgba(255,255,255,.25)}
+/* Country code phone bar */
+.phone-bar{display:flex;border:1px solid rgba(255,255,255,.1);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.04);transition:border-color .2s;}
+.phone-bar:focus-within{border-color:rgba(255,119,0,.55)}
+.cc-trigger{
+  display:flex;align-items:center;gap:6px;padding:0 12px;
+  background:rgba(255,119,0,.07);border-right:1px solid rgba(255,255,255,.08);
+  cursor:pointer;white-space:nowrap;font-size:.88rem;color:#fff;flex-shrink:0;
+  user-select:none;min-width:80px;
+}
+.cc-trigger:hover{background:rgba(255,119,0,.13)}
+.cc-arrow{font-size:.5rem;opacity:.5;margin-left:2px}
+.phone-bar input{flex:1;background:transparent;border:none;padding:12px 12px;color:#fff;font-size:.92rem;outline:none;}
+.phone-bar input::placeholder{color:rgba(255,255,255,.25)}
+/* Country dropdown */
+.cc-dropdown{
+  display:none;position:absolute;z-index:600;
+  background:#0d1228;border:1px solid rgba(255,119,0,.2);
+  border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.8);
+  width:280px;overflow:hidden;
+}
+.cc-dropdown.open{display:block;animation:fadeUp .18s ease}
+.cc-search{width:100%;padding:10px 14px;background:#0a0f1f;border:none;border-bottom:1px solid rgba(255,255,255,.07);color:#fff;font-size:.85rem;outline:none;}
+.cc-search::placeholder{color:rgba(255,255,255,.3)}
+.cc-list{max-height:220px;overflow-y:auto;}
+.cc-list::-webkit-scrollbar{width:3px}
+.cc-list::-webkit-scrollbar-thumb{background:rgba(255,119,0,.3);border-radius:2px}
+.cc-opt{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:.85rem;color:rgba(255,255,255,.8);transition:background .15s;}
+.cc-opt:hover{background:rgba(255,119,0,.08);color:#fff}
+.cc-opt .cc-flag{font-size:1.1rem;flex-shrink:0}
+.cc-opt .cc-name{flex:1;font-size:.82rem}
+.cc-opt .cc-code{color:var(--green);font-size:.8rem;font-weight:600}
+</style>
+
 <div id="register-modal" class="auth-modal" aria-hidden="true">
-  <div class="auth-panel" role="dialog" aria-modal="true">
-    <button class="auth-close" onclick="closeRegisterModal()">×</button>
-    <div style="text-align:center;margin-bottom:22px;">
-      <div style="font-size:2rem;margin-bottom:8px;">🚀</div>
-      <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.01em;">Create Account</h2>
-      <p style="color:rgba(255,255,255,.4);font-size:.82rem;margin-top:4px;">Join ThriveMine and start earning today</p>
+  <div class="reg-panel" role="dialog" aria-modal="true">
+    <button class="auth-close" onclick="closeRegisterModal()" style="position:absolute;top:16px;right:18px;z-index:10;">×</button>
+
+    <!-- LEFT decorative panel -->
+    <div class="reg-left">
+      <div>
+        <div style="font-size:2.4rem;margin-bottom:12px;">⚡</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:1.9rem;font-weight:700;line-height:1.15;margin-bottom:12px;">Start Earning <span style="color:var(--green)">Today</span></div>
+        <p style="color:rgba(255,255,255,.55);font-size:.88rem;line-height:1.75;">Join thousands of investors growing their wealth with ThriveMine's automated investment plans.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.7);">
+          <span style="color:var(--green);font-size:1rem;">✓</span> Returns paid every cycle
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.7);">
+          <span style="color:var(--green);font-size:1rem;">✓</span> 15% referral bonus
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.7);">
+          <span style="color:var(--green);font-size:1rem;">✓</span> 180+ countries supported
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.7);">
+          <span style="color:var(--green);font-size:1rem;">✓</span> 24/7 live support
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,119,0,.1);padding-top:18px;font-size:.75rem;color:rgba(255,255,255,.3);">
+        🔒 SSL secured · Data encrypted
+      </div>
     </div>
-    <form class="auth-form" id="register-form">
-      <div class="field">
-        <label>Full Name</label>
-        <input id="reg-fullname" type="text" required placeholder="Your full name" />
+
+    <!-- RIGHT form panel -->
+    <div class="reg-right">
+      <div style="margin-bottom:22px;">
+        <div style="font-size:1.6rem;margin-bottom:8px;">🚀</div>
+        <h2 style="font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;letter-spacing:-.01em;">Create Account</h2>
+        <p style="color:rgba(255,255,255,.4);font-size:.82rem;margin-top:4px;">Join ThriveMine and start earning today</p>
       </div>
-      <div class="field">
-        <label>Username</label>
-        <input id="reg-username" type="text" required placeholder="Choose a username (no spaces)" />
-      </div>
-      <div class="field">
-        <label>Phone Number</label>
-        <input id="reg-phone" type="tel" placeholder="+1 234 567 8900" />
-      </div>
-      <div class="field">
-        <label>Email</label>
-        <input id="reg-email" type="email" required placeholder="you@example.com" />
-      </div>
-      <div class="field">
-        <label>Password</label>
-        <input id="reg-password" type="password" required placeholder="Create a password" />
-      </div>
-      <div class="field">
-        <label>Confirm Password</label>
-        <input id="reg-confirm" type="password" required placeholder="Repeat your password" />
-      </div>
-      <div id="reg-ref-banner" style="display:none;background:rgba(255,119,0,.07);border:1px solid rgba(255,119,0,.25);border-radius:8px;padding:8px 12px;font-size:.78rem;color:#ff7700;margin-bottom:10px;">
-        🔗 Referred by code: <span style="font-weight:700;font-family:monospace"></span>
-      </div>
-      <div class="auth-actions">
-        <button type="submit" class="btn-green" id="register-submit">Create Account</button>
-      </div>
-      <div class="auth-messages" id="register-message"></div>
-      <p style="text-align:center;font-size:.82rem;color:rgba(255,255,255,.72);margin-top:14px;">
-        Already have an account? <a href="#" onclick="closeRegisterModal();openLoginModal();" style="color:var(--green);text-decoration:none;">Login here</a>
-      </p>
-    </form>
+
+      <form class="auth-form" id="register-form" style="display:flex;flex-direction:column;gap:0;">
+        <!-- Row 1: Full Name + Username -->
+        <div class="reg-form-grid" style="margin-bottom:14px;">
+          <div class="reg-field">
+            <label>Full Name</label>
+            <input id="reg-fullname" type="text" required placeholder="Your full name" />
+          </div>
+          <div class="reg-field">
+            <label>Username</label>
+            <input id="reg-username" type="text" required placeholder="No spaces" />
+          </div>
+        </div>
+
+        <!-- Phone with country code -->
+        <div class="reg-field" style="margin-bottom:14px;position:relative;">
+          <label>Phone Number</label>
+          <div class="phone-bar">
+            <div class="cc-trigger" id="cc-trigger" onclick="toggleCCDropdown()">
+              <span id="cc-flag">🇺🇸</span>
+              <span id="cc-code">+1</span>
+              <span class="cc-arrow">▼</span>
+            </div>
+            <input id="reg-phone" type="tel" placeholder="234 567 8900" />
+          </div>
+          <div class="cc-dropdown" id="cc-dropdown">
+            <input class="cc-search" type="text" placeholder="Search country..." oninput="filterCC(this.value)" />
+            <div class="cc-list" id="cc-list"></div>
+          </div>
+        </div>
+
+        <!-- Email full width -->
+        <div class="reg-field" style="margin-bottom:14px;">
+          <label>Email</label>
+          <input id="reg-email" type="email" required placeholder="you@example.com" />
+        </div>
+
+        <!-- Row 2: Password + Confirm -->
+        <div class="reg-form-grid" style="margin-bottom:14px;">
+          <div class="reg-field">
+            <label>Password</label>
+            <input id="reg-password" type="password" required placeholder="Create a password" />
+          </div>
+          <div class="reg-field">
+            <label>Confirm Password</label>
+            <input id="reg-confirm" type="password" required placeholder="Repeat password" />
+          </div>
+        </div>
+
+        <div id="reg-ref-banner" style="display:none;background:rgba(255,119,0,.07);border:1px solid rgba(255,119,0,.25);border-radius:8px;padding:8px 12px;font-size:.78rem;color:#ff7700;margin-bottom:12px;">
+          🔗 Referred by code: <span style="font-weight:700;font-family:monospace"></span>
+        </div>
+
+        <button type="submit" class="btn-green" id="register-submit" style="width:100%;padding:14px;font-size:.88rem;justify-content:center;border-radius:10px;margin-top:4px;">Create Account →</button>
+        <div class="auth-messages" id="register-message" style="margin-top:12px;"></div>
+        <p style="text-align:center;font-size:.82rem;color:rgba(255,255,255,.5);margin-top:14px;">
+          Already have an account? <a href="#" onclick="closeRegisterModal();openLoginModal();" style="color:var(--green);text-decoration:none;">Login here</a>
+        </p>
+      </form>
+    </div>
   </div>
 </div>
+
+<script>
+/* ── COUNTRY CODE PICKER ── */
+const CC_LIST=[
+  {f:'🇺🇸',n:'United States',c:'+1'},{f:'🇬🇧',n:'United Kingdom',c:'+44'},
+  {f:'🇳🇬',n:'Nigeria',c:'+234'},{f:'🇬🇭',n:'Ghana',c:'+233'},
+  {f:'🇰🇪',n:'Kenya',c:'+254'},{f:'🇿🇦',n:'South Africa',c:'+27'},
+  {f:'🇨🇦',n:'Canada',c:'+1'},{f:'🇦🇺',n:'Australia',c:'+61'},
+  {f:'🇮🇳',n:'India',c:'+91'},{f:'🇵🇭',n:'Philippines',c:'+63'},
+  {f:'🇦🇪',n:'UAE',c:'+971'},{f:'🇸🇦',n:'Saudi Arabia',c:'+966'},
+  {f:'🇩🇪',n:'Germany',c:'+49'},{f:'🇫🇷',n:'France',c:'+33'},
+  {f:'🇮🇹',n:'Italy',c:'+39'},{f:'🇪🇸',n:'Spain',c:'+34'},
+  {f:'🇧🇷',n:'Brazil',c:'+55'},{f:'🇲🇽',n:'Mexico',c:'+52'},
+  {f:'🇯🇵',n:'Japan',c:'+81'},{f:'🇨🇳',n:'China',c:'+86'},
+  {f:'🇰🇷',n:'South Korea',c:'+82'},{f:'🇸🇬',n:'Singapore',c:'+65'},
+  {f:'🇲🇾',n:'Malaysia',c:'+60'},{f:'🇮🇩',n:'Indonesia',c:'+62'},
+  {f:'🇵🇰',n:'Pakistan',c:'+92'},{f:'🇧🇩',n:'Bangladesh',c:'+880'},
+  {f:'🇪🇬',n:'Egypt',c:'+20'},{f:'🇹🇿',n:'Tanzania',c:'+255'},
+  {f:'🇺🇬',n:'Uganda',c:'+256'},{f:'🇷🇼',n:'Rwanda',c:'+250'},
+  {f:'🇿🇼',n:'Zimbabwe',c:'+263'},{f:'🇿🇲',n:'Zambia',c:'+260'},
+  {f:'🇨🇲',n:'Cameroon',c:'+237'},{f:'🇸🇳',n:'Senegal',c:'+221'},
+  {f:'🇨🇮',n:'Côte d\'Ivoire',c:'+225'},{f:'🇿🇦',n:'Ethiopia',c:'+251'},
+  {f:'🇳🇱',n:'Netherlands',c:'+31'},{f:'🇧🇪',n:'Belgium',c:'+32'},
+  {f:'🇨🇭',n:'Switzerland',c:'+41'},{f:'🇸🇪',n:'Sweden',c:'+46'},
+  {f:'🇳🇴',n:'Norway',c:'+47'},{f:'🇩🇰',n:'Denmark',c:'+45'},
+  {f:'🇵🇱',n:'Poland',c:'+48'},{f:'🇷🇺',n:'Russia',c:'+7'},
+  {f:'🇹🇷',n:'Turkey',c:'+90'},{f:'🇮🇱',n:'Israel',c:'+972'},
+  {f:'🇦🇷',n:'Argentina',c:'+54'},{f:'🇨🇴',n:'Colombia',c:'+57'},
+  {f:'🇨🇱',n:'Chile',c:'+56'},{f:'🇵🇪',n:'Peru',c:'+51'},
+  {f:'🇳🇿',n:'New Zealand',c:'+64'},{f:'🇹🇭',n:'Thailand',c:'+66'},
+  {f:'🇻🇳',n:'Vietnam',c:'+84'},{f:'🇵🇹',n:'Portugal',c:'+351'},
+];
+function renderCC(list){
+  document.getElementById('cc-list').innerHTML=list.map(cc=>
+    `<div class="cc-opt" onclick="selectCC('${cc.f}','${cc.c}')">
+      <span class="cc-flag">${cc.f}</span>
+      <span class="cc-name">${cc.n}</span>
+      <span class="cc-code">${cc.c}</span>
+    </div>`
+  ).join('');
+}
+function filterCC(q){
+  renderCC(CC_LIST.filter(c=>c.n.toLowerCase().includes(q.toLowerCase())||c.c.includes(q)));
+}
+function selectCC(flag,code){
+  document.getElementById('cc-flag').textContent=flag;
+  document.getElementById('cc-code').textContent=code;
+  document.getElementById('cc-dropdown').classList.remove('open');
+  document.getElementById('reg-phone').focus();
+}
+function toggleCCDropdown(){
+  const dd=document.getElementById('cc-dropdown');
+  dd.classList.toggle('open');
+  if(dd.classList.contains('open')){
+    dd.querySelector('.cc-search').value='';
+    renderCC(CC_LIST);
+    setTimeout(()=>dd.querySelector('.cc-search').focus(),50);
+  }
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',function(e){
+  if(!document.getElementById('cc-trigger').contains(e.target)&&
+     !document.getElementById('cc-dropdown').contains(e.target)){
+    document.getElementById('cc-dropdown').classList.remove('open');
+  }
+});
+renderCC(CC_LIST);
+// Combine code + number on submit (update phone field value before registration)
+document.getElementById('register-form').addEventListener('submit',function(){
+  const code=document.getElementById('cc-code').textContent;
+  const num=document.getElementById('reg-phone').value.trim();
+  if(num) document.getElementById('reg-phone').value=code+' '+num;
+},true);
+</script>
 
 <!-- keep old modal shell so existing JS references don't break -->
 <div id="auth-modal" style="display:none;"></div>
