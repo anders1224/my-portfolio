@@ -548,17 +548,8 @@
       box-shadow: 0 16px 48px rgba(0,0,0,.9);
     }
 
-    /* Force Smartsupp chat to bottom-right on mobile, above everything */
-    @media(max-width:900px){
-      #smartsupp-widget-container,
-      #chat-application,
-      #smartsupp-widget-container iframe {
-        right: 16px !important;
-        left: auto !important;
-        bottom: 16px !important;
-        z-index: 99999 !important;
-      }
-    }
+    /* Smartsupp — never hidden, always on top */
+    #smartsupp-widget-container { display: block !important; z-index: 2147483647 !important; }
     #mobile-translate-panel.open { display: block; animation: fadeUp .2s ease; }
 
     /* Hidden Google Translate element */
@@ -5501,6 +5492,24 @@ function closePrivacyModal(){document.getElementById('privacyModal').style.displ
 // close on outside click
 ['faqModal','termsModal','legalModal','privacyModal'].forEach(function(id){
   document.getElementById(id).addEventListener('click',function(e){if(e.target===this){this.style.display='none';document.body.style.overflow='';}});
+});
+</script>
+
+<script>
+/* Smartsupp visibility safety net — runs after everything loads */
+window.addEventListener('load', function(){
+  function showSmartsupp(){
+    var c = document.getElementById('smartsupp-widget-container');
+    if(c){
+      c.style.setProperty('display','block','important');
+      c.style.setProperty('visibility','visible','important');
+      c.style.setProperty('z-index','2147483647','important');
+      c.style.setProperty('opacity','1','important');
+    }
+  }
+  showSmartsupp();
+  setTimeout(showSmartsupp, 1500);
+  setTimeout(showSmartsupp, 4000);
 });
 </script>
 
