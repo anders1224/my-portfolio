@@ -393,9 +393,15 @@
 
     /* Hide Google's default ugly banner & top bar */
     body { top: 0 !important; }
-    .goog-te-banner-frame, .skiptranslate { display:none !important; }
+    .goog-te-banner-frame { display:none !important; }
+    .skiptranslate:not(#smartsupp-widget-container):not(#chat-application):not([id^="smartsupp"]) { display:none !important; }
     .goog-te-gadget { font-size:0 !important; }
     .goog-te-gadget .goog-te-combo { font-size:.78rem !important; }
+    /* Always keep Smartsupp visible */
+    #smartsupp-widget-container,
+    #chat-application,
+    #smartsupp-widget-container *,
+    #chat-application * { display:revert !important; visibility:visible !important; opacity:1 !important; }
 
     /* Custom translate button in navbar */
     .translate-wrap {
@@ -3432,29 +3438,30 @@ function filterLangs(panel, query) {
   })
 }
 
-/* Apply translation via Google Translate cookie */
+/* Apply translation via Google Translate combo element */
 function applyLanguage(code, name) {
   currentLangCode = code
-
-  // Update button label
   document.getElementById('current-lang-label').textContent = name
+  closeAllTranslatePanels()
+  buildLangLists()
 
-  // Set Google Translate cookie
-  if(code === 'en') {
-    // Reset to English
-    const iframe = document.querySelector('.goog-te-banner-frame')
+  // Primary: trigger the hidden Google Translate select element directly
+  const select = document.querySelector('.goog-te-combo')
+  if (select) {
+    select.value = code
+    select.dispatchEvent(new Event('change'))
+    return
+  }
+
+  // Fallback: cookie + reload (if Google Translate widget hasn't loaded yet)
+  if (code === 'en') {
     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + location.hostname
-    location.reload()
   } else {
     document.cookie = `googtrans=/en/${code}`
     document.cookie = `googtrans=/en/${code}; domain=${location.hostname}`
-    location.reload()
   }
-
-  // Close panels
-  closeAllTranslatePanels()
-  buildLangLists()
+  location.reload()
 }
 
 /* Toggle panel open/close */
