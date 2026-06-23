@@ -404,13 +404,6 @@
     #google_translate_element .skiptranslate { display:none !important; }
     .goog-te-gadget { font-size:0 !important; }
     .goog-te-gadget .goog-te-combo { font-size:.78rem !important; }
-    /* If Chrome native translate bar still appears, push navbar + ticker below it */
-    html.translated-ltr #navbar,
-    html.translated-rtl #navbar { top: 52px !important; }
-    html.translated-ltr #crypto-ticker-tape,
-    html.translated-rtl #crypto-ticker-tape { top: calc(64px + 52px) !important; margin-top: calc(64px + 52px) !important; }
-    html.translated-ltr #live-toast,
-    html.translated-rtl #live-toast { top: calc(120px + 52px) !important; }
 
     /* Custom translate button in navbar */
     .translate-wrap {
@@ -4106,6 +4099,7 @@ window.addEventListener('load', function() {
   // Slide in after 1.5s
   setTimeout(function() {
     if(window.toastDismissed) return
+    window._toastAutoShown = true
     toast.classList.add('show')
     document.body.classList.add('toast-open')
   }, 1500)
@@ -4115,6 +4109,20 @@ window.addEventListener('load', function() {
     if(window.toastDismissed) { clearInterval(_toastInterval); return }
     updateToastContent()
   }, 5000)
+
+  // Hide toast when user scrolls past hero section; restore when back
+  var _hero = document.getElementById('hero')
+  window.addEventListener('scroll', function() {
+    if(window.toastDismissed || !toast || !_hero || !window._toastAutoShown) return
+    var heroBottom = _hero.getBoundingClientRect().bottom
+    if(heroBottom < 80) {
+      toast.classList.remove('show')
+      document.body.classList.remove('toast-open')
+    } else {
+      toast.classList.add('show')
+      document.body.classList.add('toast-open')
+    }
+  }, { passive: true })
 })
 
 /* ── CONTACT FORM ── */
