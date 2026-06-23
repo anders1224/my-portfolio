@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -404,6 +404,13 @@
     #google_translate_element .skiptranslate { display:none !important; }
     .goog-te-gadget { font-size:0 !important; }
     .goog-te-gadget .goog-te-combo { font-size:.78rem !important; }
+    /* If Chrome native translate bar still appears, push navbar + ticker below it */
+    html.translated-ltr #navbar,
+    html.translated-rtl #navbar { top: 52px !important; }
+    html.translated-ltr #crypto-ticker-tape,
+    html.translated-rtl #crypto-ticker-tape { top: calc(64px + 52px) !important; margin-top: calc(64px + 52px) !important; }
+    html.translated-ltr #live-toast,
+    html.translated-rtl #live-toast { top: calc(120px + 52px) !important; }
 
     /* Custom translate button in navbar */
     .translate-wrap {
