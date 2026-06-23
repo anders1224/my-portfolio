@@ -2476,6 +2476,39 @@ document.getElementById('register-form').addEventListener('submit',function(){
 
 </div>
 
+<!-- ══════════ LIVE CRYPTO TICKER TAPE ══════════ -->
+<div id="crypto-ticker-tape" style="background:#04081a;border-bottom:1px solid rgba(255,119,0,.12);position:relative;z-index:100;">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName":"BINANCE:BTCUSDT","title":"BTC"},
+        {"proName":"BINANCE:ETHUSDT","title":"ETH"},
+        {"proName":"BINANCE:XRPUSDT","title":"XRP"},
+        {"proName":"BINANCE:SOLUSDT","title":"SOL"},
+        {"proName":"BINANCE:BNBUSDT","title":"BNB"},
+        {"proName":"BINANCE:ADAUSDT","title":"ADA"},
+        {"proName":"BINANCE:DOGEUSDT","title":"DOGE"},
+        {"proName":"BINANCE:TRXUSDT","title":"TRX"},
+        {"proName":"BINANCE:DOTUSDT","title":"DOT"},
+        {"proName":"BINANCE:LTCUSDT","title":"LTC"},
+        {"proName":"BINANCE:MATICUSDT","title":"MATIC"},
+        {"proName":"BINANCE:AVAXUSDT","title":"AVAX"},
+        {"proName":"BINANCE:LINKUSDT","title":"LINK"},
+        {"proName":"BINANCE:UNIUSDT","title":"UNI"},
+        {"proName":"BINANCE:ATOMUSDT","title":"ATOM"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "en"
+    }
+    </script>
+  </div>
+</div>
+
 <!-- ══════════ HERO ══════════ -->
 <section id="hero">
   <canvas id="hero-canvas"></canvas>
@@ -5677,6 +5710,33 @@ function closePrivacyModal(){document.getElementById('privacyModal').style.displ
   document.getElementById(id).addEventListener('click',function(e){if(e.target===this){this.style.display='none';document.body.style.overflow='';}});
 });
 </script>
+
+<!-- ══════════ FIXED BOTTOM PRICE BAR ══════════ -->
+<div id="bottom-price-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:250;background:#04081a;border-top:1px solid rgba(255,119,0,.18);box-shadow:0 -4px 24px rgba(0,0,0,.6);">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {
+      "symbols": [
+        {"proName":"BINANCE:ETHUSDT","title":"ETH/USD"},
+        {"proName":"FX:EURUSD","title":"EUR/USD"},
+        {"proName":"BINANCE:BTCUSDT","title":"BTC/USD"},
+        {"proName":"FX:GBPUSD","title":"GBP/USD"},
+        {"proName":"FX:USDJPY","title":"USD/JPY"},
+        {"proName":"BINANCE:SOLUSDT","title":"SOL/USD"},
+        {"proName":"BINANCE:XRPUSDT","title":"XRP/USD"},
+        {"proName":"COMEX:GC1!","title":"GOLD"},
+        {"proName":"NYMEX:CL1!","title":"OIL"}
+      ],
+      "showSymbolLogo": true,
+      "isTransparent": true,
+      "displayMode": "adaptive",
+      "colorTheme": "dark",
+      "locale": "en"
+    }
+    </script>
+  </div>
+</div>
 
 <script>
 /* Smartsupp visibility safety net */
