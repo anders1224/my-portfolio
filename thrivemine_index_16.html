@@ -1489,20 +1489,22 @@
     ═══════════════════════════════════════ */
     #live-toast{
       position:fixed;
-      top:110px;
+      top:120px;
       left:0; right:0;
-      z-index:150;
+      z-index:148;
       display:flex;
       align-items:center;
       gap:14px;
       background:#090d1f;
       border-bottom:2px solid rgba(0,210,160,.25);
       padding:13px 20px 13px 16px;
-      transform:translateY(-110%);
-      transition:transform .5s cubic-bezier(.22,.68,0,1.2);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .5s ease;
     }
     #live-toast.show{
-      transform:translateY(0);
+      opacity:1;
+      pointer-events:auto;
     }
     .lt-text{
       flex:1;
@@ -4074,8 +4076,8 @@ function closeLiveToast() {
   clearInterval(_toastInterval)
   _toastInterval = null
   toast.classList.remove('show')
-  toast.style.setProperty('transform', 'translateY(-110%)', 'important')
-  toast.style.setProperty('display', 'none', 'important')
+  toast.style.setProperty('opacity', '0', 'important')
+  toast.style.setProperty('pointer-events', 'none', 'important')
   document.body.classList.remove('toast-open')
 }
 
