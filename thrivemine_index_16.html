@@ -550,6 +550,15 @@
 
     /* Smartsupp — never hidden, always on top */
     #smartsupp-widget-container { display: block !important; z-index: 2147483647 !important; }
+    /* Thin ticker bars — match telexchain compact style */
+    #crypto-ticker-tape,
+    #bottom-price-bar { height:36px !important; overflow:hidden !important; }
+    #crypto-ticker-tape .tradingview-widget-container,
+    #bottom-price-bar .tradingview-widget-container,
+    #crypto-ticker-tape .tradingview-widget-container__widget,
+    #bottom-price-bar .tradingview-widget-container__widget { height:36px !important; }
+    /* Stop bottom bar hiding page content */
+    body { padding-bottom:36px; }
     #mobile-translate-panel.open { display: block; animation: fadeUp .2s ease; }
 
     /* Hidden Google Translate element */
@@ -2477,7 +2486,7 @@ document.getElementById('register-form').addEventListener('submit',function(){
 </div>
 
 <!-- ══════════ LIVE CRYPTO TICKER TAPE ══════════ -->
-<div id="crypto-ticker-tape" style="background:#04081a;border-bottom:1px solid rgba(255,119,0,.12);position:relative;z-index:100;">
+<div id="crypto-ticker-tape" style="background:#04081a;border-bottom:1px solid rgba(255,119,0,.12);position:relative;z-index:100;height:36px;overflow:hidden;">
   <div class="tradingview-widget-container">
     <div class="tradingview-widget-container__widget"></div>
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
@@ -5712,7 +5721,7 @@ function closePrivacyModal(){document.getElementById('privacyModal').style.displ
 </script>
 
 <!-- ══════════ FIXED BOTTOM PRICE BAR ══════════ -->
-<div id="bottom-price-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:250;background:#04081a;border-top:1px solid rgba(255,119,0,.18);box-shadow:0 -4px 24px rgba(0,0,0,.6);">
+<div id="bottom-price-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:250;background:#04081a;border-top:1px solid rgba(255,119,0,.18);box-shadow:0 -4px 24px rgba(0,0,0,.6);height:36px;overflow:hidden;">
   <div class="tradingview-widget-container">
     <div class="tradingview-widget-container__widget"></div>
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
