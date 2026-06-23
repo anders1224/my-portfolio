@@ -550,17 +550,15 @@
 
     /* Smartsupp — never hidden, always on top */
     #smartsupp-widget-container { display: block !important; z-index: 2147483647 !important; }
-    /* Thin ticker bars — match telexchain compact style */
-    #crypto-ticker-tape,
-    #bottom-price-bar { height:36px !important; overflow:hidden !important; }
+    /* Ticker bars — 46px shows symbol name + price on one row */
+    #crypto-ticker-tape { height:46px !important; overflow:hidden !important; margin-top:64px; position:sticky; top:64px; z-index:99; }
+    #bottom-price-bar { height:46px !important; overflow:hidden !important; }
     #crypto-ticker-tape .tradingview-widget-container,
     #bottom-price-bar .tradingview-widget-container,
     #crypto-ticker-tape .tradingview-widget-container__widget,
-    #bottom-price-bar .tradingview-widget-container__widget { height:36px !important; }
-    /* Push top ticker below fixed navbar on all loads */
-    #crypto-ticker-tape { margin-top:64px; position:sticky; top:64px; z-index:99; }
+    #bottom-price-bar .tradingview-widget-container__widget { height:46px !important; }
     /* Stop bottom bar hiding page content */
-    body { padding-bottom:36px; }
+    body { padding-bottom:46px; }
     #mobile-translate-panel.open { display: block; animation: fadeUp .2s ease; }
 
     /* Hidden Google Translate element */
@@ -1495,13 +1493,12 @@
       z-index:150;
       display:flex;
       align-items:center;
-      gap:9px;
-      background:rgba(9,13,31,.82);
-      border-bottom:1px solid rgba(0,210,160,.18);
-      padding:7px 14px 7px 12px;
+      gap:14px;
+      background:#090d1f;
+      border-bottom:2px solid rgba(0,210,160,.25);
+      padding:13px 20px 13px 16px;
       transform:translateY(-110%);
       transition:transform .5s cubic-bezier(.22,.68,0,1.2);
-      backdrop-filter:blur(6px);
     }
     #live-toast.show{
       transform:translateY(0);
@@ -1511,31 +1508,31 @@
       transition:opacity .35s ease;
     }
     .lt-icon{
-      width:28px; height:28px;
-      border-radius:5px;
-      background:rgba(0,190,150,.12);
-      border:1px solid rgba(0,190,150,.25);
+      width:46px; height:46px;
+      border-radius:6px;
+      background:rgba(0,190,150,.15);
+      border:1px solid rgba(0,190,150,.3);
       display:flex; align-items:center; justify-content:center;
-      font-size:.95rem; font-weight:900;
+      font-size:1.6rem; font-weight:900;
       color:#00e5b0;
       flex-shrink:0;
     }
     .lt-line1{
-      font-size:.75rem;
-      color:rgba(255,255,255,.85);
+      font-size:.95rem;
+      color:#fff;
       font-weight:400;
-      line-height:1.2;
+      line-height:1.3;
     }
     .lt-line1 strong{
       color:#00e5b0;
-      font-weight:600;
+      font-weight:700;
     }
     .lt-amount{
       font-family:'Rajdhani',sans-serif;
-      font-size:1rem;
+      font-size:1.45rem;
       font-weight:700;
       color:#fff;
-      line-height:1.1;
+      line-height:1.15;
     }
     .lt-close{
       color:rgba(255,255,255,.7);
@@ -2489,7 +2486,7 @@ document.getElementById('register-form').addEventListener('submit',function(){
 </div>
 
 <!-- ══════════ LIVE CRYPTO TICKER TAPE ══════════ -->
-<div id="crypto-ticker-tape" style="background:#04081a;border-bottom:1px solid rgba(255,119,0,.12);position:relative;z-index:100;height:36px;overflow:hidden;">
+<div id="crypto-ticker-tape" style="background:#04081a;border-bottom:1px solid rgba(255,119,0,.12);position:relative;z-index:100;height:46px;overflow:hidden;">
   <div class="tradingview-widget-container">
     <div class="tradingview-widget-container__widget"></div>
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
@@ -5724,7 +5721,7 @@ function closePrivacyModal(){document.getElementById('privacyModal').style.displ
 </script>
 
 <!-- ══════════ FIXED BOTTOM PRICE BAR ══════════ -->
-<div id="bottom-price-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:250;background:#04081a;border-top:1px solid rgba(255,119,0,.18);box-shadow:0 -4px 24px rgba(0,0,0,.6);height:36px;overflow:hidden;">
+<div id="bottom-price-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:250;background:#04081a;border-top:1px solid rgba(255,119,0,.18);box-shadow:0 -4px 24px rgba(0,0,0,.6);height:46px;overflow:hidden;">
   <div class="tradingview-widget-container">
     <div class="tradingview-widget-container__widget"></div>
     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
