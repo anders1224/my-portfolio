@@ -551,10 +551,8 @@
 
     /* Smartsupp — never hidden, always on top */
     #smartsupp-widget-container { display: block !important; z-index: 2147483647 !important; }
-    /* Top ticker — compact single-row */
-    #crypto-ticker-tape { margin-top:64px; position:sticky; top:64px; z-index:99; overflow:hidden; height:40px; }
-    #crypto-ticker-tape .tradingview-widget-container,
-    #crypto-ticker-tape .tradingview-widget-container__widget { height:40px !important; }
+    /* Top ticker — compact single-row, no height cap so prices always render */
+    #crypto-ticker-tape { margin-top:64px; position:sticky; top:64px; z-index:99; overflow:visible; }
     /* Bottom price bar */
     #bottom-price-bar { height:46px !important; overflow:hidden !important; }
     #bottom-price-bar .tradingview-widget-container,
@@ -1492,7 +1490,7 @@
     ═══════════════════════════════════════ */
     #live-toast{
       position:fixed;
-      top:110px;
+      top:116px;
       left:0; right:0;
       z-index:90;
       display:flex;
@@ -5826,6 +5824,28 @@ window.addEventListener('load', function(){
   window.addEventListener('load', function(){ _baseH = window.innerHeight; _check(); });
   window.addEventListener('resize', _check, { passive: true });
   new MutationObserver(_check).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+})();
+
+/* Position toast dynamically below ticker once TradingView renders */
+(function(){
+  function _positionToast(){
+    var ticker = document.getElementById('crypto-ticker-tape');
+    var toast  = document.getElementById('live-toast');
+    if(!ticker || !toast) return;
+    var h = ticker.getBoundingClientRect().height;
+    if(h > 10){
+      var toastTop = 64 + h + 4; /* navbar + ticker height + 4px gap */
+      toast.style.setProperty('top', toastTop + 'px', 'important');
+    }
+  }
+  /* Run after load and after short delays to catch TradingView async render */
+  window.addEventListener('load', function(){
+    _positionToast();
+    setTimeout(_positionToast, 500);
+    setTimeout(_positionToast, 1500);
+    setTimeout(_positionToast, 3000);
+  });
+  window.addEventListener('resize', _positionToast, { passive: true });
 })();
 </script>
 
