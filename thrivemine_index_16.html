@@ -1490,9 +1490,9 @@
     ═══════════════════════════════════════ */
     #live-toast{
       position:fixed;
-      top:120px;
+      top:160px;
       left:0; right:0;
-      z-index:148;
+      z-index:90;
       display:flex;
       align-items:center;
       gap:14px;
@@ -5802,7 +5802,7 @@ window.addEventListener('load', function(){
     if(barH > 0){
       if(e.nav)    e.nav.style.setProperty('top', barH + 'px', 'important');
       if(e.ticker){ e.ticker.style.setProperty('top', (64 + barH) + 'px', 'important'); e.ticker.style.setProperty('margin-top', (64 + barH) + 'px', 'important'); }
-      if(e.toast)  e.toast.style.setProperty('top', (120 + barH) + 'px', 'important');
+      if(e.toast)  e.toast.style.setProperty('top', (160 + barH) + 'px', 'important');
     } else {
       if(e.nav)    e.nav.style.removeProperty('top');
       if(e.ticker){ e.ticker.style.removeProperty('top'); e.ticker.style.removeProperty('margin-top'); }
