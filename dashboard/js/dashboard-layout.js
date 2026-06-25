@@ -42,7 +42,7 @@ function renderSidebar(activePage, user) {
           <div style="font-size:.7rem;color:var(--muted);">${user?.email || ''}</div>
         </div>
       </div>
-      <button onclick="signOut('../index.html')" class="btn btn-danger btn-sm btn-full">
+      <button onclick="signOut('../thrivemine_index_16.html')" class="btn btn-danger btn-sm btn-full">
         🚪 Sign Out
       </button>
     </div>
