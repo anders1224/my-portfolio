@@ -2475,13 +2475,8 @@ document.getElementById('register-form').addEventListener('submit',function(){
 
   <!-- Bottom: language + buttons -->
   <div class="mob-bottom">
-    <select class="mob-lang">
-      <option>Select Language</option>
-      <option>English</option>
-      <option>French</option>
-      <option>Spanish</option>
-      <option>Arabic</option>
-      <option>Portuguese</option>
+    <select class="mob-lang" id="mob-lang-select">
+      <option value="">🌐 Select Language</option>
     </select>
     <div class="mob-btns">
       <a href="#" class="mob-btn1">Login</a>
@@ -5826,6 +5821,31 @@ window.addEventListener('load', function(){
   window.addEventListener('load', function(){ _baseH = window.innerHeight; _check(); });
   window.addEventListener('resize', _check, { passive: true });
   new MutationObserver(_check).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+})();
+
+/* Populate mobile menu language selector from LANGUAGES array */
+(function(){
+  function _initMobLang(){
+    var sel = document.getElementById('mob-lang-select');
+    if(!sel || typeof LANGUAGES === 'undefined') return;
+    LANGUAGES.forEach(function(l){
+      var o = document.createElement('option');
+      o.value = l.code;
+      o.textContent = l.flag + ' ' + l.name;
+      sel.appendChild(o);
+    });
+    sel.addEventListener('change', function(){
+      var code = sel.value;
+      if(!code) return;
+      var lang = LANGUAGES.find(function(l){ return l.code === code; });
+      if(lang && typeof applyLanguage === 'function') applyLanguage(code, lang.name);
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', _initMobLang);
+  } else {
+    _initMobLang();
+  }
 })();
 
 /* Position toast dynamically below ticker once TradingView renders */
