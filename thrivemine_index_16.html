@@ -392,14 +392,17 @@
        TRANSLATOR (Google Translate)
     ═══════════════════════════════════════ */
 
-    /* Hide Google's default ugly banner & top bar — target only Google elements */
-    body { top: 0 !important; }
+    /* Hide Google Translate banner — all selectors + aggressive overrides */
+    body { top: 0 !important; margin-top: 0 !important; }
     .goog-te-banner-frame,
     .goog-te-balloon-frame,
     #goog-gt-tt,
     .goog-tooltip,
     .goog-tooltip:hover,
-    .goog-text-highlight { display:none !important; box-shadow:none !important; }
+    .goog-text-highlight { display:none !important; visibility:hidden !important;
+      height:0 !important; max-height:0 !important;
+      box-shadow:none !important; pointer-events:none !important; }
+    iframe.goog-te-banner-frame { display:none !important; height:0 !important; }
     /* Hide only the translate gadget wrapper inside our hidden div, not site-wide */
     #google_translate_element .skiptranslate { display:none !important; }
     .goog-te-gadget { font-size:0 !important; }
@@ -5821,6 +5824,28 @@ window.addEventListener('load', function(){
   window.addEventListener('load', function(){ _baseH = window.innerHeight; _check(); });
   window.addEventListener('resize', _check, { passive: true });
   new MutationObserver(_check).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+})();
+
+/* Instantly hide Google Translate banner whenever it appears */
+(function(){
+  function _killBanner(){
+    document.querySelectorAll('.goog-te-banner-frame,.goog-te-balloon-frame,iframe[id*="google_translate_"]').forEach(function(el){
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('visibility','hidden','important');
+    });
+    if(document.body && document.body.style.top && document.body.style.top !== '0px'){
+      document.body.style.setProperty('top','0','important');
+    }
+  }
+  /* Watch for banner being added to DOM */
+  new MutationObserver(_killBanner).observe(document.documentElement,{childList:true,subtree:true});
+  /* Also sweep every 150ms for 8 seconds after page load to catch async injection */
+  window.addEventListener('load',function(){
+    _killBanner();
+    var t=setInterval(_killBanner,150);
+    setTimeout(function(){clearInterval(t);},8000);
+  });
 })();
 
 /* Populate mobile menu language selector from LANGUAGES array */
