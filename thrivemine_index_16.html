@@ -4397,6 +4397,9 @@ if (typeof document.addEventListener === 'function') {
     if (!email)    { msg.textContent = 'Please enter your email.'; return }
     if (!password) { msg.textContent = 'Please enter a password.'; return }
     if (password !== confirm) { msg.textContent = 'Passwords do not match.'; return }
+    if (!phone) { msg.textContent = 'Please enter your phone number.'; return }
+    var _phoneDigits = phone.replace(/[\s\+\-\(\)]/g, '')
+    if (!/^\d{6,15}$/.test(_phoneDigits)) { msg.textContent = 'Please enter a valid phone number (digits only, no letters).'; return }
     btn.disabled = true; btn.textContent = 'Creating account…'
 
     var su = await authClient.auth.signUp({
