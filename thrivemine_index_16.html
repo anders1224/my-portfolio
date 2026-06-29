@@ -2195,7 +2195,7 @@ window.smartsupp._ = window.smartsupp._ || [];
               <span id="cc-code">+1</span>
               <span class="cc-arrow">▼</span>
             </div>
-            <input id="reg-phone" type="tel" placeholder="234 567 8900" />
+            <input id="reg-phone" type="tel" placeholder="234 567 8900" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9\s]/g,'')" maxlength="15" />
           </div>
           <div class="cc-dropdown" id="cc-dropdown">
             <div class="cc-search-wrap">
@@ -4399,7 +4399,7 @@ if (typeof document.addEventListener === 'function') {
     if (password !== confirm) { msg.textContent = 'Passwords do not match.'; return }
     if (!phone) { msg.textContent = 'Please enter your phone number.'; return }
     var _phoneDigits = phone.replace(/[\s\+\-\(\)]/g, '')
-    if (!/^\d{6,15}$/.test(_phoneDigits)) { msg.textContent = 'Please enter a valid phone number (digits only, no letters).'; return }
+    if (!/^\d{8,15}$/.test(_phoneDigits)) { msg.textContent = 'Please enter a valid phone number (e.g. 234 567 8900).'; return }
     btn.disabled = true; btn.textContent = 'Creating account…'
 
     var su = await authClient.auth.signUp({
