@@ -4395,6 +4395,11 @@ if (typeof document.addEventListener === 'function') {
     if (!fullname) { msg.textContent = 'Please enter your full name.'; return }
     if (!username) { msg.textContent = 'Please choose a username.'; return }
     if (!email)    { msg.textContent = 'Please enter your email.'; return }
+    var _disposableDomains = ['mailinator.com','guerrillamail.com','tempmail.com','throwaway.email','yopmail.com','sharklasers.com','dispostable.com','mailnull.com','spamgourmet.com','trashmail.com','10minutemail.com','grr.la','guerrillamail.info','guerrillamail.biz','guerrillamail.de','guerrillamail.net','guerrillamail.org','spam4.me','trashmail.at','trashmail.io','trashmail.me','trashmail.net','fakeinbox.com','mailnesia.com','maildrop.cc','discard.email','tempr.email','getnada.com','anonaddy.com','getairmail.com','filzmail.com','throwam.com','mintemail.com','spamgourmet.net','spamgourmet.org']
+    var _emailDomain = email.toLowerCase().split('@')[1] || ''
+    if (_disposableDomains.includes(_emailDomain)) { msg.textContent = 'Please use a real email address. Temporary email addresses are not allowed.'; return }
+    var { data: _bannedEmail } = await authClient.from('banned_emails').select('email').eq('email', email.toLowerCase()).maybeSingle()
+    if (_bannedEmail) { msg.textContent = 'This email address is not allowed to register. Please use a different email.'; return }
     if (!password) { msg.textContent = 'Please enter a password.'; return }
     if (password !== confirm) { msg.textContent = 'Passwords do not match.'; return }
     if (!phone) { msg.textContent = 'Please enter your phone number.'; return }
